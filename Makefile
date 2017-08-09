@@ -30,12 +30,12 @@ update: ##@vms start vms
 
 .PHONY: start
 start: ##@vms start vms
-	vagrant up
+	./etc/parallel-up.sh
 
 .PHONY: stop
 stop: ##@vms stop vms
-	vagrant halt
+	./etc/parallel-halt.sh
 
 .PHONY: clean
 clean: ##@vms stop and remove vms
-	vagrant destroy -f
+	./etc/parallel-destroy.sh
