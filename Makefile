@@ -1,5 +1,7 @@
 export VM_OS ?= bento-16.04
 
+
+# thanks to https://gist.github.com/prwhite/8168133#gistcomment-1727513 for 'make help'
 .PHONY: help
 help: ##@other Show this help.
 	@perl -e '$(HELP_FUN)' $(MAKEFILE_LIST)
