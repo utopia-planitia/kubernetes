@@ -16,7 +16,7 @@ $box_url = case ENV["VM_OS"]
         $box_url = "https://stable.release.core-os.net/amd64-usr/current/coreos_production_vagrant.json"
     when "ubuntu-16.04"
         $box = "ubuntu/xenial64"
-    else
+    when "bento-16.04"
         $box = "bento/ubuntu-16.04"
 end
 
