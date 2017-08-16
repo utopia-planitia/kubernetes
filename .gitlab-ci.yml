@@ -1,0 +1,28 @@
+stages:
+  - prepare
+  - test
+
+variables:
+  DOCKER_IMAGE:             docker:17.06.0-ce
+  DOCKER_DRIVER:            overlay2
+  DOCKER_HOST:              tcp://localhost:2375
+  DEV_TOOLS_IMAGE_SHA:      ${REGISTRY_DOMAIN}/${CI_PROJECT_PATH}:${CI_COMMIT_SHA}
+  DEV_TOOLS_IMAGE_LATEST:   ${REGISTRY_DOMAIN}/${CI_PROJECT_PATH}:latest
+
+devtools image:
+  stage: prepare
+  image: ${DOCKER_IMAGE}
+  services:
+    - ${DOCKER_IMAGE}-dind
+  script:
+    - docker login -u ${REGISTRY_USERNAME} -p ${REGISTRY_PASSWORD} ${REGISTRY_DOMAIN}
+    - docker pull ${DEV_TOOLS_IMAGE_LATEST} || true
+    - docker build --pull --cache-from ${DEV_TOOLS_IMAGE_LATEST} -t ${DEV_TOOLS_IMAGE_SHA} docker
+    - if [ "${CI_COMMIT_REF_NAME}" = "master" ]; then docker tag ${DEV_TOOLS_IMAGE_SHA} ${DEV_TOOLS_IMAGE_LATEST}; docker push ${DEV_TOOLS_IMAGE_LATEST}; fi
+    - docker push ${DEV_TOOLS_IMAGE_SHA}
+
+test:
+  stage: test
+  image: ${DEV_TOOLS_IMAGE_SHA}
+  script:
+    - date
