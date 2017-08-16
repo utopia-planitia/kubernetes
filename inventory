@@ -1,0 +1,5 @@
+[all]
+node1 ansible_host=172.17.8.101
+node2 ansible_host=172.17.8.102
+node3 ansible_host=172.17.8.103
+node4 ansible_host=172.17.8.104

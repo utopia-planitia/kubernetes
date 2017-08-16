@@ -10,7 +10,11 @@ system-requirements-check: ##@setup checks system for required dependencies
 .PHONY: cli
 cli: ##@development creates command line interface
 	@docker build --pull -t kubernetes-tools ./docker
-	@docker run --rm -ti -v $(PWD):/workspace -w /workspace kubernetes-tools
+	@docker run --net=host --rm -ti -v $(PWD):/workspace -w /workspace kubernetes-tools
+
+.PHONY: deploy
+deploy: ##@ansible deploy
+	@ansible-playbook playbook.yml ${OPTIONS}
 
 .PHONY: update
 update: ##@vms start vms
