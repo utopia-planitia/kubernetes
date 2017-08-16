@@ -9,7 +9,8 @@ system-requirements-check: ##@setup checks system for required dependencies
 
 .PHONY: cli
 cli: ##@development creates command line interface
-	@docker run -ti -v $(PWD):/workspace -w /workspace davedamoon/k8s-cluster-build-tools:v1.11
+	@docker build --pull -t kubernetes-tools ./docker
+	@docker run --rm -ti -v $(PWD):/workspace -w /workspace kubernetes-tools
 
 .PHONY: update
 update: ##@vms start vms
