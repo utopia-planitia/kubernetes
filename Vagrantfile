@@ -4,7 +4,7 @@ if ENV["NUM_INSTANCES"].to_i > 0 && ENV["NUM_INSTANCES"]
   $num_instances = ENV["NUM_INSTANCES"].to_i
 end
 
-$box_url = case ENV["VM_OS"]
+$box_url = case ENV["VAGRANT_OS"]
     when "coreos-alpha"
         $box = "coreos-alpha"
         $box_url = "https://alpha.release.core-os.net/amd64-usr/current/coreos_production_vagrant_virtualbox.json"
