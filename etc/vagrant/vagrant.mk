@@ -12,8 +12,8 @@ vagrant-start: ##@vagrant start vms
 vagrant-stop: ##@vagrant stop vms
 	./etc/vagrant/halt.sh
 
-.PHONY: vagrant-clean
-vagrant-clean: ##@vagrant stop and remove vms
+.PHONY: vagrant-destroy
+vagrant-destroy: ##@vagrant stop and remove vms
 	./etc/vagrant/destroy.sh
 
 .PHONY: vagrant-provision
