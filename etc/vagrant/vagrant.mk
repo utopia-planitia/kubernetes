@@ -19,4 +19,4 @@ vagrant-destroy: ##@vagrant stop and remove vms
 .PHONY: vagrant-provision
 vagrant-provision: ##@vagrant start vms and create inventory
 	$(MAKE) vagrant-start
-	cp etc/vagrant/inventory ./inventory
+	cat ./etc/vagrant/inventory | envsubst > ./inventory
