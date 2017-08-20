@@ -1,6 +1,8 @@
 stages:
   - prepare
-  - test
+  - provision
+  - deploy
+  - destroy
 
 variables:
   DOCKER_IMAGE:             docker:17.06.0-ce
@@ -21,8 +23,27 @@ devtools image:
     - if [ "${CI_COMMIT_REF_NAME}" = "master" ]; then docker tag ${DEV_TOOLS_IMAGE_SHA} ${DEV_TOOLS_IMAGE_LATEST}; docker push ${DEV_TOOLS_IMAGE_LATEST}; fi
     - docker push ${DEV_TOOLS_IMAGE_SHA}
 
-test:
-  stage: test
+provision:
+  stage: provision
   image: ${DEV_TOOLS_IMAGE_SHA}
   script:
-    - date
+    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
+    - cp -a ~/.ssh .ssh
+  artifacts:
+    paths:
+      - inventory
+      - .ssh
+
+destroy:
+  stage: destroy
+  image: ${DEV_TOOLS_IMAGE_SHA}
+  script:
+    - ansible-playbook ovh-destroy.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
+  when: always
+
+deploy:
+  stage: deploy
+  image: ${DEV_TOOLS_IMAGE_SHA}
+  script:
+    - mv .ssh ~/.ssh
+    - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}

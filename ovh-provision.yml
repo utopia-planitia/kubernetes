@@ -1,0 +1,7 @@
+---
+- name: create instances
+  gather_facts: false
+  hosts: localhost
+  roles:
+    - { role: create-openstack-instances }
+    - { role: rewrite-inventory }

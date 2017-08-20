@@ -1,0 +1,6 @@
+---
+- name: remove instances
+  os_server:
+    name: "{{ OVH_NODES_PREFIX }}-{{ item.name }}"
+    state: absent
+  with_items: "{{ servers }}"

@@ -1,0 +1,6 @@
+---
+servers:
+  - name: node1
+  - name: node2
+  - name: node3
+  - name: node4

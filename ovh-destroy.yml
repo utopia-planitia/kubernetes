@@ -1,0 +1,6 @@
+---
+- name: create instances
+  gather_facts: false
+  hosts: localhost
+  roles:
+    - { role: destroy-openstack-instances }

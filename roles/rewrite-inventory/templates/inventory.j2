@@ -1,0 +1,14 @@
+[all]
+{% for host in groups['all'] %}
+{{ host }} ansible_host={{ hostvars[host]['ansible_host'] }}
+{% endfor %}
+
+{% for group in groups %}
+{% if group not in ['ungrouped', 'all'] %}
+[{{ group }}] 
+{% for host in groups[group] %}
+{{ host }}
+{% endfor %}
+
+{% endif %}
+{% endfor %}

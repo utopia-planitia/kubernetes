@@ -1,0 +1,13 @@
+---
+image: Ubuntu 16.04
+flavor: s1-2
+region_name: SBG3
+servers:
+  - name: node1
+    groups: ovh,ubuntu-1604,etcd,masters
+  - name: node2
+    groups: ovh,ubuntu-1604,etcd,masters
+  - name: node3
+    groups: ovh,ubuntu-1604,etcd
+  - name: node4
+    groups: ovh,ubuntu-1604
