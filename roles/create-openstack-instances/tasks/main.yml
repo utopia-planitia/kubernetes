@@ -14,11 +14,7 @@
     flavor: "{{ flavor }}"
   with_items: "{{ servers }}"
   register: "os_hosts"
-
-- name: debug ovh hosts
-  debug:
-    var: os_hosts
-    verbosity: 4
+  when: item.name == OVH_NODE | default(item.name)
 
 - name: add hosts to inventory
   add_host:
@@ -27,3 +23,4 @@
     groups: "{{ item.item.groups }}"
     ansible_host: "{{ item.openstack.accessIPv4 }}"
   with_items: "{{ os_hosts.results }}"
+  when: item.openstack is defined

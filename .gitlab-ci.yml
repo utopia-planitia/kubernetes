@@ -1,6 +1,8 @@
 stages:
   - prepare
-  - provision
+  - pre-provision
+  - provision-nodes
+  - inventory
   - deploy
   - destroy
 
@@ -8,6 +10,9 @@ variables:
   DOCKER_IMAGE:             docker:17.06.0-ce
   DEV_TOOLS_IMAGE_SHA:      ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
   DEV_TOOLS_IMAGE_LATEST:   ${CI_REGISTRY_IMAGE}:latest
+
+before_script:
+  - mv .ssh ~/.ssh
 
 devtools image:
   stage: prepare
@@ -17,6 +22,7 @@ devtools image:
   variables:
     DOCKER_DRIVER:            overlay2
     DOCKER_HOST:              tcp://docker:2375
+  before_script: []
   script:
     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
     - docker pull ${DEV_TOOLS_IMAGE_LATEST} || true
@@ -24,16 +30,51 @@ devtools image:
     - if [ "${CI_COMMIT_REF_NAME}" = "master" ]; then docker tag ${DEV_TOOLS_IMAGE_SHA} ${DEV_TOOLS_IMAGE_LATEST}; docker push ${DEV_TOOLS_IMAGE_LATEST}; fi
     - docker push ${DEV_TOOLS_IMAGE_SHA}
 
-provision:
-  stage: provision
+ssh key:
+  stage: pre-provision
   image: ${DEV_TOOLS_IMAGE_SHA}
+  before_script: []
   script:
-    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
+    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_NODE=none" ${ANSIBLE_OPTIONS}
     - cp -a ~/.ssh .ssh
   artifacts:
     paths:
-      - inventory
       - .ssh
+
+.provision_node: &provision_node
+  stage: provision-nodes
+  image: ${DEV_TOOLS_IMAGE_SHA}
+  script:
+    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_NODE=${OVH_NODE}" ${ANSIBLE_OPTIONS}
+
+node1:
+  <<: *provision_node
+  variables:
+    OVH_NODE: node1
+
+node2:
+  <<: *provision_node
+  variables:
+    OVH_NODE: node2
+
+node3:
+  <<: *provision_node
+  variables:
+    OVH_NODE: node3
+
+node4:
+  <<: *provision_node
+  variables:
+    OVH_NODE: node4
+
+provision:
+  stage: inventory
+  image: ${DEV_TOOLS_IMAGE_SHA}
+  script:
+    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
+  artifacts:
+    paths:
+      - inventory
 
 destroy:
   stage: destroy
@@ -46,5 +87,4 @@ deploy:
   stage: deploy
   image: ${DEV_TOOLS_IMAGE_SHA}
   script:
-    - mv .ssh ~/.ssh
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
