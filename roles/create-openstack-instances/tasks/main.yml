@@ -9,7 +9,6 @@
     name: "{{ OVH_NODES_PREFIX }}-{{ item.name }}"
     state: present
     key: /root/.ssh/id_rsa.pub
-    region_name: "{{ region_name }}"
     image: "{{ image }}"
     flavor: "{{ flavor }}"
   with_items: "{{ servers }}"
@@ -18,7 +17,6 @@
 
 - name: add hosts to inventory
   add_host:
-#    name: "{{ item['openstack']['human_id'] }}"
     name: "{{ item.item.name }}"
     groups: "{{ item.item.groups }}"
     ansible_host: "{{ item.openstack.accessIPv4 }}"
