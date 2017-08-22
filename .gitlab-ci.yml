@@ -1,6 +1,5 @@
 stages:
   - prepare
-  - pre-provision
   - provision-nodes
   - inventory
   - deploy
@@ -31,11 +30,13 @@ devtools image:
     - docker push ${DEV_TOOLS_IMAGE_SHA}
 
 ssh key:
-  stage: pre-provision
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  stage: prepare
+  image: ubuntu:16.04
   before_script: []
   script:
-    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_NODE=none" ${ANSIBLE_OPTIONS}
+    - apt-get update
+    - apt-get install -y --no-install-recommends openssh-client
+    - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
     - cp -a ~/.ssh .ssh
   artifacts:
     paths:
