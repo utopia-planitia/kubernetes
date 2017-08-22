@@ -14,3 +14,9 @@ RUN apt-add-repository ppa:ansible/ansible && \
 	apt-get install -y --no-install-recommends ansible=${ANSIBLE_VERSION}-1ppa~xenial python-pip python-shade && \
 	apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# update pip
+RUN pip install --upgrade pip
+
+# ansible lint
+RUN pip install ansible-lint==3.4.13

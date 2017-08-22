@@ -11,5 +11,9 @@ system-requirements-check: ##@setup checks system for required dependencies
 	./etc/system-requirements-check.sh
 
 .PHONY: deploy
-deploy: ##@ansible deploy
+deploy: ##@ansible deploy to nodes
 	$(CLI) ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
+
+.PHONY: lint
+lint: ##@ansible lint ansible config
+	$(CLI) ansible-lint *.yml roles

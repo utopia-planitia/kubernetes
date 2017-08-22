@@ -1,5 +1,6 @@
 stages:
   - prepare
+  - fast-tests
   - provision-nodes
   - inventory
   - deploy
@@ -29,13 +30,19 @@ devtools image:
     - if [ "${CI_COMMIT_REF_NAME}" = "master" ]; then docker tag ${DEV_TOOLS_IMAGE_SHA} ${DEV_TOOLS_IMAGE_LATEST}; docker push ${DEV_TOOLS_IMAGE_LATEST}; fi
     - docker push ${DEV_TOOLS_IMAGE_SHA}
 
-ssh key:
-  stage: prepare
-  image: ubuntu:16.04
+lint:
+  stage: fast-tests
+  image: ${DEV_TOOLS_IMAGE_SHA}
   before_script: []
   script:
-    - apt-get update
-    - apt-get install -y --no-install-recommends openssh-client
+    - ansible-lint *.yml roles
+  allow_failure: true
+
+ssh key:
+  stage: fast-tests
+  image: ${DEV_TOOLS_IMAGE_SHA}
+  before_script: []
+  script:
     - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
     - cp -a ~/.ssh .ssh
   artifacts:
