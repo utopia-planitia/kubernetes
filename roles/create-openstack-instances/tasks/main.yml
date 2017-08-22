@@ -1,6 +1,6 @@
 ---
 - name: generate SSH key
-  shell: ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+  command: ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
   args:
     creates: /root/.ssh/id_rsa
 

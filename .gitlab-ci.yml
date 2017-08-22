@@ -36,7 +36,6 @@ lint:
   before_script: []
   script:
     - ansible-lint *.yml roles
-  allow_failure: true
 
 ssh key:
   stage: fast-tests
