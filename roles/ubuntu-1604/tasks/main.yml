@@ -1,0 +1,10 @@
+---
+
+- name: install python
+  raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  changed_when: false
+
+- name: install docker
+  package:
+    name: docker.io=1.12.6-0ubuntu1~16.04.1
+    state: present

@@ -1,9 +1,5 @@
 ---
 
-- name: debug inventory_dir
-  debug:
-    var: inventory_dir
-
 - name: create inventory file
   template:
     src=inventory.j2
