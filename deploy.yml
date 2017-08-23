@@ -1,6 +1,5 @@
 ---
 - hosts: all
-  gather_facts: false
   tasks:
     - name: wait for ssh to be available
       local_action: wait_for port=22 host="{{ ansible_host }}" search_regex=OpenSSH
@@ -8,3 +7,7 @@
 - hosts: ubuntu-1604
   roles:
     - { role: ubuntu-1604 }
+
+- hosts: all
+  roles:
+    - { role: docker }

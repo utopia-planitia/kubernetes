@@ -1,0 +1,18 @@
+---
+
+- name: load overlay kernel module into runtime
+  modprobe:
+    name: overlay
+    state: present
+
+- name: load overlay kernel module at bootup
+  lineinfile:
+    path: /etc/modules
+    regexp: overlay
+    line: overlay
+
+- name: configure docker
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+  notify: restart docker
