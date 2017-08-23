@@ -1,19 +1,42 @@
 ---
+
+- name: generate SSH key directory
+  file:
+    path: /root/.ssh
+    state: directory
+    recurse: yes
+
 - name: generate SSH key
   command: ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
   args:
     creates: /root/.ssh/id_rsa
 
+- name: upload public ssh key
+  os_keypair:
+    state: present
+    name: "{{ OVH_KEYPAIR_NAME }}"
+    public_key_file: /root/.ssh/id_rsa.pub
+
 - name: launch instances
   os_server:
     name: "{{ OVH_NODES_PREFIX }}-{{ item.name }}"
     state: present
-    key: /root/.ssh/id_rsa.pub
+    key_name: "{{ OVH_KEYPAIR_NAME }}"
     image: "{{ image }}"
     flavor: "{{ flavor }}"
   with_items: "{{ servers }}"
   register: "os_hosts"
   when: item.name == OVH_NODE | default(item.name)
+
+- name: remove old inventory file
+  file:
+    path: ./inventory
+    state: absent
+  when: OVH_NODE is undefined
+
+- name: load empty inventory
+  meta: refresh_inventory
+  when: OVH_NODE is undefined
 
 - name: add hosts to inventory
   add_host:
@@ -21,4 +44,6 @@
     groups: "{{ item.item.groups }}"
     ansible_host: "{{ item.openstack.accessIPv4 }}"
   with_items: "{{ os_hosts.results }}"
-  when: item.openstack is defined
+  when:
+    - item.openstack is defined
+    - OVH_NODE is undefined

@@ -42,8 +42,10 @@ ssh key:
   image: ${DEV_TOOLS_IMAGE_SHA}
   before_script: []
   script:
-    - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
-    - cp -a ~/.ssh .ssh
+    - mkdir .ssh
+    - echo ${SSH_KEY_PRIVATE} | base64 -d > .ssh/id_rsa
+    - echo ${SSH_KEY_PUBLIC}  | base64 -d > .ssh/id_rsa.pub
+    - chmod 400 .ssh/id_rsa .ssh/id_rsa.pub
   artifacts:
     paths:
       - .ssh
@@ -52,7 +54,7 @@ ssh key:
   stage: provision-nodes
   image: ${DEV_TOOLS_IMAGE_SHA}
   script:
-    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_NODE=${OVH_NODE}" ${ANSIBLE_OPTIONS}
+    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_NODE=${OVH_NODE} OVH_KEYPAIR_NAME=ci-runner" ${ANSIBLE_OPTIONS}
 
 node1:
   <<: *provision_node
@@ -78,7 +80,7 @@ provision:
   stage: inventory
   image: ${DEV_TOOLS_IMAGE_SHA}
   script:
-    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
+    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_KEYPAIR_NAME=ci-runner" ${ANSIBLE_OPTIONS}
   artifacts:
     paths:
       - inventory

@@ -1,0 +1,13 @@
+---
+- name: remove public ssh key
+  os_keypair:
+    state: absent
+    name: "{{ OVH_KEYPAIR_NAME }}"
+  when: OVH_KEYPAIR_NAME is defined
+
+- name: remove instances
+  os_server:
+    name: "{{ OVH_NODES_PREFIX }}-{{ item }}"
+    state: absent
+  with_items: "{{ groups.ovh }}"
+  when: item == OVH_NODE | default(item)
