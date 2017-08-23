@@ -1,0 +1,26 @@
+[all]
+node1 ansible_host=172.17.8.101
+node2 ansible_host=172.17.8.102
+node3 ansible_host=172.17.8.103
+node4 ansible_host=172.17.8.104
+
+[masters]
+node1
+node2
+
+[etcd]
+node1
+node2
+node3
+
+[vagrant]
+node1
+node2
+node3
+node4
+
+[ubuntu-1604]
+node1
+node2
+node3
+node4
