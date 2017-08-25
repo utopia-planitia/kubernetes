@@ -10,7 +10,6 @@ variables:
   DOCKER_IMAGE:            docker:17.06.0-ce
   DEV_TOOLS_IMAGE_SHA:     ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
   DEV_TOOLS_IMAGE_LATEST:  ${CI_REGISTRY_IMAGE}:latest
-  NETWORK_RELATED_RETRIES: 2
 
 before_script:
   - mv .ssh ~/.ssh
@@ -18,7 +17,7 @@ before_script:
 devtools image:
   stage: prepare
   image: ${DOCKER_IMAGE}
-  retry: ${NETWORK_RELATED_RETRIES}
+  retry: 2
   services:
     - ${DOCKER_IMAGE}-dind
   variables:
@@ -55,7 +54,7 @@ ssh key:
 .provision_node: &provision_node
   stage: provision-nodes
   image: ${DEV_TOOLS_IMAGE_SHA}
-  retry: ${NETWORK_RELATED_RETRIES}
+  retry: 2
   script:
     - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_NODE=${OVH_NODE} OVH_KEYPAIR_NAME=ci-runner" ${ANSIBLE_OPTIONS}
 
@@ -82,7 +81,7 @@ node4:
 provision:
   stage: inventory
   image: ${DEV_TOOLS_IMAGE_SHA}
-  retry: ${NETWORK_RELATED_RETRIES}
+  retry: 2
   script:
     - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_KEYPAIR_NAME=ci-runner" ${ANSIBLE_OPTIONS}
   artifacts:
@@ -92,7 +91,7 @@ provision:
 destroy:
   stage: destroy
   image: ${DEV_TOOLS_IMAGE_SHA}
-  retry: ${NETWORK_RELATED_RETRIES}
+  retry: 2
   script:
     - ansible-playbook ovh-destroy.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
   when: always
@@ -100,6 +99,6 @@ destroy:
 deploy:
   stage: deploy
   image: ${DEV_TOOLS_IMAGE_SHA}
-  retry: ${NETWORK_RELATED_RETRIES}
+  retry: 2
   script:
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
