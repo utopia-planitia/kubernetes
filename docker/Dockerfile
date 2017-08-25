@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 
 # tools
 RUN apt-get update && \
-	apt-get install -y --no-install-recommends software-properties-common git curl rsync gettext-base nano dnsutils iputils-ping openssh-client make && \
+	apt-get install -y --no-install-recommends software-properties-common git curl rsync gettext-base nano dnsutils iputils-ping openssh-client make bash-completion && \
 	apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 CMD ["bash"]
@@ -20,3 +20,6 @@ RUN pip install --upgrade pip
 
 # ansible lint
 RUN pip install ansible-lint==3.4.13
+
+# enable bash autocompletion
+RUN echo . /etc/bash_completion >> /root/.bashrc
