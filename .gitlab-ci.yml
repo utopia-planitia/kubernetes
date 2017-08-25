@@ -4,6 +4,7 @@ stages:
   - provision-nodes
   - inventory
   - deploy
+  - tests
   - destroy
 
 variables:
@@ -102,3 +103,11 @@ deploy:
   retry: 2
   script:
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
+
+redeploy:
+  stage: tests
+  image: ${DEV_TOOLS_IMAGE_SHA}
+  retry: 2
+  script:
+    - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS} | tee deploy.log
+    - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 4
