@@ -1,5 +1,5 @@
 CURRENT_GIT_BRANCH = $(shell git rev-parse --abbrev-ref HEAD)
-OVH_KEYPAIR_NAME = $(shell hostname | base64 -w 0)
+OVH_KEYPAIR_NAME = $(shell hostname -s)
 
 .PHONY: ovh-provision
 ovh-provision: ##@ovh start vms and create inventory
