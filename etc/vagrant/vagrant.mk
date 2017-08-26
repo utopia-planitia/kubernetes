@@ -19,4 +19,5 @@ vagrant-destroy: ##@vagrant stop and remove vms
 .PHONY: vagrant-provision
 vagrant-provision: ##@vagrant start vms and create inventory
 	$(MAKE) vagrant-start
+	unlink ./inventory
 	cp ./etc/vagrant/inventory-${VAGRANT_OS} ./inventory
