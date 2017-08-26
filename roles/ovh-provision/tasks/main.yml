@@ -25,13 +25,14 @@
     image: "{{ image }}"
     flavor: "{{ flavor }}"
   with_items: "{{ servers }}"
+  changed_when: os_hosts.openstack.adminPass is defined
   register: "os_hosts"
   when: item.name == OVH_NODE | default(item.name)
 
 - name: remove old inventory file
-  file:
-    path: ./inventory
-    state: absent
+  copy:
+    dest: ./inventory
+    content: ""
   when: OVH_NODE is undefined
 
 - name: load empty inventory

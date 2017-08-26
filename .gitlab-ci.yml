@@ -84,6 +84,7 @@ provision:
   image: ${DEV_TOOLS_IMAGE_SHA}
   retry: 2
   script:
+    - touch inventory
     - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_KEYPAIR_NAME=ci-runner" ${ANSIBLE_OPTIONS}
   artifacts:
     paths:
