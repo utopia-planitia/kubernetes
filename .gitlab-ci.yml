@@ -119,3 +119,10 @@ overlay2:
   retry: 2
   script:
     - bats tests/overlay2.bats
+
+kubelet:
+  stage: tests
+  image: ${DEV_TOOLS_IMAGE_SHA}
+  retry: 2
+  script:
+    - bats tests/kubelet.bats

@@ -11,3 +11,4 @@
 - hosts: all
   roles:
     - { role: docker }
+    - { role: k8s-common }
