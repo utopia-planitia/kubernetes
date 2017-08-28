@@ -17,3 +17,7 @@ deploy: ##@ansible deploy to nodes
 .PHONY: lint
 lint: ##@ansible lint ansible config
 	$(CLI) ansible-lint *.yml roles
+
+.PHONY: tests
+tests: ##@development run all tests
+	$(CLI) bats tests/*

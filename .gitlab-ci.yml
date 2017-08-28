@@ -112,3 +112,10 @@ redeploy:
   script:
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS} | tee deploy.log
     - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 4
+
+overlay2:
+  stage: tests
+  image: ${DEV_TOOLS_IMAGE_SHA}
+  retry: 2
+  script:
+    - bats tests/overlay2.bats
