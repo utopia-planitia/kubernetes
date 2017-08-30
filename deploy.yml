@@ -12,3 +12,16 @@
   roles:
     - { role: docker }
     - { role: k8s-common }
+
+- hosts: localhost
+  roles:
+    - { role: etcd-certificates }
+
+- hosts: etcds
+  pre_tasks:
+    - name: set etcd_id
+      set_fact: etcd_id={{ item.0 + 1 }}
+      with_indexed_items: "{{ groups['etcds'] }}"
+      when: item.1 == inventory_hostname
+  roles:
+    - { role: etcd }

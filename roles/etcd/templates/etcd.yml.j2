@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: etcd
+  namespace: kube-system
+  annotations:
+    ansible/certificates-hash: {{ etcd_cert_hashsum }}
+spec:
+  hostNetwork: true
+  initContainers:
+{% for host in groups['etcds'] %}
+    - name: etcd{{ hostvars[host]['etcd_id'] }}
+      image: busybox:1.27.2
+      command:
+        - sh
+      args:
+        - -c
+        - "grep -q '^{{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }}$' /etc/hosts || echo '{{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }}' >> /etc/hosts"
+{% endfor %}
+  containers:
+    - name: etcd
+      image: {{ etcd_image }}
+      env:
+        - name: ETCD_NAME
+          value: etcd{{ etcd_id }}
+        - name: ETCD_DATA_DIR
+          value: /var/lib/etcd
+        - name: ETCD_LISTEN_CLIENT_URLS
+          value: https://0.0.0.0:2379
+        - name: ETCD_ADVERTISE_CLIENT_URLS
+          value: https://etcd{{ etcd_id }}:2379
+        - name: ETCD_LISTEN_PEER_URLS
+          value: https://0.0.0.0:2380
+        - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
+          value: https://etcd{{ etcd_id }}:2380
+        - name: ETCD_INITIAL_CLUSTER
+          value: etcd1=https://etcd1:2380,etcd2=https://etcd2:2380,etcd3=https://etcd3:2380
+        - name: ETCD_CERT_FILE
+          value: /etc/etcd/ssl/server.pem
+        - name: ETCD_KEY_FILE
+          value: /etc/etcd/ssl/server-key.pem
+        - name: ETCD_CLIENT_CERT_AUTH
+          value: "true"
+        - name: ETCD_TRUSTED_CA_FILE
+          value: /etc/etcd/ssl/ca.pem
+        - name: ETCD_PEER_CERT_FILE
+          value: /etc/etcd/ssl/member.pem
+        - name: ETCD_PEER_KEY_FILE
+          value: /etc/etcd/ssl/member-key.pem
+        - name: ETCD_PEER_CLIENT_CERT_AUTH
+          value: "true"
+        - name: ETCD_PEER_TRUSTED_CA_FILE
+          value: /etc/etcd/ssl/ca.pem
+        - name: ETCDCTL_ENDPOINTS
+          value: https://127.0.0.1:2379
+        - name: ETCDCTL_CERT_FILE
+          value: /etc/etcd/ssl/member.pem
+        - name: ETCDCTL_KEY_FILE
+          value: /etc/etcd/ssl/member-key.pem
+        - name: ETCDCTL_CA_FILE
+          value: /etc/etcd/ssl/ca.pem
+      livenessProbe:
+        tcpSocket:
+          port: 2380
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 1000m
+          memory: 200Mi
+      volumeMounts:
+        - name: etcd-data
+          mountPath: /var/lib/etcd
+        - name: etcd-ssl-certs
+          mountPath: /etc/etcd/ssl
+  volumes:
+    - name: etcd-data
+      hostPath:
+        path: /var/lib/etcd
+    - name: etcd-ssl-certs
+      hostPath:
+        path: /etc/etcd/ssl

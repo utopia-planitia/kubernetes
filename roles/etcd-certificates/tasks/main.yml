@@ -1,0 +1,47 @@
+---
+
+- name: Set up a Certificate directory
+  file:
+    path: "{{ etcd_cert_dir }}"
+    state: directory
+    recurse: true
+
+- name: Set up a Certificate Authority
+  shell: cfssl gencert -initca {{ etcd_config_dir }}/ca.json | cfssljson -bare ca
+  args:
+    chdir: "{{ etcd_cert_dir }}"
+    creates: "{{ item }}"
+  with_items:
+    - ca-key.pem
+    - ca.csr
+    - ca.pem
+
+- name: Set up a client certificate
+  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ etcd_config_dir }}/config.json -profile=client {{ etcd_config_dir }}/client.json | cfssljson -bare client
+  args:
+    chdir: "{{ etcd_cert_dir }}"
+    creates: "{{ item }}"
+  with_items:
+    - client-key.pem
+    - client.csr
+    - client.pem
+
+- name: Set up a member certificate
+  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ etcd_config_dir }}/config.json -profile=member {{ etcd_config_dir }}/member.json | cfssljson -bare member
+  args:
+    chdir: "{{ etcd_cert_dir }}"
+    creates: "{{ item }}"
+  with_items:
+    - member-key.pem
+    - member.csr
+    - member.pem
+
+- name: Set up a server certificate
+  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ etcd_config_dir }}/config.json -profile=server {{ etcd_config_dir }}/server.json | cfssljson -bare server
+  args:
+    chdir: "{{ etcd_cert_dir }}"
+    creates: "{{ item }}"
+  with_items:
+    - server-key.pem
+    - server.csr
+    - server.pem

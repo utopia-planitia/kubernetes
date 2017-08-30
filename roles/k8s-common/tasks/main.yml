@@ -1,5 +1,13 @@
 ---
 
+- name: create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: true
+  with_items:
+    - /etc/kubernetes/manifests/
+
 - name: create kubelet service
   template:
     src: kubelet.service.j2

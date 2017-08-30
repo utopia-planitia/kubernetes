@@ -8,7 +8,7 @@ node4 ansible_host=172.17.8.104
 node1
 node2
 
-[etcd]
+[etcds]
 node1
 node2
 node3

@@ -104,6 +104,9 @@ deploy:
   retry: 2
   script:
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
+  artifacts:
+    paths:
+      - certificates
 
 redeploy:
   stage: tests
@@ -111,7 +114,7 @@ redeploy:
   retry: 2
   script:
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS} | tee deploy.log
-    - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 4
+    - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 5
 
 overlay2:
   stage: tests
@@ -126,3 +129,10 @@ kubelet:
   retry: 2
   script:
     - bats tests/kubelet.bats
+
+etcd:
+  stage: tests
+  image: ${DEV_TOOLS_IMAGE_SHA}
+  retry: 2
+  script:
+    - bats tests/etcd.bats

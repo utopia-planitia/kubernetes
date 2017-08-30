@@ -1,0 +1,31 @@
+---
+
+- name: create etcd ssl directory
+  file:
+    path: /etc/etcd/ssl/
+    state: directory
+    recurse: true
+
+- name: create etcd certificates
+  copy:
+    src: "{{ etcd_cert_dir }}/{{ item }}"
+    dest: "/etc/etcd/ssl/{{ item }}"
+  with_items:
+    - ca.pem
+    - server.pem
+    - server-key.pem
+    - member.pem
+    - member-key.pem
+  no_log: true
+
+- name: checksum of certificates
+  local_action: shell cd {{ etcd_cert_dir }}; md5sum ca.pem server.pem server-key.pem member.pem member-key.pem | md5sum | head -c 32
+  register: etcd_cert_hashsum
+  changed_when: false
+
+- name: "set etcd_cert_hashsum variable"
+  set_fact:
+    etcd_cert_hashsum: "{{ etcd_cert_hashsum.stdout }}"
+
+- name: install etcd
+  template: src=etcd.yml.j2 dest=/etc/kubernetes/manifests/etcd.yml
