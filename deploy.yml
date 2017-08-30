@@ -4,6 +4,11 @@
     - name: wait for ssh to be available
       local_action: wait_for port=22 host="{{ ansible_host }}" search_regex=OpenSSH
 
+- hosts: localhost
+  roles:
+    - { role: etcd-certificates }
+    - { role: master-certificates }
+
 - hosts: ubuntu-1604
   roles:
     - { role: ubuntu-1604 }
@@ -13,10 +18,6 @@
     - { role: docker }
     - { role: node }
 
-- hosts: localhost
-  roles:
-    - { role: etcd-certificates }
-
 - hosts: etcds
   pre_tasks:
     - name: set etcd_id
@@ -25,3 +26,7 @@
       when: item.1 == inventory_hostname
   roles:
     - { role: etcd }
+
+- hosts: masters
+  roles:
+    - { role: master }

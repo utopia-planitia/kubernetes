@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: k8s-master
+  namespace: kube-system
+  annotations:
+    ansible/certificates-hash: {{ master_cert_hashsum }}
+spec:
+  hostNetwork: true
+  initContainers:
+{% for host in groups['etcds'] %}
+    - name: etcd{{ hostvars[host]['etcd_id'] }}
+      image: busybox:1.27.2
+      command:
+        - sh
+      args:
+        - -c
+        - "grep -q '^{{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }}$' /etc/hosts || echo '{{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }}' >> /etc/hosts"
+{% endfor %}
+  containers:
+    - name: apiserver
+      image: {{ kubernetes_image }}
+      command:
+        - /apiserver
+      args:
+        - --advertise-address={{ ansible_host }}
+        - --storage-backend=etcd3
+        - --etcd-servers=https://etcd1:2379,https://etcd2:2379,https://etcd3:2379
+        - --etcd-cafile=/etc/kubernetes/ssl/etcd-ca.pem
+        - --etcd-certfile=/etc/kubernetes/ssl/etcd.pem
+        - --etcd-keyfile=/etc/kubernetes/ssl/etcd-key.pem
+        - --client-ca-file=/etc/kubernetes/ssl/kubernetes-ca.pem
+        - --tls-cert-file=/etc/kubernetes/ssl/master.pem
+        - --tls-private-key-file=/etc/kubernetes/ssl/master-key.pem
+        - --kubelet-certificate-authority=/etc/kubernetes/ssl/kubernetes-ca.pem
+        - --kubelet-client-certificate=/etc/kubernetes/ssl/master.pem
+        - --kubelet-client-key=/etc/kubernetes/ssl/master-key.pem
+        - --service-cluster-ip-range=10.16.0.0/12
+        - --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds
+        - --allow_privileged=true
+        - --apiserver-count={{ groups['masters'] | length }}
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: 8080
+          host: 127.0.0.1
+      resources:
+        requests:
+          cpu: 100m
+          memory: 250Mi
+        limits:
+          cpu: 1000m
+          memory: 500Mi
+      volumeMounts:
+        - name: kubernetes-ssl-certs
+          mountPath: /etc/kubernetes/ssl
+    - name: controller-manager
+      image: {{ kubernetes_image }}
+      args:
+        - /controller-manager
+        - --master=http://127.0.0.1:8080
+        - --service-account-private-key-file=/etc/kubernetes/ssl/master-key.pem
+        - --root-ca-file=/etc/kubernetes/ssl/kubernetes-ca.pem
+        - --leader-elect=true
+        - --address=127.0.0.1
+        - --port=10252
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: 10252
+          host: 127.0.0.1
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 1000m
+          memory: 200Mi
+      volumeMounts:
+        - name: kubernetes-ssl-certs
+          mountPath: /etc/kubernetes/ssl
+    - name: scheduler
+      image: {{ kubernetes_image }}
+      args:
+        - /scheduler
+        - --master=http://127.0.0.1:8080
+        - --leader-elect=true
+        - --address=127.0.0.1
+        - --port=10251
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: 10251
+          host: 127.0.0.1
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 1000m
+          memory: 200Mi
+  volumes:
+    - name: kubernetes-ssl-certs
+      hostPath:
+        path: /etc/kubernetes/ssl

@@ -1,0 +1,7 @@
+{
+    "CN": "Kubernetes",
+    "key": {
+      "algo": "rsa",
+      "size": 2048
+    }
+  }

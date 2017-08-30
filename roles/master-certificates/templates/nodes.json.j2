@@ -1,0 +1,15 @@
+{
+  "CN": "Kubernetes Nodes",
+  "hosts": [
+    {% for host in groups['all'] %}
+    "{{ host }}",
+    "{{ hostvars[host]['ansible_host'] }}",
+    {% endfor %}
+    "127.0.0.1",
+    "localhost"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  }
+}

@@ -1,11 +1,13 @@
 ---
 
 kubernetes_version: v1.7.4
-etcd_version: v3.2.6
+etcd_version:       v3.2.6
 
 kubernetes_image: "gcr.io/google_containers/hyperkube:{{ kubernetes_version }}"
-etcd_image: "gcr.io/etcd-development/etcd:{{ etcd_version }}"
+etcd_image:       "gcr.io/etcd-development/etcd:{{ etcd_version }}"
 
 
-etcd_cert_dir: "{{ playbook_dir }}/certificates/etcd"
-etcd_config_dir: "{{ playbook_dir }}/roles/etcd-certificates/files"
+etcd_cert_dir:     "{{ playbook_dir }}/certificates/etcd"
+etcd_config_dir:   "{{ playbook_dir }}/roles/etcd-certificates/files"
+master_cert_dir:   "{{ playbook_dir }}/certificates/master"
+master_config_dir: "{{ playbook_dir }}/roles/master-certificates/files"

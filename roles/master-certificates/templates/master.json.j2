@@ -1,0 +1,22 @@
+{
+  "CN": "Kubernetes Master",
+  "hosts": [
+    {% for host in groups['masters'] %}
+    "{{ host }}",
+    "{{ hostvars[host]['ansible_host'] }}",
+    {% endfor %}
+    "${MASTER1_IP}",
+    "${MASTER2_IP}",
+    "127.0.0.1",
+    "10.16.0.1",
+    "localhost",
+    "kubernetes",
+    "kubernetes.default",
+    "kubernetes.default.svc",
+    "kubernetes.default.svc.cluster.local"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  }
+}

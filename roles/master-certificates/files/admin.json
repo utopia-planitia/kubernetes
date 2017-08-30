@@ -1,0 +1,7 @@
+{
+    "CN": "Kubernetes Administrator",
+    "key": {
+      "algo": "rsa",
+      "size": 2048
+    }
+  }

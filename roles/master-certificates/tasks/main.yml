@@ -1,0 +1,55 @@
+---
+
+- name: Set up a Certificate directory
+  file:
+    path: "{{ master_cert_dir }}"
+    state: directory
+    recurse: true
+
+- name: Render Certificate Configurations
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ master_cert_dir }}/{{ item }}"
+  with_items:
+    - master.json
+    - nodes.json
+
+- name: Set up a Certificate Authority
+  shell: cfssl gencert -initca {{ master_config_dir }}/ca.json | cfssljson -bare ca
+  args:
+    chdir: "{{ master_cert_dir }}"
+    creates: "{{ item }}"
+  with_items:
+    - ca-key.pem
+    - ca.csr
+    - ca.pem
+
+- name: Create the Admin certificate
+  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes {{ master_config_dir }}/admin.json | cfssljson -bare admin
+  args:
+    chdir: "{{ master_cert_dir }}"
+    creates: "{{ item }}"
+  with_items:
+    - admin-key.pem
+    - admin.csr
+    - admin.pem
+
+- name: Create the Nodes certificate
+  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes nodes.json | cfssljson -bare nodes
+  args:
+    chdir: "{{ master_cert_dir }}"
+    creates: "{{ item }}"
+  with_items:
+    - nodes-key.pem
+    - nodes.csr
+    - nodes.pem
+
+- name: Create the Master certificate
+  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes master.json | cfssljson -bare master
+  args:
+    chdir: "{{ master_cert_dir }}"
+    creates: "{{ item }}"
+  with_items:
+    - master-key.pem
+    - master.csr
+    - master.pem
