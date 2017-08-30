@@ -11,7 +11,7 @@
 - hosts: all
   roles:
     - { role: docker }
-    - { role: k8s-common }
+    - { role: node }
 
 - hosts: localhost
   roles:
