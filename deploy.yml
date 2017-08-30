@@ -30,3 +30,7 @@
 - hosts: masters
   roles:
     - { role: master }
+
+- hosts: all:!masters
+  roles:
+    - { role: master-forwarder }

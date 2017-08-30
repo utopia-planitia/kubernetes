@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: master-forwarder
+  namespace: kube-system
+  annotations:
+    ansible/config-hash: {{ master_forwarder_config_hashsum }}
+spec:
+  hostNetwork: true
+  containers:
+    - name: forwarder
+      image: {{ nginx_image }}
+      livenessProbe:
+        tcpSocket:
+          port: 6443
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 1000m
+          memory: 200Mi
+      volumeMounts:
+        - name: config
+          mountPath: /etc/nginx/
+  volumes:
+    - name: config
+      hostPath:
+        path: /etc/master-forwarder/

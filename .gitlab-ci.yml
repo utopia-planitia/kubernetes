@@ -143,3 +143,10 @@ master:
   retry: 2
   script:
     - bats tests/master.bats
+
+master-forwarder:
+  stage: tests
+  image: ${DEV_TOOLS_IMAGE_SHA}
+  retry: 2
+  script:
+    - bats tests/master-forwarder.bats

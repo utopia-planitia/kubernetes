@@ -2,9 +2,11 @@
 
 kubernetes_version: v1.7.4
 etcd_version:       v3.2.6
+nginx_version:      1.13.3-alpine
 
 kubernetes_image: "gcr.io/google_containers/hyperkube:{{ kubernetes_version }}"
 etcd_image:       "gcr.io/etcd-development/etcd:{{ etcd_version }}"
+nginx_image:      "nginx:{{ nginx_version }}"
 
 
 etcd_cert_dir:     "{{ playbook_dir }}/certificates/etcd"
