@@ -8,37 +8,32 @@ metadata:
 spec:
   hostNetwork: true
   initContainers:
-{% for host in groups['etcds'] %}
-    - name: etcd{{ hostvars[host]['etcd_id'] }}
-      image: busybox:1.27.2
-      command:
-        - sh
-      args:
-        - -c
-        - "grep -q '^{{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }}$' /etc/hosts || echo '{{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }}' >> /etc/hosts"
-{% endfor %}
   containers:
     - name: apiserver
       image: {{ kubernetes_image }}
       command:
-        - /apiserver
+        - sh
       args:
-        - --advertise-address={{ ansible_host }}
-        - --storage-backend=etcd3
-        - --etcd-servers=https://etcd1:2379,https://etcd2:2379,https://etcd3:2379
-        - --etcd-cafile=/etc/kubernetes/ssl/etcd-ca.pem
-        - --etcd-certfile=/etc/kubernetes/ssl/etcd.pem
-        - --etcd-keyfile=/etc/kubernetes/ssl/etcd-key.pem
-        - --client-ca-file=/etc/kubernetes/ssl/kubernetes-ca.pem
-        - --tls-cert-file=/etc/kubernetes/ssl/master.pem
-        - --tls-private-key-file=/etc/kubernetes/ssl/master-key.pem
-        - --kubelet-certificate-authority=/etc/kubernetes/ssl/kubernetes-ca.pem
-        - --kubelet-client-certificate=/etc/kubernetes/ssl/master.pem
-        - --kubelet-client-key=/etc/kubernetes/ssl/master-key.pem
-        - --service-cluster-ip-range=10.16.0.0/12
-        - --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds
-        - --allow_privileged=true
-        - --apiserver-count={{ groups['masters'] | length }}
+        - -c
+        - >-
+          {% for host in groups['etcds'] %}echo {{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }} >> /etc/hosts && {% endfor %}
+          /apiserver
+          --advertise-address={{ ansible_host }}
+          --storage-backend=etcd3
+          --etcd-servers=https://etcd1:2379,https://etcd2:2379,https://etcd3:2379
+          --etcd-cafile=/etc/kubernetes/ssl/etcd-ca.pem
+          --etcd-certfile=/etc/kubernetes/ssl/etcd.pem
+          --etcd-keyfile=/etc/kubernetes/ssl/etcd-key.pem
+          --client-ca-file=/etc/kubernetes/ssl/kubernetes-ca.pem
+          --tls-cert-file=/etc/kubernetes/ssl/master.pem
+          --tls-private-key-file=/etc/kubernetes/ssl/master-key.pem
+          --kubelet-certificate-authority=/etc/kubernetes/ssl/kubernetes-ca.pem
+          --kubelet-client-certificate=/etc/kubernetes/ssl/master.pem
+          --kubelet-client-key=/etc/kubernetes/ssl/master-key.pem
+          --service-cluster-ip-range=10.16.0.0/12
+          --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds
+          --allow_privileged=true
+          --apiserver-count={{ groups['masters'] | length }}
       livenessProbe:
         httpGet:
           path: /healthz

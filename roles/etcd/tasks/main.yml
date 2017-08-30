@@ -6,7 +6,7 @@
     state: directory
     recurse: true
 
-- name: create etcd certificates
+- name: copy etcd certificates
   copy:
     src: "{{ etcd_cert_dir }}/{{ item }}"
     dest: "/etc/etcd/ssl/{{ item }}"

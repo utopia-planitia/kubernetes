@@ -1,5 +1,5 @@
 {
-    "CN": "etcd cluster",
+    "CN": "Etcd",
     "key": {
       "algo": "rsa",
       "size": 2048

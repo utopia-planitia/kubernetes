@@ -7,19 +7,14 @@ metadata:
     ansible/certificates-hash: {{ etcd_cert_hashsum }}
 spec:
   hostNetwork: true
-  initContainers:
-{% for host in groups['etcds'] %}
-    - name: etcd{{ hostvars[host]['etcd_id'] }}
-      image: busybox:1.27.2
+  containers:
+    - name: etcd
+      image: {{ etcd_image }}
       command:
         - sh
       args:
         - -c
-        - "grep -q '^{{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }}$' /etc/hosts || echo '{{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }}' >> /etc/hosts"
-{% endfor %}
-  containers:
-    - name: etcd
-      image: {{ etcd_image }}
+        - "{% for host in groups['etcds'] %}echo {{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }} >> /etc/hosts && {% endfor %} /usr/local/bin/etcd"
       env:
         - name: ETCD_NAME
           value: etcd{{ etcd_id }}

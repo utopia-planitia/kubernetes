@@ -1,32 +1,32 @@
 #!/usr/bin/env bats
 
 @test "node1: wait for apiserver" {
-  until [[ $( ansible -i inventory node1 -m shell -a "docker ps" | grep "/apiserver " | wc -l ) = "1" ]]; do
+  until [[ $( ansible -i inventory node1 -m shell -a "docker ps" | grep " k8s_apiserver_k8s-master" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
 @test "node2: wait for apiserver" {
-  until [[ $( ansible -i inventory node2 -m shell -a "docker ps" | grep "/apiserver " | wc -l ) = "1" ]]; do
+  until [[ $( ansible -i inventory node2 -m shell -a "docker ps" | grep " k8s_apiserver_k8s-master" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
 @test "node1: wait for scheduler" {
-  until [[ $( ansible -i inventory node1 -m shell -a "docker ps" | grep "/scheduler " | wc -l ) = "1" ]]; do
+  until [[ $( ansible -i inventory node1 -m shell -a "docker ps" | grep " k8s_scheduler_k8s-master" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
 @test "node2: wait for scheduler" {
-  until [[ $( ansible -i inventory node2 -m shell -a "docker ps" | grep "/scheduler " | wc -l ) = "1" ]]; do
+  until [[ $( ansible -i inventory node2 -m shell -a "docker ps" | grep " k8s_scheduler_k8s-master" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
 @test "node1: wait for controller-manager" {
-  until [[ $( ansible -i inventory node1 -m shell -a "docker ps" | grep "/controller-manager " | wc -l ) = "1" ]]; do
+  until [[ $( ansible -i inventory node1 -m shell -a "docker ps" | grep " k8s_controller-manager_k8s-master" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
 @test "node2: wait for controller-manager" {
-  until [[ $( ansible -i inventory node2 -m shell -a "docker ps" | grep "/controller-manager " | wc -l ) = "1" ]]; do
+  until [[ $( ansible -i inventory node2 -m shell -a "docker ps" | grep " k8s_controller-manager_k8s-master" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }

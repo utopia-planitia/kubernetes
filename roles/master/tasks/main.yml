@@ -31,10 +31,6 @@
   register: etcd_cert_hashsum
   changed_when: false
 
-- name: "set etcd_cert_hashsum variable"
-  set_fact:
-    etcd_cert_hashsum: "{{ etcd_cert_hashsum.stdout }}"
-
 - name: checksum of master certificates
   local_action: shell cd {{ master_cert_dir }}; md5sum ca.pem server.pem server-key.pem member.pem member-key.pem | md5sum | head -c 32
   register: master_cert_hashsum
@@ -42,7 +38,7 @@
 
 - name: "set master_cert_hashsum variable"
   set_fact:
-    master_cert_hashsum: "{{ master_cert_hashsum.stdout }}"
+    master_cert_hashsum: "{{ master_cert_hashsum.stdout }}-{{ etcd_cert_hashsum.stdout }}"
 
 - name: install master
   template: src=master.yml.j2 dest=/etc/kubernetes/manifests/master.yml

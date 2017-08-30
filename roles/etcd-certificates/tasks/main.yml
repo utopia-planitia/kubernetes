@@ -16,7 +16,7 @@
     - ca.csr
     - ca.pem
 
-- name: Set up a client certificate
+- name: Create the Client certificate
   shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ etcd_config_dir }}/config.json -profile=client {{ etcd_config_dir }}/client.json | cfssljson -bare client
   args:
     chdir: "{{ etcd_cert_dir }}"
@@ -26,7 +26,7 @@
     - client.csr
     - client.pem
 
-- name: Set up a member certificate
+- name: Create the Member certificate
   shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ etcd_config_dir }}/config.json -profile=member {{ etcd_config_dir }}/member.json | cfssljson -bare member
   args:
     chdir: "{{ etcd_cert_dir }}"
@@ -36,7 +36,7 @@
     - member.csr
     - member.pem
 
-- name: Set up a server certificate
+- name: Create the Server certificate
   shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ etcd_config_dir }}/config.json -profile=server {{ etcd_config_dir }}/server.json | cfssljson -bare server
   args:
     chdir: "{{ etcd_cert_dir }}"
