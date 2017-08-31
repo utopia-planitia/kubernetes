@@ -1,6 +1,10 @@
 ---
 
+<<<<<<< HEAD
 kubernetes_version: v1.7.6
+=======
+kubernetes_version: v1.7.5
+>>>>>>> c417b5a... fixed pathes
 etcd_version:       v3.2.6
 nginx_version:      1.13.3-alpine
 
