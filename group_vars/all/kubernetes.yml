@@ -4,7 +4,9 @@ kubernetes_version: v1.11.4
 etcd_version:       v3.2.18
 nginx_version:      1.13.3-alpine
 
-kubernetes_image: "gcr.io/google_containers/hyperkube:{{ kubernetes_version }}"
+apiserver_image: "gcr.io/google_containers/kube-apiserver:{{ kubernetes_version }}"
+controller_manager_image: "gcr.io/google_containers/kube-controller-manager:{{ kubernetes_version }}"
+scheduler_image: "gcr.io/google_containers/kube-scheduler:{{ kubernetes_version }}"
 kube_proxy_image: "gcr.io/google_containers/kube-proxy:{{ kubernetes_version }}"
 etcd_image:       "gcr.io/etcd-development/etcd:{{ etcd_version }}"
 nginx_image:      "nginx:{{ nginx_version }}"
