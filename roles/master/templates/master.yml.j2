@@ -12,7 +12,7 @@ spec:
   hostNetwork: true
   containers:
     - name: apiserver
-      image: {{ kubernetes_image }}
+      image: {{ apiserver_image }}
       command:
         - sh
       args:
@@ -51,7 +51,7 @@ spec:
         - name: kubernetes-ssl-certs
           mountPath: /etc/kubernetes/ssl
     - name: controller-manager
-      image: {{ kubernetes_image }}
+      image: {{ controller_manager_image }}
       args:
         - /controller-manager
         - --master=http://127.0.0.1:8080
@@ -76,7 +76,7 @@ spec:
         - name: kubernetes-ssl-certs
           mountPath: /etc/kubernetes/ssl
     - name: scheduler
-      image: {{ kubernetes_image }}
+      image: {{ scheduler_image }}
       args:
         - /scheduler
         - --master=http://127.0.0.1:8080
