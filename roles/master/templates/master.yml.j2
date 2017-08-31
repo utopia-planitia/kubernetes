@@ -7,14 +7,14 @@ spec:
   hostNetwork: true
   containers:
     - name: apiserver
-      image: {{ kubernetes_image }}
+      image: {{ apiserver_image }}
       command:
         - sh
       args:
         - -c
         - >-
           {% for host in groups['etcds'] %}echo {{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }} >> /etc/hosts && {% endfor %}
-          /apiserver
+          kube-apiserver
           --advertise-address={{ ansible_host }}
           --etcd-servers=https://etcd1:2379,https://etcd2:2379,https://etcd3:2379
           --etcd-cafile=/etc/kubernetes/ssl/etcd-ca.pem
@@ -66,9 +66,9 @@ spec:
         - name: logs
           mountPath: /var/log/kubernetes/
     - name: controller-manager
-      image: {{ kubernetes_image }}
+      image: {{ controller_manager_image }}
       args:
-        - /controller-manager
+        - kube-controller-manager
         - --master=http://127.0.0.1:8080
         - --service-account-private-key-file=/etc/kubernetes/ssl/master-key.pem
         - --root-ca-file=/etc/kubernetes/ssl/kubernetes-ca.pem
@@ -95,9 +95,9 @@ spec:
         - name: config
           mountPath: /etc/kubernetes
     - name: scheduler
-      image: {{ kubernetes_image }}
+      image: {{ scheduler_image }}
       args:
-        - /scheduler
+        - kube-scheduler
         - --master=http://127.0.0.1:8080
         - --leader-elect=true
         - --address=127.0.0.1
