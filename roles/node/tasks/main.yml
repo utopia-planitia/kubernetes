@@ -7,6 +7,14 @@
     recurse: true
   with_items:
     - /etc/kubernetes/manifests/
+    - /usr/local/bin/
+
+- name: download kubelet binary
+  get_url:
+    url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubelet"
+    dest: /usr/local/bin/kubelet
+    checksum: sha256:2ca46b4a9e6f1771d6d2ad529f525bc3154e4e13f31e265e1923a832eed11ab5
+    mode: 0771
 
 - name: create kubelet service
   template:

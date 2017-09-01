@@ -4,37 +4,13 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-TimeoutStartSec=0
-Restart=always
-ExecStartPre=-/usr/bin/docker stop kubelet
-ExecStartPre=-/usr/bin/docker rm kubelet
-ExecStartPre=/usr/bin/docker pull {{ kubernetes_image }}
-ExecStart=/usr/bin/docker \
-  run \
-  --name kubelet \
-  --pid=host \
-  --privileged=true \
-  --net=host \
-  -v /dev:/dev \
-  -v /sys:/sys:ro \
-  -v /var/run:/var/run:rw \
-  -v /var/lib/docker/:/var/lib/docker:rw \
-  -v /var/lib/kubelet/:/var/lib/kubelet:shared \
-  -v /var/log:/var/log:shared \
-  -v /srv/kubernetes:/srv/kubernetes:ro \
-  -v /etc/kubernetes:/etc/kubernetes:ro \
-  -v /etc/kubernetes/manifests:/etc/kubernetes/manifests:ro \
-  -v /:/rootfs:ro,shared \
-  -v /lib/modules/:/lib/modules/:ro \
-  {{ kubernetes_image }} \
-  /bin/bash -c ' \
-  /kubelet \
+ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
   --pod-manifest-path=/etc/kubernetes/manifests \
-  --containerized=true \
   --register-node=false \
   --container-runtime docker \
   2>&1 | tee -a /var/log/kubelet.log '
-ExecStop=/usr/bin/docker stop kubelet
+Restart=on-failure
+ResetSec=5
 
 [Install]
 WantedBy=multi-user.target
