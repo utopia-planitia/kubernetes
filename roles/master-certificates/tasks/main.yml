@@ -34,6 +34,17 @@
     - admin.csr
     - admin.pem
 
+- name: Create Admin config file
+  command: "kubectl --kubeconfig=admin-kube-config config {{ item }}"
+  args:
+    chdir: "{{ master_cert_dir }}"
+  with_items:
+    - "set-cluster default --server=https://{{ hostvars['node1']['ansible_host'] }}:6443 --embed-certs=true --certificate-authority=ca.pem"
+    - "set-credentials default --embed-certs=true --client-certificate=admin.pem --client-key=admin-key.pem"
+    - "set-context default --cluster=default --user=default"
+    - "use-context default"
+  changed_when: false
+
 - name: Create the Nodes certificate
   shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes nodes.json | cfssljson -bare nodes
   args:
@@ -43,6 +54,17 @@
     - nodes-key.pem
     - nodes.csr
     - nodes.pem
+
+- name: Create Nodes config file
+  command: "kubectl --kubeconfig=nodes-kube-config config {{ item }}"
+  args:
+    chdir: "{{ master_cert_dir }}"
+  with_items:
+    - set-cluster default --server=https://127.0.0.1:6443 --embed-certs=true --certificate-authority=ca.pem
+    - set-credentials default --embed-certs=true --client-certificate=nodes.pem --client-key=nodes-key.pem
+    - set-context default --cluster=default --user=default
+    - use-context default
+  changed_when: false
 
 - name: Create the Master certificate
   shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes master.json | cfssljson -bare master

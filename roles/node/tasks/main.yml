@@ -7,7 +7,21 @@
     recurse: true
   with_items:
     - /etc/kubernetes/manifests/
+    - /etc/kubelet/
     - /usr/local/bin/
+
+- name: copy kubelet certificates
+  copy:
+    src: "{{ master_cert_dir }}/{{ item.local }}"
+    dest: "/etc/kubelet/{{ item.remote }}"
+  with_items:
+    - { local: 'ca.pem', remote: 'ca.pem' }
+    - { local: 'nodes.pem', remote: 'kubelet.pem' }
+    - { local: 'nodes-key.pem', remote: 'kubelet-key.pem' }
+    - { local: 'nodes-kube-config', remote: 'kubeconfig' }
+  no_log: true
+  notify:
+    - restart kubelet
 
 - name: download kubelet binary
   get_url:

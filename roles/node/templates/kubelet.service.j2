@@ -6,8 +6,18 @@ Requires=docker.service
 [Service]
 ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
   --pod-manifest-path=/etc/kubernetes/manifests \
-  --register-node=false \
+  --register-node=true \
   --container-runtime docker \
+  --image-pull-progress-deadline=2m \
+  --allow-privileged=true \
+  --cluster-dns=10.32.0.10 \
+  --cluster-domain=cluster.local \
+  --require-kubeconfig \
+  --kubeconfig=/etc/kubelet/kubeconfig \
+  --serialize-image-pulls=false \
+  --client-ca-file=/etc/kubelet/ca.pem \
+  --tls-cert-file=/etc/kubelet/kubelet.pem \
+  --tls-private-key-file=/etc/kubelet/kubelet-key.pem \
   2>&1 | tee -a /var/log/kubelet.log '
 Restart=on-failure
 ResetSec=5

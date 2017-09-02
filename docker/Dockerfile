@@ -29,3 +29,7 @@ RUN curl -L -o cfssl     https://pkg.cfssl.org/R1.2/cfssl_linux-amd64     && ech
 RUN curl -L -o cfssljson https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 && echo "a9766e7eef71a39a5d2ca94061c8a6004fcdd524 cfssljson" | sha1sum -c -
 RUN chmod +x cfssl* && mv cfssl* /usr/local/bin
 
+# kubectl
+ENV KUBERNETES_VERSION v1.7.5
+RUN curl -L -o kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl
+RUN chmod +x kubectl && mv kubectl /usr/local/bin
