@@ -10,13 +10,13 @@
     sleep 0.5
   done
 }
-@test "node3: wait for master-forwarder" {
-  until [[ $( ansible -i inventory node3 -m shell -a "docker ps" | grep " k8s_forwarder_master-forwarder" | wc -l ) = "1" ]]; do
+@test "node3: wait for master-proxy" {
+  until [[ $( ansible -i inventory node3 -m shell -a "docker ps" | grep " k8s_forwarder_master-proxy" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
-@test "node4: wait for master-forwarder" {
-  until [[ $( ansible -i inventory node4 -m shell -a "docker ps" | grep " k8s_forwarder_master-forwarder" | wc -l ) = "1" ]]; do
+@test "node4: wait for master-proxy" {
+  until [[ $( ansible -i inventory node4 -m shell -a "docker ps" | grep " k8s_forwarder_master-proxy" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
@@ -29,11 +29,11 @@
   result="$( ansible -i inventory node2 -m raw -a "curl -k https://127.0.0.1:6443/ | grep Unauthorized")"
   [[ "$status" -eq 0 ]]
 }
-@test "node3: check master-forwarder" {
+@test "node3: check master-proxy" {
   result="$( ansible -i inventory node3 -m raw -a "curl -k https://127.0.0.1:6443/ | grep Unauthorized")"
   [[ "$status" -eq 0 ]]
 }
-@test "node4: check master-forwarder" {
+@test "node4: check master-proxy" {
   result="$( ansible -i inventory node4 -m raw -a "curl -k https://127.0.0.1:6443/ | grep Unauthorized")"
   [[ "$status" -eq 0 ]]
 }

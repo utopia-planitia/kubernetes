@@ -8,10 +8,10 @@ stages:
   - destroy
 
 variables:
-  DOCKER_IMAGE:            docker:17.06.0-ce
-  DEV_TOOLS_IMAGE_SHA:     ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
-  DEV_TOOLS_IMAGE_LATEST:  ${CI_REGISTRY_IMAGE}:latest
-  KUBECONFIG: ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
+  DOCKER_IMAGE:           docker:17.06.0-ce
+  DEV_TOOLS_IMAGE_SHA:    ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
+  DEV_TOOLS_IMAGE_LATEST: ${CI_REGISTRY_IMAGE}:latest
+  KUBECONFIG:             ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
 
 before_script:
   - mv .ssh ~/.ssh
@@ -23,8 +23,8 @@ devtools image:
   services:
     - ${DOCKER_IMAGE}-dind
   variables:
-    DOCKER_DRIVER:            overlay2
-    DOCKER_HOST:              tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST:   tcp://docker:2375
   before_script: []
   script:
     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
@@ -145,12 +145,12 @@ master:
   script:
     - bats tests/master.bats
 
-master-forwarder:
+master-proxy:
   stage: tests
   image: ${DEV_TOOLS_IMAGE_SHA}
   retry: 2
   script:
-    - bats tests/master-forwarder.bats
+    - bats tests/master-proxy.bats
 
 kube-proxy:
   stage: tests

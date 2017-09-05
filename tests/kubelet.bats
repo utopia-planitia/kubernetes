@@ -27,13 +27,13 @@
     sleep 0.5
   done
 }
-@test "node3: wait for master-forwarder" {
-  until [[ $( ansible -i inventory node3 -m shell -a "docker ps" | grep " k8s_forwarder_master-forwarder" | wc -l ) = "1" ]]; do
+@test "node3: wait for master-proxy" {
+  until [[ $( ansible -i inventory node3 -m shell -a "docker ps" | grep " k8s_forwarder_master-proxy" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
-@test "node4: wait for master-forwarder" {
-  until [[ $( ansible -i inventory node4 -m shell -a "docker ps" | grep " k8s_forwarder_master-forwarder" | wc -l ) = "1" ]]; do
+@test "node4: wait for master-proxy" {
+  until [[ $( ansible -i inventory node4 -m shell -a "docker ps" | grep " k8s_forwarder_master-proxy" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }

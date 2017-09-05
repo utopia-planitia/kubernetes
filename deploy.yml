@@ -33,4 +33,4 @@
 
 - hosts: all:!masters
   roles:
-    - { role: master-forwarder }
+    - { role: master-proxy }
