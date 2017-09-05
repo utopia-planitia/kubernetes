@@ -1,5 +1,6 @@
 stages:
   - prepare
+  - certificates
   - build
   - tests
   - destroy
@@ -8,33 +9,26 @@ variables:
   DEV_TOOLS_IMAGE: ${CI_REGISTRY_IMAGE}-tools:v1
   KUBECONFIG:      ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
 
-before_script:
-  - mv .ssh ~/.ssh
-
 lint:
   stage: prepare
   image: ${DEV_TOOLS_IMAGE}
-  before_script: []
   script:
     - ansible-lint *.yml roles
 
 provision:
   stage: prepare
   image: ${DEV_TOOLS_IMAGE}
-  before_script: []
   retry: 2
   script:
     - mkdir ~/.ssh
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/id_rsa
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
     - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
-    - cp -a ~/.ssh .ssh
     - touch inventory
     - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_KEYPAIR_NAME=ci-runner" ${ANSIBLE_OPTIONS}
   artifacts:
     paths:
       - inventory
-      - .ssh
 
 destroy:
   stage: destroy
@@ -44,28 +38,47 @@ destroy:
     - ansible-playbook ovh-destroy.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
   when: always
 
+certificates:
+  stage: certificates
+  image: ${DEV_TOOLS_IMAGE}
+  retry: 2
+  script:
+    - ansible-playbook certificates.yml ${ANSIBLE_OPTIONS}
+  artifacts:
+    paths:
+      - certificates
+
 deploy:
   stage: build
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
+    - mkdir ~/.ssh
+    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/id_rsa
+    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
+    - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
     - bash etc/wait-for-kubernetes-control-plane.sh
-  artifacts:
-    paths:
-      - certificates
 
 redeploy:
   stage: tests
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
+    - mkdir ~/.ssh
+    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/id_rsa
+    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
+    - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS} | tee deploy.log
-    - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 5
+    - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 4
 
 overlay2:
   stage: tests
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
+    - mkdir ~/.ssh
+    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/id_rsa
+    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
+    - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
     - bats tests/overlay2.bats

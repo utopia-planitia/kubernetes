@@ -12,7 +12,9 @@ system-requirements-check: ##@setup checks system for required dependencies
 
 .PHONY: deploy
 deploy: ##@ansible deploy to nodes
-	$(CLI) ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
+	$(CLI) ansible-playbook certificates.yml ${ANSIBLE_OPTIONS}
+	$(CLI) ansible-playbook deploy.yml       ${ANSIBLE_OPTIONS}
+	$(CLI) bash etc/wait-for-kubernetes-control-plane.sh
 
 .PHONY: lint
 lint: ##@ansible lint ansible config
@@ -20,5 +22,4 @@ lint: ##@ansible lint ansible config
 
 .PHONY: tests
 tests: ##@development run all tests
-	$(CLI) bash etc/wait-for-kubernetes-control-plane.sh
 	$(CLI) bats tests/*
