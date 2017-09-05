@@ -36,7 +36,14 @@ destroy:
   retry: 2
   script:
     - ansible-playbook ovh-destroy.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
-  when: always
+
+destroy now:
+  stage: destroy
+  image: ${DEV_TOOLS_IMAGE}
+  retry: 2
+  script:
+    - ansible-playbook ovh-destroy.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
+  when: manual
 
 certificates:
   stage: certificates
