@@ -1,8 +1,6 @@
 stages:
-  - fast-tests
-  - provision-nodes
-  - inventory
-  - deploy
+  - prepare
+  - build
   - tests
   - destroy
 
@@ -14,62 +12,29 @@ before_script:
   - mv .ssh ~/.ssh
 
 lint:
-  stage: fast-tests
+  stage: prepare
   image: ${DEV_TOOLS_IMAGE}
   before_script: []
   script:
     - ansible-lint *.yml roles
 
-ssh key:
-  stage: fast-tests
+provision:
+  stage: prepare
   image: ${DEV_TOOLS_IMAGE}
   before_script: []
-  script:
-    - mkdir .ssh
-    - echo ${SSH_KEY_PRIVATE} | base64 -d > .ssh/id_rsa
-    - echo ${SSH_KEY_PUBLIC}  | base64 -d > .ssh/id_rsa.pub
-    - chmod 400 .ssh/id_rsa .ssh/id_rsa.pub
-  artifacts:
-    paths:
-      - .ssh
-
-.provision_node: &provision_node
-  stage: provision-nodes
-  image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
-    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_NODE=${OVH_NODE} OVH_KEYPAIR_NAME=ci-runner" ${ANSIBLE_OPTIONS}
-
-node1:
-  <<: *provision_node
-  variables:
-    OVH_NODE: node1
-
-node2:
-  <<: *provision_node
-  variables:
-    OVH_NODE: node2
-
-node3:
-  <<: *provision_node
-  variables:
-    OVH_NODE: node3
-
-node4:
-  <<: *provision_node
-  variables:
-    OVH_NODE: node4
-
-provision:
-  stage: inventory
-  image: ${DEV_TOOLS_IMAGE}
-  retry: 2
-  script:
+    - mkdir ~/.ssh
+    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/id_rsa
+    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
+    - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
+    - cp -a ~/.ssh .ssh
     - touch inventory
     - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_KEYPAIR_NAME=ci-runner" ${ANSIBLE_OPTIONS}
   artifacts:
     paths:
       - inventory
+      - .ssh
 
 destroy:
   stage: destroy
@@ -80,7 +45,7 @@ destroy:
   when: always
 
 deploy:
-  stage: deploy
+  stage: build
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
