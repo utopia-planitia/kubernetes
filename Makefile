@@ -20,4 +20,5 @@ lint: ##@ansible lint ansible config
 
 .PHONY: tests
 tests: ##@development run all tests
+	$(CLI) bash etc/wait-for-kubernetes-control-plane.sh
 	$(CLI) bats tests/*

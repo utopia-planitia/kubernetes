@@ -50,7 +50,7 @@ deploy:
   retry: 2
   script:
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
-    - bats tests/control-plane.bats
+    - bash etc/wait-for-kubernetes-control-plane.sh
   artifacts:
     paths:
       - certificates
