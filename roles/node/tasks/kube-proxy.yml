@@ -1,0 +1,33 @@
+
+---
+
+- name: create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: true
+  with_items:
+    - /etc/kubernetes/manifests/
+    - /etc/kube-proxy/
+
+- name: copy kube-proxy certificates
+  copy:
+    src: "{{ master_cert_dir }}/{{ item.local }}"
+    dest: "/etc/kube-proxy/{{ item.remote }}"
+  with_items:
+    - { local: 'nodes-kube-config', remote: 'kubeconfig' }
+  no_log: true
+
+- name: checksum of kube proxy config
+  shell: md5sum /etc/kube-proxy/kubeconfig | head -c 32
+  register: kube_proxy_config_hashsum
+  changed_when: false
+
+- name: "set kube_proxy_config_hashsum variable"
+  set_fact:
+    kube_proxy_config_hashsum: "{{ kube_proxy_config_hashsum.stdout }}"
+
+- name: install kube-proxy
+  template:
+    src: kube-proxy.yml.j2
+    dest: /etc/kubernetes/manifests/kube-proxy.yml

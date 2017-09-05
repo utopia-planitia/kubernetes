@@ -1,12 +1,12 @@
 #!/usr/bin/env bats
 
 @test "node1: wait for apiserver" {
-  until [[ $( ansible -i inventory node1 -m shell -a "docker ps" | grep " k8s_apiserver_k8s-master" | wc -l ) = "1" ]]; do
+  until [[ $( ansible -i inventory node1 -m shell -a "docker ps" | grep " k8s_apiserver_master" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
 @test "node2: wait for apiserver" {
-  until [[ $( ansible -i inventory node2 -m shell -a "docker ps" | grep " k8s_apiserver_k8s-master" | wc -l ) = "1" ]]; do
+  until [[ $( ansible -i inventory node2 -m shell -a "docker ps" | grep " k8s_apiserver_master" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }

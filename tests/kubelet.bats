@@ -18,12 +18,12 @@
 }
 
 @test "node1: wait for apiserver" {
-  until [[ $( ansible -i inventory node1 -m shell -a "docker ps" | grep " k8s_apiserver_k8s-master" | wc -l ) = "1" ]]; do
+  until [[ $( ansible -i inventory node1 -m shell -a "docker ps" | grep " k8s_apiserver_master" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
 @test "node2: wait for apiserver" {
-  until [[ $( ansible -i inventory node2 -m shell -a "docker ps" | grep " k8s_apiserver_k8s-master" | wc -l ) = "1" ]]; do
+  until [[ $( ansible -i inventory node2 -m shell -a "docker ps" | grep " k8s_apiserver_master" | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
@@ -39,22 +39,22 @@
 }
 
 @test "node1: wait for registration" {  
-  until [[ $( kubectl --kubeconfig=./certificates/master/admin-kube-config get no --no-headers=true | grep node1 | wc -l ) = "1" ]]; do
+  until [[ $( kubectl get no --no-headers=true | grep node1 | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
 @test "node2: wait for registration" {
-  until [[ $( kubectl --kubeconfig=./certificates/master/admin-kube-config get no --no-headers=true | grep node2 | wc -l ) = "1" ]]; do
+  until [[ $( kubectl get no --no-headers=true | grep node2 | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
 @test "node3: wait for registration" {
-  until [[ $( kubectl --kubeconfig=./certificates/master/admin-kube-config get no --no-headers=true | grep node3 | wc -l ) = "1" ]]; do
+  until [[ $( kubectl get no --no-headers=true | grep node3 | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }
 @test "node4: wait for registration" {
-  until [[ $( kubectl --kubeconfig=./certificates/master/admin-kube-config get no --no-headers=true | grep node4 | wc -l ) = "1" ]]; do
+  until [[ $( kubectl get no --no-headers=true | grep node4 | wc -l ) = "1" ]]; do
     sleep 0.5
   done
 }

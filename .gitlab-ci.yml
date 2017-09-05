@@ -11,6 +11,7 @@ variables:
   DOCKER_IMAGE:            docker:17.06.0-ce
   DEV_TOOLS_IMAGE_SHA:     ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
   DEV_TOOLS_IMAGE_LATEST:  ${CI_REGISTRY_IMAGE}:latest
+  KUBECONFIG: ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
 
 before_script:
   - mv .ssh ~/.ssh
@@ -150,3 +151,10 @@ master-forwarder:
   retry: 2
   script:
     - bats tests/master-forwarder.bats
+
+kube-proxy:
+  stage: tests
+  image: ${DEV_TOOLS_IMAGE_SHA}
+  retry: 2
+  script:
+    - bats tests/kube-proxy.bats

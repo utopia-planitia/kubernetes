@@ -3,7 +3,9 @@ OVH_KEYPAIR_NAME = $(shell hostname -s)
 
 .PHONY: ovh-provision
 ovh-provision: ##@ovh start vms and create inventory
-	touch inventory
+	$(CLI) touch certificates
+	$(CLI) rm -r certificates
+	$(CLI) touch inventory
 	$(CLI) ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=$(CURRENT_GIT_BRANCH) OVH_KEYPAIR_NAME=$(OVH_KEYPAIR_NAME)" ${ANSIBLE_OPTIONS}
 
 .PHONY: ovh-destroy

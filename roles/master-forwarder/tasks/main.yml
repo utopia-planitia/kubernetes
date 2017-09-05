@@ -19,4 +19,6 @@
     master_forwarder_config_hashsum: "{{ master_forwarder_config_hashsum.stdout }}"
 
 - name: install master-forwarder
-  template: src=master-forwarder.yml.j2 dest=/etc/kubernetes/manifests/master-forwarder.yml
+  template:
+    src: master-forwarder.yml.j2
+    dest: /etc/kubernetes/manifests/master-forwarder.yml

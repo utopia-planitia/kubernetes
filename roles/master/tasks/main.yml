@@ -41,4 +41,6 @@
     master_cert_hashsum: "{{ master_cert_hashsum.stdout }}-{{ etcd_cert_hashsum.stdout }}"
 
 - name: install master
-  template: src=master.yml.j2 dest=/etc/kubernetes/manifests/master.yml
+  template:
+    src: master.yml.j2
+    dest: /etc/kubernetes/manifests/master.yml

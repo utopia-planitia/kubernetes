@@ -5,6 +5,9 @@ metadata:
   namespace: kube-system
   annotations:
     ansible/config-hash: {{ master_forwarder_config_hashsum }}
+  labels:
+    name: master-forwarder
+    host: {{ inventory_hostname_short }}
 spec:
   hostNetwork: true
   containers:
