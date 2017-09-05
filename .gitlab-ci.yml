@@ -50,6 +50,7 @@ deploy:
   retry: 2
   script:
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
+    - bats tests/control-plane.bats
   artifacts:
     paths:
       - certificates
@@ -68,38 +69,3 @@ overlay2:
   retry: 2
   script:
     - bats tests/overlay2.bats
-
-kubelet:
-  stage: tests
-  image: ${DEV_TOOLS_IMAGE}
-  retry: 2
-  script:
-    - bats tests/kubelet.bats
-
-etcd:
-  stage: tests
-  image: ${DEV_TOOLS_IMAGE}
-  retry: 2
-  script:
-    - bats tests/etcd.bats
-
-master:
-  stage: tests
-  image: ${DEV_TOOLS_IMAGE}
-  retry: 2
-  script:
-    - bats tests/master.bats
-
-master-proxy:
-  stage: tests
-  image: ${DEV_TOOLS_IMAGE}
-  retry: 2
-  script:
-    - bats tests/master-proxy.bats
-
-kube-proxy:
-  stage: tests
-  image: ${DEV_TOOLS_IMAGE}
-  retry: 2
-  script:
-    - bats tests/kube-proxy.bats
