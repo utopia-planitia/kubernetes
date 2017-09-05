@@ -1,5 +1,4 @@
 stages:
-  - prepare
   - fast-tests
   - provision-nodes
   - inventory
@@ -8,41 +7,22 @@ stages:
   - destroy
 
 variables:
-  DOCKER_IMAGE:           docker:17.06.0-ce
-  DEV_TOOLS_IMAGE_SHA:    ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
-  DEV_TOOLS_IMAGE_LATEST: ${CI_REGISTRY_IMAGE}:latest
-  KUBECONFIG:             ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
+  DEV_TOOLS_IMAGE: ${CI_REGISTRY_IMAGE}-tools:v1
+  KUBECONFIG:      ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
 
 before_script:
   - mv .ssh ~/.ssh
 
-devtools image:
-  stage: prepare
-  image: ${DOCKER_IMAGE}
-  retry: 2
-  services:
-    - ${DOCKER_IMAGE}-dind
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_HOST:   tcp://docker:2375
-  before_script: []
-  script:
-    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
-    - docker pull ${DEV_TOOLS_IMAGE_LATEST} || true
-    - docker build --pull --cache-from ${DEV_TOOLS_IMAGE_LATEST} -t ${DEV_TOOLS_IMAGE_SHA} docker
-    - if [ "${CI_COMMIT_REF_NAME}" = "master" ]; then docker tag ${DEV_TOOLS_IMAGE_SHA} ${DEV_TOOLS_IMAGE_LATEST}; docker push ${DEV_TOOLS_IMAGE_LATEST}; fi
-    - docker push ${DEV_TOOLS_IMAGE_SHA}
-
 lint:
   stage: fast-tests
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   before_script: []
   script:
     - ansible-lint *.yml roles
 
 ssh key:
   stage: fast-tests
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   before_script: []
   script:
     - mkdir .ssh
@@ -55,7 +35,7 @@ ssh key:
 
 .provision_node: &provision_node
   stage: provision-nodes
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_NODE=${OVH_NODE} OVH_KEYPAIR_NAME=ci-runner" ${ANSIBLE_OPTIONS}
@@ -82,7 +62,7 @@ node4:
 
 provision:
   stage: inventory
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - touch inventory
@@ -93,7 +73,7 @@ provision:
 
 destroy:
   stage: destroy
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - ansible-playbook ovh-destroy.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
@@ -101,7 +81,7 @@ destroy:
 
 deploy:
   stage: deploy
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
@@ -111,7 +91,7 @@ deploy:
 
 redeploy:
   stage: tests
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS} | tee deploy.log
@@ -119,42 +99,42 @@ redeploy:
 
 overlay2:
   stage: tests
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - bats tests/overlay2.bats
 
 kubelet:
   stage: tests
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - bats tests/kubelet.bats
 
 etcd:
   stage: tests
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - bats tests/etcd.bats
 
 master:
   stage: tests
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - bats tests/master.bats
 
 master-proxy:
   stage: tests
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - bats tests/master-proxy.bats
 
 kube-proxy:
   stage: tests
-  image: ${DEV_TOOLS_IMAGE_SHA}
+  image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - bats tests/kube-proxy.bats
