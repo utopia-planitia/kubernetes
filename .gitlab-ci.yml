@@ -6,7 +6,7 @@ stages:
   - destroy
 
 variables:
-  DEV_TOOLS_IMAGE: ${CI_REGISTRY_IMAGE}-tools:v1
+  DEV_TOOLS_IMAGE: ${CI_REGISTRY_IMAGE}-tools:v2
   KUBECONFIG:      ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
 
 lint:
