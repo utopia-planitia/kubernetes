@@ -3,3 +3,4 @@
   roles:
     - { role: etcd-certificates }
     - { role: master-certificates }
+    - { role: weave-certificates }

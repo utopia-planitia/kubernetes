@@ -31,7 +31,7 @@ spec:
           --kubelet-certificate-authority=/etc/kubernetes/ssl/kubernetes-ca.pem
           --kubelet-client-certificate=/etc/kubernetes/ssl/master.pem
           --kubelet-client-key=/etc/kubernetes/ssl/master-key.pem
-          --service-cluster-ip-range=10.16.0.0/12
+          --service-cluster-ip-range=10.32.0.0/24
           --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds
           --allow_privileged=true
           --apiserver-count={{ groups['masters'] | length }}

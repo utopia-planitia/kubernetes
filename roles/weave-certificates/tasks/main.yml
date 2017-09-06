@@ -1,0 +1,22 @@
+---
+
+- name: create directory
+  file:
+    path: "{{ addons_cert_dir }}"
+    state: directory
+    recurse: true
+
+- name: create weave secret
+  local_action: shell cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 64
+  register: weave_secret
+  changed_when: false
+
+- name: "set weave_secret variable"
+  set_fact:
+    weave_secret: "{{ weave_secret.stdout }}"
+
+- name: render secret yml
+  template:
+    src: "weave-secret.yml.j2"
+    dest: "{{ addons_cert_dir }}/weave-secret.yml"
+    force: false

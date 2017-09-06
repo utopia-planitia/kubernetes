@@ -66,6 +66,8 @@ deploy:
     - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
     - bash etc/wait-for-kubernetes-control-plane.sh
+    - kubectl apply -f addons/ -f certificates/addons/
+    - bash etc/wait-for-addons.sh
 
 redeploy:
   stage: tests

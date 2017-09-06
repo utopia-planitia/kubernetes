@@ -1,0 +1,13 @@
+---
+
+- name: create directories
+  file:
+    path: /usr/local/bin/
+    state: directory
+    recurse: true
+
+- name: weave binary
+  template:
+    src: weave.j2
+    dest: /usr/local/bin/weave
+    mode: 0755

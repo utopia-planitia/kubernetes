@@ -1,0 +1,32 @@
+---
+
+- name: create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: true
+  with_items:
+    - /opt/cni/bin
+    - /etc/cni/net.d
+
+- name: download
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.local_file }}"
+    checksum: "{{ item.checksum }}"
+  with_items: "{{ cni_packages }}"
+
+- name: unpack
+  unarchive:
+    dest: /opt/cni/bin
+    copy: no
+    src: "{{ item.local_file }}"
+    creates: "{{ item.creates }}"
+  with_items: "{{ cni_packages }}"
+
+- name: unpack cni plugins
+  unarchive:
+    src: /opt/cni.tar.gz
+    dest: /opt/cni/bin
+    copy: no
+    creates: /opt/cni/bin/portmap
