@@ -23,3 +23,7 @@ lint: ##@ansible lint ansible config
 .PHONY: tests
 tests: ##@development run all tests
 	$(CLI) bats tests/*
+
+.PHONY: status
+status: ##@development show current system status
+	$(CLI) ./etc/status.sh

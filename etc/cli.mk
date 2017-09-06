@@ -10,4 +10,4 @@ cli-pull-image: ##@development pull latest version of DEV_TOOLS_DOCKER_IMAGE
 
 .PHONY: cli
 cli: ##@development creates command line interface
-	$(CLI) bash
+	$(CLI)
