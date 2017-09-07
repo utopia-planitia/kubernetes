@@ -97,8 +97,8 @@ for ID in $NODES; do
 done
 
 for ID in $NODES; do
-  echo waiting for node${ID} registration
-  until [[ $( kubectl get no --no-headers=true | grep node${ID} | wc -l ) = "1" ]]; do
+  echo waiting for node ${ID}/4 registration
+  until [[ $( kubectl get no --no-headers=true | wc -l ) -ge "${ID}" ]]; do
    sleep 0.5
    echo -n .
   done
