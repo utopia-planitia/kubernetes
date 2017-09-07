@@ -14,8 +14,3 @@
     src: weave
     dest: /usr/local/bin/weave
     mode: 0755
-
-- name: weave cni config
-  template:
-    src: 10-weave.conf.j2
-    dest: /etc/cni/net.d/10-weave.conf
