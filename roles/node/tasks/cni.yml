@@ -30,3 +30,8 @@
     dest: /opt/cni/bin
     copy: no
     creates: /opt/cni/bin/portmap
+
+- name: add cni configuration
+  copy:
+    src: "10-weave.conf"
+    dest: "/etc/cni/net.d/10-weave.conf"
