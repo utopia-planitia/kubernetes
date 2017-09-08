@@ -25,5 +25,5 @@ PODS_COUNT=$( kubectl get po --all-namespaces=true --no-headers=true | wc -l )
 PODS_READY=$( kubectl get po --all-namespaces=true --no-headers=true | grep Running | wc -l )
 echo "${PODS_READY} pods are running"
 if [[ ! "${PODS_COUNT}" = "${PODS_READY}" ]]; then
-	kubectl get po --all-namespaces=true | grep -v Running
+	kubectl get po --all-namespaces=true -o wide | grep -v Running
 fi

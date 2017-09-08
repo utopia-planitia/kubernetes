@@ -1,5 +1,6 @@
 ---
 
+- include: etc-hosts.yml
 - include: kubelet.yml
 - include: kube-proxy.yml
 - include: cni.yml

@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kubernetes-default-svc-cluster-local
+spec:
+  template:
+    metadata:
+      name: kubernetes-default-svc-cluster-local
+    spec:
+      containers:
+      - name: dns
+        image: azukiapp/dig:0.3.0
+        command:
+          - sh
+          - -c
+          - "nslookup kubernetes.default.svc.cluster.local | grep Address"
+      restartPolicy: Never

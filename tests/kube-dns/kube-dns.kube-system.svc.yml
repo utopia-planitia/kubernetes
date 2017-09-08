@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kube-dns-kube-system-svc
+spec:
+  template:
+    metadata:
+      name: kube-dns-kube-system-svc
+    spec:
+      containers:
+      - name: dns
+        image: azukiapp/dig:0.3.0
+        command:
+          - sh
+          - -c
+          - "nslookup kube-dns.kube-system.svc | grep Address"
+      restartPolicy: Never

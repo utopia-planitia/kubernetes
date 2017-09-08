@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kubernetes
+spec:
+  template:
+    metadata:
+      name: kubernetes
+    spec:
+      containers:
+      - name: dns
+        image: azukiapp/dig:0.3.0
+        command:
+          - sh
+          - -c
+          - "nslookup kubernetes | grep Address"
+      restartPolicy: Never

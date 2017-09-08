@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: google-public-dns-a-google-com
+spec:
+  template:
+    metadata:
+      name: google-public-dns-a-google-com
+    spec:
+      containers:
+      - name: dns
+        image: azukiapp/dig:0.3.0
+        command:
+          - sh
+          - -c
+          - "nslookup google-public-dns-a.google.com | grep Address"
+      restartPolicy: Never

@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kubernetes-default-svc
+spec:
+  template:
+    metadata:
+      name: kubernetes-default-svc
+    spec:
+      containers:
+      - name: dns
+        image: azukiapp/dig:0.3.0
+        command:
+          - sh
+          - -c
+          - "nslookup kubernetes.default.svc | grep Address"
+      restartPolicy: Never

@@ -91,3 +91,10 @@ overlay2:
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
     - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
     - bats tests/overlay2.bats
+
+kube-dns:
+  stage: tests
+  image: ${DEV_TOOLS_IMAGE}
+  retry: 2
+  script:
+    - bats tests/kube-dns.bats
