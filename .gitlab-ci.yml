@@ -98,3 +98,10 @@ kube-dns:
   retry: 2
   script:
     - bats tests/kube-dns.bats
+
+get logs:
+  stage: tests
+  image: ${DEV_TOOLS_IMAGE}
+  retry: 2
+  script:
+    - bats tests/logging.bats
