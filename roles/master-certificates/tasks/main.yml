@@ -39,7 +39,7 @@
   args:
     chdir: "{{ master_cert_dir }}"
   with_items:
-    - "set-cluster default --server=https://{{ hostvars['node1']['ansible_host'] }}:6443 --embed-certs=true --certificate-authority=ca.pem"
+    - "set-cluster default --server=https://{{ hostvars[groups['masters'][0]]['ansible_host'] }}:6443 --embed-certs=true --certificate-authority=ca.pem"
     - "set-credentials default --embed-certs=true --client-certificate=admin.pem --client-key=admin-key.pem"
     - "set-context default --cluster=default --user=default"
     - "use-context default"

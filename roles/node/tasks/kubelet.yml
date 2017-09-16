@@ -46,3 +46,7 @@
     name: kubelet
     enabled: yes
     state: started
+
+- name: wait for kubelet to be available
+  wait_for:
+    port: 10248

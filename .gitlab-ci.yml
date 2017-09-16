@@ -65,7 +65,7 @@ deploy:
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
     - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
-    - bash etc/wait-for-kubernetes-control-plane.sh
+    - bash etc/wait-for-nodes.sh
     - kubectl apply -f addons/ -f certificates/addons/
     - bash etc/wait-for-addons.sh
 
@@ -99,7 +99,7 @@ kube-dns:
   script:
     - bats tests/kube-dns.bats
 
-get logs:
+logging:
   stage: tests
   image: ${DEV_TOOLS_IMAGE}
   retry: 2

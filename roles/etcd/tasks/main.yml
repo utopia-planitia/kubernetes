@@ -29,3 +29,7 @@
 
 - name: install etcd
   template: src=etcd.yml.j2 dest=/etc/kubernetes/manifests/etcd.yml
+
+- name: wait for etcd to be available
+  wait_for:
+    port: 2379

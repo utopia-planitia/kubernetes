@@ -44,3 +44,19 @@
   template:
     src: master.yml.j2
     dest: /etc/kubernetes/manifests/master.yml
+
+- name: wait for insecure apiserver to be available
+  wait_for:
+    port: 8080
+
+- name: wait for secure apiserver to be available
+  wait_for:
+    port: 6443
+
+- name: wait for scheduler to be available
+  wait_for:
+    port: 10251
+
+- name: wait for controller-manager to be available
+  wait_for:
+    port: 10252

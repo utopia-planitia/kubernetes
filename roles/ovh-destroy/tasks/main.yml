@@ -7,7 +7,7 @@
 
 - name: remove instances
   os_server:
-    name: "{{ OVH_NODES_PREFIX }}-{{ item }}"
+    name: "{{ item }}"
     state: absent
   with_items: "{{ groups.ovh }}"
   when: item == OVH_NODE | default(item)

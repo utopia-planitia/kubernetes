@@ -1,6 +1,6 @@
 ---
 
-- name: create kubernetes ssl directory
+- name: create master proxy directory
   file:
     path: /etc/master-proxy
     state: directory
@@ -22,3 +22,7 @@
   template:
     src: master-proxy.yml.j2
     dest: /etc/kubernetes/manifests/master-proxy.yml
+
+- name: wait for master-proxy to be available
+  wait_for:
+    port: 6443
