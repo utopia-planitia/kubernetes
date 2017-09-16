@@ -99,6 +99,13 @@ kube-dns:
   script:
     - bats tests/kube-dns.bats
 
+ping:
+  stage: tests
+  image: ${DEV_TOOLS_IMAGE}
+  retry: 2
+  script:
+    - bats tests/ping.bats
+
 logging:
   stage: tests
   image: ${DEV_TOOLS_IMAGE}

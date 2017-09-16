@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: google-dns
+spec:
+  template:
+    metadata:
+      name: google-dns
+    spec:
+      containers:
+      - name: dig
+        image: azukiapp/dig:0.3.0
+        command:
+          - sh
+          - -c
+          - "ping -c 1 8.8.8.8"
+      restartPolicy: Never
