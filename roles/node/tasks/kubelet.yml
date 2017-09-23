@@ -28,7 +28,7 @@
   get_url:
     url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubelet"
     dest: /usr/local/bin/kubelet
-    checksum: sha256:2ca46b4a9e6f1771d6d2ad529f525bc3154e4e13f31e265e1923a832eed11ab5
+    checksum: sha256:6178cb17d3c34ebe31dfc572d17ae077ce19d2a936bbe90999bac87ebf6e06eb
     mode: 0771
 
 - name: create kubelet service

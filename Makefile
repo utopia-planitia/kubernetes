@@ -1,10 +1,9 @@
 
 include ./etc/help.mk
 include ./etc/cli.mk
+include ./etc/tests.mk
 include ./etc/ovh.mk
 include ./etc/vagrant/vagrant.mk
-
-#ANSIBLE_OPTIONS ?= "-vvvv"
 
 .PHONY: system-requirements-check
 system-requirements-check: ##@setup checks system for required dependencies
@@ -21,14 +20,6 @@ deploy: ##@ansible deploy to nodes
 	$(CLI) bash etc/wait-for-nodes.sh
 	$(CLI) kubectl apply -f addons/ -f certificates/addons/
 	$(CLI) bash etc/wait-for-addons.sh
-
-.PHONY: lint
-lint: ##@ansible lint ansible config
-	$(CLI) ansible-lint *.yml roles
-
-.PHONY: tests
-tests: ##@development run all tests
-	$(CLI) bats tests/*
 
 .PHONY: status
 status: ##@development show current system status
