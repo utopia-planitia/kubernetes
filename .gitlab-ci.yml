@@ -3,7 +3,7 @@ stages:
   - certificates
   - build
   - tests
-  - conformance-serial
+  - serial 1
   - destroy
 
 variables:
@@ -114,7 +114,7 @@ logging:
   script:
     - bats tests/logging.bats
 
-conformance:
+conformance 1/2:
   stage: tests
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
@@ -122,8 +122,16 @@ conformance:
     - cd /go/src/k8s.io/kubernetes
     - go run hack/e2e.go -get=false -- -v -test -check-version-skew=false --provider=skeleton -test_args="--ginkgo.focus=\[Conformance\] --ginkgo.skip=\[Serial\]|\[Flaky\]|\[Feature:.+\]" --ginkgo-parallel
 
-conformance-serial:
-  stage: conformance-serial
+port forward:
+  stage: tests
+  image: ${DEV_TOOLS_IMAGE}
+  retry: 2
+  script:
+    - cd /go/src/k8s.io/kubernetes
+    - go run hack/e2e.go -get=false -- -v -test -check-version-skew=false --provider=skeleton -test_args="--ginkgo.focus=port-forward"
+
+conformance 2/2:
+  stage: serial 1
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
