@@ -15,7 +15,6 @@ certificates:
 
 .PHONY: deploy
 deploy: ##@ansible deploy to nodes
-	$(CLI) ansible-playbook certificates.yml ${ANSIBLE_OPTIONS}
 	$(CLI) ansible-playbook deploy.yml       ${ANSIBLE_OPTIONS}
 	$(CLI) bash etc/wait-for-nodes.sh
 	$(CLI) kubectl apply -f addons/ -f certificates/addons/

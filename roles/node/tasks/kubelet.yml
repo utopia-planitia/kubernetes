@@ -17,9 +17,9 @@
     dest: "/etc/kubelet/{{ item.remote }}"
   with_items:
     - { local: 'ca.pem', remote: 'ca.pem' }
-    - { local: 'nodes.pem', remote: 'kubelet.pem' }
-    - { local: 'nodes-key.pem', remote: 'kubelet-key.pem' }
-    - { local: 'nodes-kube-config', remote: 'kubeconfig' }
+    - { local: 'node-{{ inventory_hostname }}.pem', remote: 'kubelet.pem' }
+    - { local: 'node-{{ inventory_hostname }}-key.pem', remote: 'kubelet-key.pem' }
+    - { local: 'node-{{ inventory_hostname }}-kube-config', remote: 'kubeconfig' }
   no_log: true
   notify:
     - restart kubelet

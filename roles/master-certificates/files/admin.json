@@ -1,7 +1,12 @@
 {
-    "CN": "Kubernetes Administrator",
+    "CN": "admin",
     "key": {
       "algo": "rsa",
       "size": 2048
-    }
+    },
+    "names": [
+      {
+        "O": "system:masters"
+      }
+    ]
   }

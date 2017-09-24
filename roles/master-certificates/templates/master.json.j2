@@ -1,5 +1,5 @@
 {
-  "CN": "Kubernetes Master",
+  "CN": "kubernetes",
   "hosts": [
     {% for host in groups['all'] %}
     "{{ host }}",
@@ -18,5 +18,10 @@
   "key": {
     "algo": "rsa",
     "size": 2048
-  }
+  },
+  "names": [
+    {
+      "O": "Kubernetes"
+    }
+  ]
 }

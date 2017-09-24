@@ -14,7 +14,7 @@
     src: "{{ master_cert_dir }}/{{ item.local }}"
     dest: "/etc/kube-proxy/{{ item.remote }}"
   with_items:
-    - { local: 'nodes-kube-config', remote: 'kubeconfig' }
+    - { local: 'kube-proxy-config', remote: 'kubeconfig' }
   no_log: true
 
 - name: checksum of kube proxy config

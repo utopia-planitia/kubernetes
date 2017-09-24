@@ -1,0 +1,19 @@
+{
+  "CN": "system:node:{{ item }}",
+  "hosts": [
+    "{{ hostvars[item]['ansible_host'] }}",
+    "{{ hostvars[item]['inventory_hostname'] }}",
+    "{{ hostvars[item]['inventory_hostname_short'] }}",
+    "127.0.0.1",
+    "localhost"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "O": "system:nodes" 
+    }
+  ]
+}
