@@ -26,7 +26,7 @@ provision:
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
     - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
     - touch inventory
-    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID} OVH_KEYPAIR_NAME=ci-runner" ${ANSIBLE_OPTIONS} || ( sleep 90 && false )
+    - ansible-playbook ovh-provision.yml -e "OVH_NODES_PREFIX=ci-${CI_PIPELINE_ID} OVH_KEYPAIR_NAME=ci-runner" ${ANSIBLE_OPTIONS} || ( sleep 90 && false )
   artifacts:
     paths:
       - inventory
@@ -36,14 +36,14 @@ destroy:
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
-    - ansible-playbook ovh-destroy.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
+    - ansible-playbook ovh-destroy.yml -e "OVH_NODES_PREFIX=ci-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
 
 destroy now:
   stage: destroy
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
-    - ansible-playbook ovh-destroy.yml -e "OVH_NODES_PREFIX=CI-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
+    - ansible-playbook ovh-destroy.yml -e "OVH_NODES_PREFIX=ci-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
   when: manual
 
 certificates:
