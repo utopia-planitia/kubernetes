@@ -2,8 +2,9 @@ stages:
   - prepare
   - certificates
   - build
-  - tests
-  - serial 1
+  - bats
+  - e2e parallel
+  - e2e serial
   - destroy
 
 variables:
@@ -46,6 +47,14 @@ destroy now:
     - ansible-playbook ovh-destroy.yml -e "OVH_NODES_PREFIX=ci-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
   when: manual
 
+delete e2e-ns:
+  stage: destroy
+  image: ${DEV_TOOLS_IMAGE}
+  retry: 2
+  script:
+    - kubectl get ns -o=name | grep namespaces/e2e | xargs -r -n1 kubectl delete
+  when: manual
+
 certificates:
   stage: certificates
   image: ${DEV_TOOLS_IMAGE}
@@ -71,7 +80,7 @@ deploy:
     - bash etc/wait-for-addons.sh
 
 redeploy:
-  stage: tests
+  stage: bats
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
@@ -83,7 +92,7 @@ redeploy:
     - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 4
 
 overlay2:
-  stage: tests
+  stage: bats
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
@@ -94,44 +103,36 @@ overlay2:
     - bats tests/overlay2.bats
 
 kube-dns:
-  stage: tests
+  stage: bats
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - bats tests/kube-dns.bats
 
 ping:
-  stage: tests
+  stage: bats
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - bats tests/ping.bats
 
 logging:
-  stage: tests
+  stage: bats
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - bats tests/logging.bats
 
-conformance 1/2:
-  stage: tests
+e2e tests 1/2:
+  stage: e2e parallel
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
     - cd /go/src/k8s.io/kubernetes
-    - go run hack/e2e.go -get=false -- -v -test -check-version-skew=false --provider=skeleton -test_args="--ginkgo.focus=\[Conformance\] --ginkgo.skip=\[Serial\]|\[Flaky\]|\[Feature:.+\]" --ginkgo-parallel
+    - go run hack/e2e.go -get=false -- -v -test -check-version-skew=false --provider=skeleton -test_args="--ginkgo.focus=\[Conformance\]|port-forward --ginkgo.skip=\[Serial\]|\[Flaky\]|\[Feature:.+\]" --ginkgo-parallel
 
-port forward:
-  stage: tests
-  image: ${DEV_TOOLS_IMAGE}
-  retry: 2
-  script:
-    - cd /go/src/k8s.io/kubernetes
-    - go run hack/e2e.go -get=false -- -v -test -check-version-skew=false --provider=skeleton -test_args="--ginkgo.focus=port-forward"
-
-conformance 2/2:
-  stage: serial 1
+e2e tests 2/2:
+  stage: e2e serial
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
