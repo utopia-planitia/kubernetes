@@ -47,14 +47,6 @@ destroy now:
     - ansible-playbook ovh-destroy.yml -e "OVH_NODES_PREFIX=ci-${CI_PIPELINE_ID}" ${ANSIBLE_OPTIONS}
   when: manual
 
-delete e2e-ns:
-  stage: destroy
-  image: ${DEV_TOOLS_IMAGE}
-  retry: 2
-  script:
-    - kubectl get ns -o=name | grep namespaces/e2e | xargs -r -n1 kubectl delete
-  when: manual
-
 certificates:
   stage: certificates
   image: ${DEV_TOOLS_IMAGE}
@@ -128,6 +120,7 @@ e2e tests 1/2:
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
+    - ./etc/delete-e2e-namespaces.sh
     - cd /go/src/k8s.io/kubernetes
     - go run hack/e2e.go -get=false -- -v -test -check-version-skew=false --provider=skeleton -test_args="--ginkgo.focus=\[Conformance\]|port-forward --ginkgo.skip=\[Serial\]|\[Flaky\]|\[Feature:.+\]" --ginkgo-parallel
 
@@ -136,5 +129,6 @@ e2e tests 2/2:
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
+    - ./etc/delete-e2e-namespaces.sh
     - cd /go/src/k8s.io/kubernetes
     - go run hack/e2e.go -get=false -- -v -test -check-version-skew=false --provider=skeleton -test_args="--ginkgo.focus=\[Serial\].*\[Conformance\]"
