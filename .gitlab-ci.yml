@@ -87,26 +87,12 @@ overlay2:
     - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
     - bats tests/overlay2.bats
 
-kube-dns:
+features:
   stage: bats
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
-    - bats tests/kube-dns.bats
-
-ping:
-  stage: bats
-  image: ${DEV_TOOLS_IMAGE}
-  retry: 2
-  script:
-    - bats tests/ping.bats
-
-logging:
-  stage: bats
-  image: ${DEV_TOOLS_IMAGE}
-  retry: 2
-  script:
-    - bats tests/logging.bats
+    - bats tests/kube-dns.bats tests/ping.bats tests/logging.bats
 
 e2e tests 1/2:
   stage: e2e parallel
