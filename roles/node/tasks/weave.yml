@@ -2,12 +2,20 @@
 
 - name: create directories
   file:
-    path: /usr/local/bin/
+    path: "{{ item }}"
     state: directory
     recurse: true
+  with_items:
+    - /etc/cni/net.d/
+    - /usr/local/bin/
 
 - name: weave binary
   template:
     src: weave.j2
     dest: /usr/local/bin/weave
     mode: 0755
+
+- name: weave cni config
+  template:
+    src: 10-weave.conf.j2
+    dest: /etc/cni/net.d/10-weave.conf
