@@ -94,7 +94,11 @@ items:
                 initialDelaySeconds: 30
               resources:
                 requests:
-                  cpu: 10m
+                  cpu: 100m
+                  memory: 100Mi
+                limits:
+                  cpu: 1000m
+                  memory: 100Mi
               securityContext:
                 privileged: true
               volumeMounts:
@@ -120,7 +124,11 @@ items:
               image: 'weaveworks/weave-npc:2.0.4'
               resources:
                 requests:
-                  cpu: 10m
+                  cpu: 100m
+                  memory: 100Mi
+                limits:
+                  cpu: 1000m
+                  memory: 100Mi
               securityContext:
                 privileged: true
           hostNetwork: true

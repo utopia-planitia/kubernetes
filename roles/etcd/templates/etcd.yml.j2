@@ -59,11 +59,11 @@ spec:
           port: 2380
       resources:
         requests:
-          cpu: 100m
-          memory: 100Mi
+          cpu: 250m
+          memory: 400Mi
         limits:
           cpu: 1000m
-          memory: 200Mi
+          memory: 400Mi
       volumeMounts:
         - name: etcd-data
           mountPath: /var/lib/etcd

@@ -36,6 +36,7 @@ spec:
           --allow_privileged=true
           --apiserver-count={{ groups['masters'] | length }}
           --authorization-mode=Node,RBAC
+          --target-ram-mb=450
       livenessProbe:
         httpGet:
           path: /healthz
@@ -43,8 +44,8 @@ spec:
           host: 127.0.0.1
       resources:
         requests:
-          cpu: 100m
-          memory: 250Mi
+          cpu: 200m
+          memory: 500Mi
         limits:
           cpu: 1000m
           memory: 500Mi
@@ -68,11 +69,11 @@ spec:
           host: 127.0.0.1
       resources:
         requests:
-          cpu: 100m
+          cpu: 200m
           memory: 100Mi
         limits:
           cpu: 1000m
-          memory: 200Mi
+          memory: 100Mi
       volumeMounts:
         - name: kubernetes-ssl-certs
           mountPath: /etc/kubernetes/ssl
@@ -91,11 +92,11 @@ spec:
           host: 127.0.0.1
       resources:
         requests:
-          cpu: 100m
+          cpu: 200m
           memory: 100Mi
         limits:
           cpu: 1000m
-          memory: 200Mi
+          memory: 100Mi
   volumes:
     - name: kubernetes-ssl-certs
       hostPath:
