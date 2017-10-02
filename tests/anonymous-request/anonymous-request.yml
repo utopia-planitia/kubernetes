@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: anonymous-request
+spec:
+  template:
+    metadata:
+      name: anonymous-request
+    spec:
+      containers:
+      - name: dig
+        image: tutum/curl:alpine
+        command:
+          - sh
+          - -c
+          - "curl --silent --insecure https://10.16.0.1:443/"
+      restartPolicy: Never
