@@ -50,3 +50,8 @@
 - name: wait for kubelet to be available
   wait_for:
     port: 10248
+
+- name: configure logrotate
+  template:
+    src: kubelet-logrotate.j2
+    dest: /etc/logrotate.d/kubelet
