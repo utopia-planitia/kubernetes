@@ -39,14 +39,16 @@
 }
 
 @test "check anonymous request to apiserver on local https node1" {
-  run ansible -i inventory node1 -m shell -a "curl  --silent --insecure https://127.0.0.1:6443/"
+  NODE=`grep node1 inventory | grep ansible_host | awk '{print $1;}'`
+  run ansible -i inventory ${NODE} -m shell -a "curl  --silent --insecure https://127.0.0.1:6443/"
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 3 ]
   [ "${lines[2]}" = 'Unauthorized' ]
 }
 
 @test "check anonymous request to apiserver on local https node2" {
-  run ansible -i inventory node2 -m shell -a "curl  --silent --insecure https://127.0.0.1:6443/"
+  NODE=`grep node2 inventory | grep ansible_host | awk '{print $1;}'`
+  run ansible -i inventory ${NODE} -m shell -a "curl  --silent --insecure https://127.0.0.1:6443/"
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 3 ]
   [ "${lines[2]}" = 'Unauthorized' ]
