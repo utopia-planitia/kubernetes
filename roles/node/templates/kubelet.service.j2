@@ -5,6 +5,7 @@ Requires=docker.service
 
 [Service]
 ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
+  --anonymous-auth=false \
   --pod-manifest-path=/etc/kubernetes/manifests \
   --register-node=true \
   --container-runtime docker \

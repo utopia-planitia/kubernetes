@@ -36,6 +36,7 @@ spec:
           --allow_privileged=true
           --apiserver-count={{ groups['masters'] | length }}
           --authorization-mode=Node,RBAC
+          --anonymous-auth=false
           --target-ram-mb=450
       livenessProbe:
         httpGet:
