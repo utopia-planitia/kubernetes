@@ -1,7 +1,7 @@
 stages:
   - prepare
   - build
-  - bats
+  - tests
   - e2e parallel
   - e2e serial
   - destroy
@@ -65,7 +65,7 @@ deploy:
     - bash etc/wait-for-addons.sh
 
 redeploy:
-  stage: bats
+  stage: tests
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
@@ -76,8 +76,8 @@ redeploy:
     - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS} | tee deploy.log
     - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 4
 
-overlay2:
-  stage: bats
+bats:
+  stage: tests
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
@@ -85,14 +85,7 @@ overlay2:
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/id_rsa
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
     - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
-    - bats tests/overlay2.bats
-
-features:
-  stage: bats
-  image: ${DEV_TOOLS_IMAGE}
-  retry: 2
-  script:
-    - bats tests/kube-dns.bats tests/ping.bats tests/logging.bats
+    - bats tests/
 
 e2e tests 1/2:
   stage: e2e parallel

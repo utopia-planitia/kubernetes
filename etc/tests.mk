@@ -11,7 +11,7 @@ tests: ##@development run all tests
 
 .PHONY: bats
 bats: ##@development run bats tests
-	$(CLI) bats tests/*
+	$(CLI) bats tests/
 
 .PHONY: e2e-conformance
 e2e-conformance: ##@development run e2e-conformance tests
