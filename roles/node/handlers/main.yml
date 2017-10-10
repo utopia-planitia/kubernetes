@@ -1,18 +1,16 @@
 ---
 
-- name: reload systemd
-  command: systemctl daemon-reload
-
 - name: restart kubelet
-  service:
+  systemd:
     name: kubelet
-    enabled: yes
+    daemon_reload: yes
     state: restarted
     enabled: yes
 
 - name: restart docker
-  service:
+  systemd:
     name: docker
+    daemon_reload: yes
     state: restarted
     enabled: yes
 
