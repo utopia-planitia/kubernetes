@@ -3,3 +3,20 @@ ansible_ssh_common_args: -o StrictHostKeyChecking=no
 ansible_ssh_user: ubuntu
 ansible_ssh_private_key_file: ~/.ssh/id_rsa
 ansible_become: true
+
+apiserver_requests_cpu: 100m
+apiserver_requests_memory: 700Mi
+apiserver_limits_cpu: 1000m
+apiserver_limits_memory: 700Mi
+controller_manager_requests_cpu: 50m
+controller_manager_requests_memory: 100Mi
+controller_manager_limits_cpu: 1000m
+controller_manager_limits_memory: 100Mi
+scheduler_requests_cpu: 50m
+scheduler_requests_memory: 100Mi
+scheduler_limits_cpu: 1000m
+scheduler_limits_memory: 100Mi
+etcd_requests_cpu: 100m
+etcd_requests_memory: 500Mi
+etcd_limits_cpu: 1000m
+etcd_limits_memory: 500Mi

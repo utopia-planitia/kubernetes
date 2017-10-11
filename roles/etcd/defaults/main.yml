@@ -1,0 +1,5 @@
+---
+etcd_requests_cpu: 500m
+etcd_requests_memory: 1000Mi
+etcd_limits_cpu: 500m
+etcd_limits_memory: 1000Mi

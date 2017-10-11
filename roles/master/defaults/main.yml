@@ -1,0 +1,13 @@
+---
+apiserver_requests_cpu: 1000m
+apiserver_requests_memory: 1000Mi
+apiserver_limits_cpu: 1000m
+apiserver_limits_memory: 1000Mi
+controller_manager_requests_cpu: 1000m
+controller_manager_requests_memory: 200Mi
+controller_manager_limits_cpu: 1000m
+controller_manager_limits_memory: 200Mi
+scheduler_requests_cpu: 500m
+scheduler_requests_memory: 200Mi
+scheduler_limits_cpu: 500m
+scheduler_limits_memory: 200Mi

@@ -5,9 +5,6 @@ metadata:
   namespace: kube-system
   annotations:
     ansible/certificates-hash: {{ master_cert_hashsum }}
-  labels:
-    name: master
-    host: {{ inventory_hostname_short }}
 spec:
   hostNetwork: true
   containers:
@@ -37,7 +34,7 @@ spec:
           --apiserver-count={{ groups['masters'] | length }}
           --authorization-mode=Node,RBAC
           --anonymous-auth=false
-          --target-ram-mb=450
+          --target-ram-mb=630
       livenessProbe:
         httpGet:
           path: /healthz
@@ -45,11 +42,11 @@ spec:
           host: 127.0.0.1
       resources:
         requests:
-          cpu: 100m
-          memory: 500Mi
+          cpu: {{ apiserver_requests_cpu }}
+          memory: {{ apiserver_requests_memory }}
         limits:
-          cpu: 1000m
-          memory: 500Mi
+          cpu: {{ apiserver_limits_cpu }}
+          memory: {{ apiserver_limits_memory }}
       volumeMounts:
         - name: kubernetes-ssl-certs
           mountPath: /etc/kubernetes/ssl
@@ -70,11 +67,11 @@ spec:
           host: 127.0.0.1
       resources:
         requests:
-          cpu: 50m
-          memory: 100Mi
+          cpu: {{ controller_manager_requests_cpu }}
+          memory: {{ controller_manager_requests_memory }}
         limits:
-          cpu: 1000m
-          memory: 100Mi
+          cpu: {{ controller_manager_limits_cpu }}
+          memory: {{ controller_manager_limits_memory }}
       volumeMounts:
         - name: kubernetes-ssl-certs
           mountPath: /etc/kubernetes/ssl
@@ -93,11 +90,11 @@ spec:
           host: 127.0.0.1
       resources:
         requests:
-          cpu: 50m
-          memory: 100Mi
+          cpu: {{ scheduler_requests_cpu }}
+          memory: {{ scheduler_requests_memory }}
         limits:
-          cpu: 1000m
-          memory: 100Mi
+          cpu: {{ scheduler_limits_cpu }}
+          memory: {{ scheduler_limits_memory }}
   volumes:
     - name: kubernetes-ssl-certs
       hostPath:
