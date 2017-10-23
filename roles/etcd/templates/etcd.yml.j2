@@ -54,6 +54,8 @@ spec:
           value: /etc/etcd/ssl/member-key.pem
         - name: ETCDCTL_CA_FILE
           value: /etc/etcd/ssl/ca.pem
+        - name: ETCD_SNAPSHOT_COUNT
+          value: "2000"
       livenessProbe:
         tcpSocket:
           port: 2380

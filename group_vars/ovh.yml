@@ -17,6 +17,6 @@ scheduler_requests_memory: 100Mi
 scheduler_limits_cpu: 1000m
 scheduler_limits_memory: 100Mi
 etcd_requests_cpu: 100m
-etcd_requests_memory: 500Mi
+etcd_requests_memory: 700Mi
 etcd_limits_cpu: 1000m
-etcd_limits_memory: 500Mi
+etcd_limits_memory: 700Mi

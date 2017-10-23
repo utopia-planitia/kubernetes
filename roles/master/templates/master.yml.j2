@@ -35,6 +35,7 @@ spec:
           --authorization-mode=Node,RBAC
           --anonymous-auth=false
           --target-ram-mb=630
+          --max-requests-inflight={{ ((groups['all'] | length) * pods_per_node / 2) | int }}
       livenessProbe:
         httpGet:
           path: /healthz
