@@ -20,3 +20,5 @@ etcd_requests_cpu: 100m
 etcd_requests_memory: 700Mi
 etcd_limits_cpu: 1000m
 etcd_limits_memory: 700Mi
+
+pods_per_node: 20

@@ -11,3 +11,5 @@ scheduler_requests_cpu: 500m
 scheduler_requests_memory: 200Mi
 scheduler_limits_cpu: 500m
 scheduler_limits_memory: 200Mi
+
+pods_per_node: 60
