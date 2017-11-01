@@ -7,7 +7,7 @@ stages:
   - destroy
 
 variables:
-  DEV_TOOLS_IMAGE:     ${CI_REGISTRY_IMAGE}-tools:v3
+  DEV_TOOLS_IMAGE:     ${CI_REGISTRY_IMAGE}-tools:v4
   KUBECONFIG:          ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
   E2E_PARALLELIZATION: 25
 
@@ -94,7 +94,7 @@ e2e tests 1/2:
   script:
     - ./etc/delete-e2e-namespaces.sh
     - cd /go/src/k8s.io/kubernetes
-    - go run hack/e2e.go -get=false -- -v -test -check-version-skew=false --provider=skeleton -test_args="--ginkgo.focus=\[Conformance\]|port-forward --ginkgo.skip=\[Serial\]|\[Flaky\]|\[Feature:.+\]" --ginkgo-parallel=${E2E_PARALLELIZATION}
+    - go run hack/e2e.go -get=false -- -v --test --check-version-skew=false --provider=skeleton --test_args="--ginkgo.focus=\[Conformance\]|port-forward --ginkgo.skip=\[Serial\]|\[Flaky\]|\[Feature:.+\]" --ginkgo-parallel=${E2E_PARALLELIZATION}
 
 e2e tests 2/2:
   stage: e2e serial
@@ -103,4 +103,4 @@ e2e tests 2/2:
   script:
     - ./etc/delete-e2e-namespaces.sh
     - cd /go/src/k8s.io/kubernetes
-    - go run hack/e2e.go -get=false -- -v -test -check-version-skew=false --provider=skeleton -test_args="--ginkgo.focus=\[Serial\].*\[Conformance\]"
+    - go run hack/e2e.go -get=false -- -v --test --check-version-skew=false --provider=skeleton --test_args="--ginkgo.focus=\[Serial\].*\[Conformance\]"
