@@ -55,7 +55,7 @@ spec:
         - name: ETCDCTL_CA_FILE
           value: /etc/etcd/ssl/ca.pem
         - name: ETCD_SNAPSHOT_COUNT
-          value: "2000"
+          value: "{{ etcd_snapshot_count | int }}"
       livenessProbe:
         tcpSocket:
           port: 2380

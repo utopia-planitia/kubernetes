@@ -34,8 +34,9 @@ spec:
           --apiserver-count={{ groups['masters'] | length }}
           --authorization-mode=Node,RBAC
           --anonymous-auth=false
-          --target-ram-mb=630
-          --max-requests-inflight={{ ((groups['all'] | length) * pods_per_node / 2) | int }}
+          --target-ram-mb={{ apiserver_limit_target_ram_mb | int }}
+          --max-requests-inflight={{ apiserver_max_requests_inflight | int }}
+          --max-mutating-requests-inflight={{ apiserver_max_mutating_requests_inflight | int }}
       livenessProbe:
         httpGet:
           path: /healthz
@@ -84,6 +85,8 @@ spec:
         - --leader-elect=true
         - --address=127.0.0.1
         - --port=10251
+        - --kube-api-qps={{ scheduler_api_qps | int }}
+        - --kube-api-burst={{ scheduler_api_burst | int }}
       livenessProbe:
         httpGet:
           path: /healthz
