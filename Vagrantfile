@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
       config.vm.network :private_network, ip: "172.17.8.#{i+100}"
 
       config.vm.provider :virtualbox do |vb|
-        vb.memory = 2048
+        vb.memory = 4096
         vb.cpus = 2
         vb.customize ["modifyvm", :id, "--cpuexecutioncap", "85"]
         vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
