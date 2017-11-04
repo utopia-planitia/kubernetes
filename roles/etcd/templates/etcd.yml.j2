@@ -3,8 +3,6 @@ kind: Pod
 metadata:
   name: etcd
   namespace: kube-system
-  annotations:
-    ansible/certificates-hash: {{ etcd_cert_hashsum }}
 spec:
   hostNetwork: true
   containers:
@@ -16,6 +14,8 @@ spec:
         - -c
         - "{% for host in groups['etcds'] %}echo {{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }} >> /etc/hosts && {% endfor %} /usr/local/bin/etcd"
       env:
+        - name: CONFIG_HASH
+          value: {{ etcd_cert_hashsum }}
         - name: ETCD_NAME
           value: etcd{{ etcd_id }}
         - name: ETCD_DATA_DIR

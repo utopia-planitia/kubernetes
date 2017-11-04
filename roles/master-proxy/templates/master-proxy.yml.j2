@@ -3,8 +3,6 @@ kind: Pod
 metadata:
   name: master-proxy
   namespace: kube-system
-  annotations:
-    ansible/config-hash: {{ master_proxy_config_hashsum }}
   labels:
     name: master-proxy
     host: {{ inventory_hostname_short }}
@@ -13,6 +11,9 @@ spec:
   containers:
     - name: forwarder
       image: {{ nginx_image }}
+      env:
+        - name: CONFIG_HASH
+          value: {{ master_proxy_config_hashsum }}
       livenessProbe:
         tcpSocket:
           port: 6443

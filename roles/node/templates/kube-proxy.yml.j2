@@ -6,8 +6,6 @@ metadata:
   labels:
     name: kube-proxy
     host: {{ inventory_hostname_short }}
-  annotations:
-    ansible/config-hash: {{ kube_proxy_config_hashsum }}
 spec:
   hostNetwork: true
   containers:
@@ -20,6 +18,9 @@ spec:
         - --kubeconfig=/etc/kube-proxy/kubeconfig
         - --hostname-override={{ ansible_host }}
         - --logtostderr=true
+      env:
+        - name: CONFIG_HASH
+          value: {{ kube_proxy_config_hashsum }}
       livenessProbe:
         httpGet:
           path: /healthz

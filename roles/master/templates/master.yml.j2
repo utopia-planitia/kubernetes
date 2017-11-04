@@ -3,8 +3,6 @@ kind: Pod
 metadata:
   name: master
   namespace: kube-system
-  annotations:
-    ansible/certificates-hash: {{ master_cert_hashsum }}
 spec:
   hostNetwork: true
   containers:
@@ -37,6 +35,9 @@ spec:
           --target-ram-mb={{ apiserver_limit_target_ram_mb | int }}
           --max-requests-inflight={{ apiserver_max_requests_inflight | int }}
           --max-mutating-requests-inflight={{ apiserver_max_mutating_requests_inflight | int }}
+      env:
+        - name: CONFIG_HASH
+          value: {{ master_cert_hashsum }}
       livenessProbe:
         httpGet:
           path: /healthz
@@ -62,6 +63,9 @@ spec:
         - --leader-elect=true
         - --address=127.0.0.1
         - --port=10252
+      env:
+        - name: CONFIG_HASH
+          value: {{ master_cert_hashsum }}
       livenessProbe:
         httpGet:
           path: /healthz
@@ -87,6 +91,9 @@ spec:
         - --port=10251
         - --kube-api-qps={{ scheduler_api_qps | int }}
         - --kube-api-burst={{ scheduler_api_burst | int }}
+      env:
+        - name: CONFIG_HASH
+          value: {{ master_cert_hashsum }}
       livenessProbe:
         httpGet:
           path: /healthz
