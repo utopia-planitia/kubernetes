@@ -3,5 +3,10 @@
   "iptables":       false,
   "ip-masq":        false,
   "live-restore":   true,
+  "log-driver":     "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "5"
+  },
   "log-level":      "error"
 }
