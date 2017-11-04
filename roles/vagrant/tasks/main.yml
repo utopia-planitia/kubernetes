@@ -1,0 +1,11 @@
+---
+
+- name: remove swap from /etc/fstab
+  mount:
+    src: /dev/mapper/vagrant--vg-swap_1
+    path: none
+    fstype: swap
+    state: absent
+  notify: disable swap
+
+- meta: flush_handlers
