@@ -25,6 +25,9 @@ ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
   --max-pods={{ kubelet_max_pods | int }} \
   --kube-reserved={{ kubelet_kube_reserved }} \
   --system-reserved={{ kubelet_system_reserved }} \
+  --eviction-hard="{{ kubelet_eviction_hard }}" \
+  --eviction-soft="{{ kubelet_eviction_soft }}" \
+  --eviction-soft-grace-period={{ kubelet_eviction_soft_grace_period }} \
   2>&1 | tee -a /var/log/kubelet.log '
 Restart=on-failure
 ResetSec=5
