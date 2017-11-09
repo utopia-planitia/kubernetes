@@ -5,6 +5,13 @@
   register: install_python_result
   changed_when: "'/usr/bin/python found' not in install_python_result.stdout"
 
+- name: install apt-transport-https
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+
 - name: add docker deb repo key
   apt_key:
     id: 0EBFCD88
@@ -16,6 +23,9 @@
     repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
     state: present
     filename: docker
+  notify: update repositories
+
+- meta: flush_handlers
 
 - name: install packages
   package:
