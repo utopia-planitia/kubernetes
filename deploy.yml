@@ -8,9 +8,14 @@
   roles:
     - { role: ubuntu-1604 }
 
+- hosts: testing
+  roles:
+    - { role: fake-xfs-filesystem }
+
 - hosts: all
   roles:
     - { role: disable-swap }
+    - { role: local-volumes }
     - { role: docker }
     - { role: node }
 

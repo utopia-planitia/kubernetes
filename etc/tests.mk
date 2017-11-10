@@ -29,3 +29,4 @@ serial: ##@development run serial test
 .PHONY: delete-e2e-namespaces
 delete-e2e-namespaces: ##@development remove namespaces created by failed e2e tests
 	$(CLI) ./etc/delete-e2e-namespaces.sh
+

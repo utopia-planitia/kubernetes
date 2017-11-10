@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: local-volume-config
+      namespace: kube-system
+    data:
+      storageClassMap: |
+        local-storage-dynamic:
+          hostDir: "/mnt/disks/dynamic"
+          mountDir: "/local-disks-dynamic"
+        local-storage-pre-provision:
+          hostDir: "/mnt/disks/pre-provision"
+          mountDir: "/local-disks-pre-provision"
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: local-storage-bootstrapper
+      namespace: kube-system
+  - apiVersion: rbac.authorization.k8s.io/v1beta1
+    kind: ClusterRoleBinding
+    metadata:
+      name: local-storage:bootstrapper
+    subjects:
+    - kind: ServiceAccount
+      name: local-storage-bootstrapper
+      namespace: kube-system
+    roleRef:
+      kind: ClusterRole
+      name: cluster-admin
+      apiGroup: rbac.authorization.k8s.io
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: local-volume-provisioner-bootstrap
+      namespace: kube-system
+      labels:
+        app: local-volume-provisioner-bootstrap
+    spec:
+      template:
+        spec:
+          serviceAccountName: local-storage-bootstrapper
+          restartPolicy: Never
+          containers:
+          - name: bootstrapper
+            image: quay.io/external_storage/local-volume-provisioner-bootstrap:latest
+            env:
+            - name: MY_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            args:
+            - --image=quay.io/external_storage/local-volume-provisioner:latest
+            - --volume-config=local-volume-config

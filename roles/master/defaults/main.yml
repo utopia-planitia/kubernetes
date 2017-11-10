@@ -18,3 +18,5 @@ scheduler_requests_cpu:             50m
 scheduler_requests_memory:          "{{ 100 + (nodes_count|int * kubelet_max_pods) }}Mi"
 scheduler_limits_cpu:               1000m
 scheduler_limits_memory:            "{{ scheduler_requests_memory }}"
+
+authorization_mode: Node,RBAC

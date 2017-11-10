@@ -1,0 +1,5 @@
+---
+
+- name: create volumes
+  include_tasks: "{{ item.type }}.yml"
+  with_items: "{{ local_volumes }}"

@@ -4,10 +4,10 @@ flavor: s1-8
 region_name: SBG3
 servers:
   - name: node1
-    groups: ovh,ubuntu-1604,etcds,masters
+    groups: ovh,ubuntu-1604,testing,etcds,masters
   - name: node2
-    groups: ovh,ubuntu-1604,etcds,masters
+    groups: ovh,ubuntu-1604,testing,etcds,masters
   - name: node3
-    groups: ovh,ubuntu-1604,etcds
+    groups: ovh,ubuntu-1604,testing,etcds
   - name: node4
-    groups: ovh,ubuntu-1604
+    groups: ovh,ubuntu-1604,testing

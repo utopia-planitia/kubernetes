@@ -19,9 +19,11 @@ certificates:
 deploy: ##@ansible deploy to nodes
 	$(CLI) ansible-playbook deploy.yml       ${ANSIBLE_OPTIONS}
 	$(CLI) bash etc/wait-for-nodes.sh
-	$(CLI) kubectl apply -f addons/ -f certificates/addons/
+	$(CLI) kubectl apply  -R -f addons/ \
+	                         -f certificates/addons/
 	$(CLI) bash etc/wait-for-addons.sh
+	$(CLI) kubectl -n kube-system delete job local-volume-provisioner-bootstrap
 
 .PHONY: status
 status: ##@development show current system status
-	$(CLI) ./etc/status.sh
+	@$(CLI) ./etc/status.sh

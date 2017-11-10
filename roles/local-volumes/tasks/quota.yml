@@ -1,0 +1,30 @@
+
+- name: creates directories
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    recurse: yes
+  register: path
+
+
+- name: check blocks
+  shell: "xfs_quota -x -c 'quota -p {{ item.xfs_quota_project_id }} -vbNh' {{ item.path }} {{ item.xfs_root }} | awk '{print $4}'"
+  register: blocks
+  changed_when: false
+
+- name: check inodes
+  shell: "xfs_quota -x -c 'quota -p {{ item.xfs_quota_project_id }} -viN' {{ item.path }} {{ item.xfs_root }} | awk '{print $4}'"
+  register: inodes
+  changed_when: false
+
+- name: create project
+  command: "xfs_quota -x -c 'project -s -p {{ item.path }} {{ item.xfs_quota_project_id }}' {{ item.xfs_root }}"
+  when:
+    - blocks.stdout != item.size
+    - inodes.stdout != item.inodes
+
+- name: set limit
+  command: "xfs_quota -x -c 'limit -p bhard={{ item.size }} ihard={{ item.inodes }} {{ item.xfs_quota_project_id }}' {{ item.xfs_root }}"
+  when:
+    - blocks.stdout != item.size
+    - inodes.stdout != item.inodes

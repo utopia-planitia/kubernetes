@@ -17,3 +17,5 @@ master_config_dir: "{{ playbook_dir }}/roles/master-certificates/files"
 addons_cert_dir:   "{{ playbook_dir }}/certificates/addons"
 
 nodes_count: "{{ groups['all'] | length }}"
+
+feature_gates: PersistentLocalVolumes=true

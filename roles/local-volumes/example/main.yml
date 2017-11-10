@@ -1,0 +1,21 @@
+---
+local_volumes:
+
+  - name: example-direct
+    size: 10M
+    path: /mnt/disks/example_direct
+    type: direct
+
+  - name: example-quota
+    size: 5M
+    path: /mnt/xfs/disks/example_quota
+    type: quota
+    xfs_quota_project_id: 1
+    xfs_root: /mnt/xfs/
+    inodes: 5000
+
+  - name: example-file
+    size: 20M
+    path: /mnt/disks/example_file
+    type: file
+    file: /var/lib/local-volumes/example_file.img

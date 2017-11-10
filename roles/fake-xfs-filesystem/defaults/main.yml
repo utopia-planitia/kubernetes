@@ -1,0 +1,5 @@
+
+fake_xfs_file: /mnt/disks/dynamic.img
+fake_xfs_size: 2G
+fake_xfs_path: /mnt/disks/dynamic
+fake_xfs_opts: defaults,prjquota
