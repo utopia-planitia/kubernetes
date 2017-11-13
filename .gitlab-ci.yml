@@ -51,7 +51,6 @@ destroy:
 destroy now:
   stage: destroy
   image: ${DEV_TOOLS_IMAGE}
-  retry: 2
   script:
     - make ${CI_PROVISION}-destroy
   when: manual
@@ -65,10 +64,7 @@ deploy:
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/id_rsa
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
     - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
-    - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS}
-    - bash etc/wait-for-nodes.sh
-    - kubectl apply -f addons/ -f certificates/addons/
-    - bash etc/wait-for-addons.sh
+    - make deploy
 
 redeploy:
   stage: tests
@@ -91,22 +87,32 @@ bats:
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/id_rsa
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
     - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
-    - bats tests/
+    - make bats
 
-e2e tests 1/2:
+cleanup e2e ns:
+  stage: destroy
+  image: ${DEV_TOOLS_IMAGE}
+  script:
+    - make delete-e2e-namespaces
+  when: manual
+
+conformance:
   stage: e2e parallel
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
-    - ./etc/delete-e2e-namespaces.sh
-    - cd /go/src/k8s.io/kubernetes
-    - go run hack/e2e.go -get=false -- -v --test --check-version-skew=false --provider=skeleton --test_args="--ginkgo.focus=\[Conformance\]|port-forward --ginkgo.skip=\[Serial\]|\[Flaky\]|\[Feature:.+\]" --ginkgo-parallel=${E2E_PARALLELIZATION}
+    - make conformance
 
-e2e tests 2/2:
+port-forward:
+  stage: e2e parallel
+  image: ${DEV_TOOLS_IMAGE}
+  retry: 2
+  script:
+    - make port-forward
+
+serial:
   stage: e2e serial
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
-    - ./etc/delete-e2e-namespaces.sh
-    - cd /go/src/k8s.io/kubernetes
-    - go run hack/e2e.go -get=false -- -v --test --check-version-skew=false --provider=skeleton --test_args="--ginkgo.focus=\[Serial\].*\[Conformance\]"
+    - make serial
