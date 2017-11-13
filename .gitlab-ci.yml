@@ -13,7 +13,9 @@ variables:
   OVH_REGION_NAME:            SBG3
   CI_PROVISION:               ovh
   OVH_NODES_PREFIX:           ci-${CI_PIPELINE_ID}
+  OVH_KEYPAIR_NAME:           utopia-planitia-ci-runner
   DIGITAL_OCEAN_NODES_PREFIX: ci-${CI_PIPELINE_ID}
+  DIGITAL_OCEAN_KEYPAIR_NAME: utopia-planitia-ci-runner
 
 lint:
   stage: prepare
@@ -29,7 +31,6 @@ provision:
     - mkdir ~/.ssh
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/id_rsa
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
-    - export OVH_KEYPAIR_NAME=ci-runner
     - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
     - touch inventory
     - make ${CI_PROVISION}-provision
