@@ -1,5 +1,5 @@
-DIGITAL_OCEAN_NODES_PREFIX = $(shell git rev-parse --abbrev-ref HEAD)
-DIGITAL_OCEAN_KEYPAIR_NAME = $(shell hostname -s)
+DIGITAL_OCEAN_NODES_PREFIX ?= $(shell git rev-parse --abbrev-ref HEAD)
+DIGITAL_OCEAN_KEYPAIR_NAME ?= $(shell hostname -s)
 DIGITAL_OCEAN_REGION_NAME ?= fra1
 
 .PHONY: digital-ocean-provision
