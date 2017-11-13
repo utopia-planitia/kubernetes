@@ -1,0 +1,19 @@
+---
+- name: remove public ssh key
+  digital_ocean:
+    state: absent
+    command: ssh
+    name: "{{ DIGITAL_OCEAN_KEYPAIR_NAME }}"
+  when: DIGITAL_OCEAN_KEYPAIR_NAME is defined
+
+- name: remove instances
+  digital_ocean:
+    command: droplet
+    name: "{{ item }}"
+    state: absent
+    unique_name: yes
+  with_items:
+    - "{{ DIGITAL_OCEAN_NODES_PREFIX }}-node1"
+    - "{{ DIGITAL_OCEAN_NODES_PREFIX }}-node2"
+    - "{{ DIGITAL_OCEAN_NODES_PREFIX }}-node3"
+    - "{{ DIGITAL_OCEAN_NODES_PREFIX }}-node4"

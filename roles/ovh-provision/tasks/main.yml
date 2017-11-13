@@ -32,11 +32,9 @@
   copy:
     dest: ./inventory
     content: ""
-  when: OVH_NODE is undefined
 
 - name: load empty inventory
   meta: refresh_inventory
-  when: OVH_NODE is undefined
 
 - name: add hosts to inventory
   add_host:
@@ -46,4 +44,3 @@
   with_items: "{{ os_hosts.results }}"
   when:
     - item.openstack is defined
-    - OVH_NODE is undefined

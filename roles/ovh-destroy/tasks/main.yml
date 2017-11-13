@@ -14,4 +14,3 @@
     - "{{ OVH_NODES_PREFIX }}-node2"
     - "{{ OVH_NODES_PREFIX }}-node3"
     - "{{ OVH_NODES_PREFIX }}-node4"
-  when: item == OVH_NODE | default(item)
