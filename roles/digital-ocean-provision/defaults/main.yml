@@ -1,6 +1,6 @@
 ---
 image: ubuntu-16-04-x64
-flavor: 2gb
+flavor: 4gb
 region_name: fra1
 servers:
   - name: node1
