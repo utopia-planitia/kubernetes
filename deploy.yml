@@ -10,9 +10,9 @@
 
 - hosts: all
   roles:
+    - { role: disable-swap }
     - { role: docker }
     - { role: node }
-    - { role: disable-swap }
 
 - hosts: etcds
   pre_tasks:
