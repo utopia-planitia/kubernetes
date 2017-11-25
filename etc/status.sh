@@ -12,7 +12,7 @@ else
 	echo "$CS" | tail -n +2 | sort
 fi
 
-NODES=$( kubectl get no 2>&1 | grep -v 'No resources found.' )
+NODES=$( kubectl get no -o wide 2>&1 | grep -v 'No resources found.' )
 NODES_COUNT=$( echo "$NODES" | tail -n +2 | wc -l )
 NODES_READY=$( echo "$NODES" | tail -n +2 | grep Ready | wc -l )
 echo "${NODES_READY} of ${NODES_COUNT} nodes are ready"
@@ -48,7 +48,7 @@ if [[ ! "${NAMESPACES_ACTIVE}" = "${NAMESPACES_COUNT}" ]]; then
 	echo "$NAMESPACES" | tail -n +2 | grep -v Active | sort
 fi
 
-PODS=$( kubectl get po --all-namespaces=true 2>&1 | grep -v 'No resources found.' )
+PODS=$( kubectl get po --all-namespaces=true -o wide 2>&1 | grep -v 'No resources found.' )
 PODS_COUNT=$( echo "$PODS" | tail -n +2 | wc -l )
 PODS_READY=$( echo "$PODS" | tail -n +2 | grep Running | wc -l )
 echo "${PODS_READY} of ${PODS_COUNT} pods are running"
