@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: anonymous-request-pod
+spec:
+  template:
+    metadata:
+      name: anonymous-request-host
+    spec:
+      containers:
+      - name: dig
+        image: tutum/curl:alpine
+        command:
+          - sh
+          - -c
+          - "curl --silent --insecure https://10.16.0.1:443/"
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: anonymous-request-host
+spec:
+  template:
+    metadata:
+      name: anonymous-request-host
+    spec:
+      hostNetwork: true
+      containers:
+      - name: dig
+        image: tutum/curl:alpine
+        command:
+          - sh
+          - -c
+          - "curl --silent --insecure https://10.16.0.1:443/"
+      restartPolicy: Never

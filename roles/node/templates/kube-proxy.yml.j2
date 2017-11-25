@@ -17,6 +17,7 @@ spec:
         - /usr/local/bin/kube-proxy
         - --kubeconfig=/etc/kube-proxy/kubeconfig
         - --hostname-override={{ ansible_host }}
+        - --cluster-cidr=10.48.0.0/12
         - --logtostderr=true
       env:
         - name: CONFIG_HASH
@@ -36,7 +37,20 @@ spec:
       volumeMounts:
         - name: config
           mountPath: /etc/kube-proxy
+        - mountPath: /run/xtables.lock
+          name: xtables-lock
+          readOnly: false
+        - mountPath: /lib/modules
+          name: lib-modules
+          readOnly: true
   volumes:
     - name: config
       hostPath:
         path: /etc/kube-proxy
+    - name: xtables-lock
+      hostPath:
+        path: /run/xtables.lock
+        type: FileOrCreate
+    - name: lib-modules
+      hostPath:
+        path: /lib/modules

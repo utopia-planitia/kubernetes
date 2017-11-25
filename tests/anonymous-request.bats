@@ -1,25 +1,35 @@
 #!/usr/bin/env bats
 
-@test "deploy anonymous-request job" {
-  run kubectl apply -f tests/anonymous-request/job.yml
+@test "deploy anonymous-request jobs" {
+  run kubectl apply -f tests/anonymous-request/jobs.yml
   [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 1 ]
+  [ "${#lines[@]}" -eq 2 ]
 }
 
-@test "check anonymous request to apiserver" {
-  until [ $(kubectl get pod -a --selector=job-name=anonymous-request --no-headers | grep Completed | wc -l) -eq 1 ]; do
+@test "check anonymous request to apiserver (pod network)" {
+  until [ $(kubectl get pod -a --selector=job-name=anonymous-request-pod --no-headers | grep Completed | wc -l) -eq 1 ]; do
     sleep 0.5
   done
-  run diff tests/anonymous-request/request.golden <(kubectl logs `kubectl get pod -a --selector=job-name=anonymous-request --output=jsonpath={.items..metadata.name}`)
+  run diff tests/anonymous-request/request.golden <(kubectl logs `kubectl get pod -a --selector=job-name=anonymous-request-pod --output=jsonpath={.items..metadata.name}`)
   printf '%s\n' "${lines[@]}"
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 0 ]
 }
 
-@test "undeploy anonymous-request job" {
-  run kubectl delete -f tests/anonymous-request/job.yml
+@test "check anonymous request to apiserver (host network)" {
+  until [ $(kubectl get pod -a --selector=job-name=anonymous-request-host --no-headers | grep Completed | wc -l) -eq 1 ]; do
+    sleep 0.5
+  done
+  run diff tests/anonymous-request/request.golden <(kubectl logs `kubectl get pod -a --selector=job-name=anonymous-request-host --output=jsonpath={.items..metadata.name}`)
+  printf '%s\n' "${lines[@]}"
   [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 1 ]
+  [ "${#lines[@]}" -eq 0 ]
+}
+
+@test "undeploy anonymous-request jobs" {
+  run kubectl delete -f tests/anonymous-request/jobs.yml
+  [ $status -eq 0 ]
+  [ "${#lines[@]}" -eq 2 ]
 }
 
 @test "check anonymous request to apiserver on node1" {
