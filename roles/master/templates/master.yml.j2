@@ -33,6 +33,12 @@ spec:
           --authorization-mode={{ authorization_mode }}
           --anonymous-auth=false
           --token-auth-file=/etc/kubernetes/token-auth-file
+          --audit-log-format=json
+          --audit-log-maxage=15
+          --audit-log-maxbackup=50
+          --audit-log-maxsize=100
+          --audit-log-path=/var/log/kubernetes/audit.log
+          --audit-policy-file=/etc/kubernetes/audit-policy.yaml
           --target-ram-mb={{ apiserver_limit_target_ram_mb | int }}
           --max-requests-inflight={{ apiserver_max_requests_inflight | int }}
           --max-mutating-requests-inflight={{ apiserver_max_mutating_requests_inflight | int }}
@@ -53,8 +59,10 @@ spec:
           cpu: {{ apiserver_limits_cpu }}
           memory: {{ apiserver_limits_memory }}
       volumeMounts:
-        - name: kubernetes-config
+        - name: config
           mountPath: /etc/kubernetes
+        - name: logs
+          mountPath: /var/log/kubernetes/
     - name: controller-manager
       image: {{ kubernetes_image }}
       args:
@@ -82,7 +90,7 @@ spec:
           cpu: {{ controller_manager_limits_cpu }}
           memory: {{ controller_manager_limits_memory }}
       volumeMounts:
-        - name: kubernetes-config
+        - name: config
           mountPath: /etc/kubernetes
     - name: scheduler
       image: {{ kubernetes_image }}
@@ -111,6 +119,9 @@ spec:
           cpu: {{ scheduler_limits_cpu }}
           memory: {{ scheduler_limits_memory }}
   volumes:
-    - name: kubernetes-config
+    - name: config
       hostPath:
         path: /etc/kubernetes
+    - name: logs
+      hostPath:
+        path: /var/log/kubernetes

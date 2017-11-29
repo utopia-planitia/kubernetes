@@ -31,6 +31,11 @@
     src: token-auth-file.j2
     dest: /etc/kubernetes/token-auth-file
 
+- name: copy kubernetes certificates
+  copy:
+    src: audit-policy.yaml
+    dest: /etc/kubernetes/audit-policy.yaml
+
 - name: checksum of etcd certificates
   local_action: shell cd {{ etcd_cert_dir }}; md5sum ca.pem server.pem server-key.pem member.pem member-key.pem | md5sum | head -c 32
   register: etcd_cert_hashsum
@@ -46,9 +51,14 @@
   register: token_auth_file_hashsum
   changed_when: false
 
+- name: checksum of audit-policy
+  local_action: shell md5sum /etc/kubernetes/audit-policy.yaml | head -c 32
+  register: audit_policy_file_hashsum
+  changed_when: false
+
 - name: "set master_config_hash variable"
   set_fact:
-    master_config_hash: "{{ master_cert_hashsum.stdout }}-{{ etcd_cert_hashsum.stdout }}-{{ token_auth_file_hashsum.stdout }}"
+    master_config_hash: "{{ master_cert_hashsum.stdout }}-{{ etcd_cert_hashsum.stdout }}-{{ token_auth_file_hashsum.stdout }}-{{ audit_policy_file_hashsum.stdout }}"
 
 - name: install master
   template:
