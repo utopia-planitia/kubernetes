@@ -26,6 +26,11 @@
     - { local: 'master-key.pem', remote: 'master-key.pem' }
   no_log: true
 
+- name: install token-auth-file
+  template:
+    src: token-auth-file.j2
+    dest: /etc/kubernetes/token-auth-file
+
 - name: checksum of etcd certificates
   local_action: shell cd {{ etcd_cert_dir }}; md5sum ca.pem server.pem server-key.pem member.pem member-key.pem | md5sum | head -c 32
   register: etcd_cert_hashsum
@@ -36,9 +41,14 @@
   register: master_cert_hashsum
   changed_when: false
 
-- name: "set master_cert_hashsum variable"
+- name: checksum of token-auth-file
+  local_action: shell md5sum /etc/kubernetes/token-auth-file | head -c 32
+  register: token_auth_file_hashsum
+  changed_when: false
+
+- name: "set master_config_hash variable"
   set_fact:
-    master_cert_hashsum: "{{ master_cert_hashsum.stdout }}-{{ etcd_cert_hashsum.stdout }}"
+    master_config_hash: "{{ master_cert_hashsum.stdout }}-{{ etcd_cert_hashsum.stdout }}-{{ token_auth_file_hashsum.stdout }}"
 
 - name: install master
   template:

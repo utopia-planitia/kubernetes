@@ -23,9 +23,9 @@
   register: etcd_cert_hashsum
   changed_when: false
 
-- name: "set etcd_cert_hashsum variable"
+- name: "set etcd_config_hash variable"
   set_fact:
-    etcd_cert_hashsum: "{{ etcd_cert_hashsum.stdout }}"
+    etcd_config_hash: "{{ etcd_cert_hashsum.stdout }}"
 
 - name: install etcd
   template: src=etcd.yml.j2 dest=/etc/kubernetes/manifests/etcd.yml

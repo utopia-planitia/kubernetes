@@ -10,5 +10,9 @@ cli-pull-image: ##@development pull latest version of DEV_TOOLS_DOCKER_IMAGE
 	docker pull ${DEV_TOOLS_DOCKER_IMAGE}
 
 .PHONY: cli
-cli: ##@development creates command line interface
+cli: ##@development creates admin command line interface
 	$(CLI)
+
+.PHONY: demo-cli
+demo-cli: ##@development creates user command line interface
+	$(CLI) sh -c "KUBECONFIG=/workspace/certificates/master/demo-user-kube-config bash"

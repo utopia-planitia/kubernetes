@@ -32,13 +32,14 @@ spec:
           --apiserver-count={{ groups['masters'] | length }}
           --authorization-mode={{ authorization_mode }}
           --anonymous-auth=false
+          --token-auth-file=/etc/kubernetes/token-auth-file
           --target-ram-mb={{ apiserver_limit_target_ram_mb | int }}
           --max-requests-inflight={{ apiserver_max_requests_inflight | int }}
           --max-mutating-requests-inflight={{ apiserver_max_mutating_requests_inflight | int }}
           --feature-gates={{ feature_gates }}
       env:
         - name: CONFIG_HASH
-          value: {{ master_cert_hashsum }}
+          value: {{ master_config_hash }}
       livenessProbe:
         httpGet:
           path: /healthz
@@ -52,8 +53,8 @@ spec:
           cpu: {{ apiserver_limits_cpu }}
           memory: {{ apiserver_limits_memory }}
       volumeMounts:
-        - name: kubernetes-ssl-certs
-          mountPath: /etc/kubernetes/ssl
+        - name: kubernetes-config
+          mountPath: /etc/kubernetes
     - name: controller-manager
       image: {{ kubernetes_image }}
       args:
@@ -67,7 +68,7 @@ spec:
         - --feature-gates={{ feature_gates }}
       env:
         - name: CONFIG_HASH
-          value: {{ master_cert_hashsum }}
+          value: {{ master_config_hash }}
       livenessProbe:
         httpGet:
           path: /healthz
@@ -81,8 +82,8 @@ spec:
           cpu: {{ controller_manager_limits_cpu }}
           memory: {{ controller_manager_limits_memory }}
       volumeMounts:
-        - name: kubernetes-ssl-certs
-          mountPath: /etc/kubernetes/ssl
+        - name: kubernetes-config
+          mountPath: /etc/kubernetes
     - name: scheduler
       image: {{ kubernetes_image }}
       args:
@@ -96,7 +97,7 @@ spec:
         - --feature-gates={{ feature_gates }}
       env:
         - name: CONFIG_HASH
-          value: {{ master_cert_hashsum }}
+          value: {{ master_config_hash }}
       livenessProbe:
         httpGet:
           path: /healthz
@@ -110,6 +111,6 @@ spec:
           cpu: {{ scheduler_limits_cpu }}
           memory: {{ scheduler_limits_memory }}
   volumes:
-    - name: kubernetes-ssl-certs
+    - name: kubernetes-config
       hostPath:
-        path: /etc/kubernetes/ssl
+        path: /etc/kubernetes

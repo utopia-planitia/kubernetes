@@ -15,7 +15,7 @@ spec:
         - "{% for host in groups['etcds'] %}echo {{ hostvars[host]['ansible_host'] }} etcd{{ hostvars[host]['etcd_id'] }} >> /etc/hosts && {% endfor %} /usr/local/bin/etcd"
       env:
         - name: CONFIG_HASH
-          value: {{ etcd_cert_hashsum }}
+          value: {{ etcd_config_hash }}
         - name: ETCD_NAME
           value: etcd{{ etcd_id }}
         - name: ETCD_DATA_DIR
