@@ -2,7 +2,7 @@
 
 set -e
 
-NODES_COUNT=4
+NODES_COUNT=$( grep ansible_host inventory | wc -l)
 KUBE_DNS_PODS=2
 
 for ID in $(seq 1 ${NODES_COUNT}); do
