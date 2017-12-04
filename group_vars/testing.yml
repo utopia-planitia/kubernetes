@@ -2,11 +2,6 @@
 authorization_mode: AlwaysAllow
 
 local_volumes:
-  - name: example-file
-    size: 20M
-    path: /mnt/disks/pre-provision/example_file
-    type: file
-    file: /var/lib/disks/pre-provision/example_file.img
   - name: example-quota
     size: 10M
     path: /mnt/disks/dynamic/example_quota

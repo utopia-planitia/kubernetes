@@ -1,12 +1,11 @@
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: local-claim-file
+  name: local-claim-quota
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
       storage: 5M
-  storageClassName: local-storage-pre-provision
+  storageClassName: local-storage
