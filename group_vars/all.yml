@@ -19,11 +19,3 @@ addons_cert_dir:   "{{ playbook_dir }}/certificates/addons"
 nodes_count: "{{ groups['all'] | length }}"
 
 feature_gates: PersistentLocalVolumes=true
-
-cluster:
-  name: local-development
-  users:
-    - username: demo
-      token: 11f050eb-d658-47a0-ab74-7a830d6aaa1c
-      uid: ffce35b8-3901-4c95-aa45-27401de67418
-      groups: system:masters

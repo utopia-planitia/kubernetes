@@ -1,6 +1,14 @@
 
 authorization_mode: AlwaysAllow
 
+cluster:
+  name: kubernetes-development
+  users:
+    - username: demo
+      token: 11f050eb-d658-47a0-ab74-7a830d6aaa1c
+      uid: ffce35b8-3901-4c95-aa45-27401de67418
+      groups: system:masters
+
 local_volumes_all_nodes:
   managed:
   - xfs:
