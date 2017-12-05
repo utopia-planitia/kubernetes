@@ -20,11 +20,9 @@
 - name: create project
   command: "xfs_quota -x -c 'project -s -p {{ item.path }} {{ item.xfs_quota_project_id }}' {{ item.xfs_root }}"
   when:
-    - blocks.stdout != item.size
-    - inodes.stdout != item.inodes
+    - blocks.stdout != item.size or inodes.stdout != item.inodes
 
 - name: set limit
   command: "xfs_quota -x -c 'limit -p bhard={{ item.size }} ihard={{ item.inodes }} {{ item.xfs_quota_project_id }}' {{ item.xfs_root }}"
   when:
-    - blocks.stdout != item.size
-    - inodes.stdout != item.inodes
+    - blocks.stdout != item.size or inodes.stdout != item.inodes
