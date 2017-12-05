@@ -13,11 +13,13 @@ system-requirements-check: ##@setup checks system for required dependencies
 .PHONY: certificates
 certificates:
 	$(CLI) sh -c 'touch certificates && rm -r certificates'
-	$(CLI) ansible-playbook certificates.yml ${ANSIBLE_OPTIONS}
+	$(CLI) ansible-playbook certificates.yml $(ANSIBLE_OPTIONS)
 
 .PHONY: deploy
 deploy: ##@ansible deploy to nodes
-	$(CLI) ansible-playbook deploy.yml       ${ANSIBLE_OPTIONS}
+	$(CLI) kubectl -n kube-system delete ds local-volume-provisioner || true
+	$(CLI) kubectl -n kube-system delete job local-volume-provisioner-bootstrap || true
+	$(CLI) ansible-playbook deploy.yml       $(ANSIBLE_OPTIONS)
 	$(CLI) bash etc/wait-for-nodes.sh
 	$(CLI) kubectl apply  -R -f addons/ \
 	                         -f certificates/addons/

@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 @test "pv quota: deploy pod with persistent local volume" {
-  run kubectl apply -f tests/local-volume-quota
+  run kubectl apply -f tests/local-volume
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 2 ]
 }
@@ -46,7 +46,7 @@
   if [ "$SKIP_LOCAL_VOLUME_QUOTA_TESTS" == "true" ]; then
     skip "skip quota based local volume tests"
   fi
-  run kubectl delete -f tests/local-volume-quota/pod.yaml
+  run kubectl delete -f tests/local-volume/pod.yaml
   [ $status == 0 ]
   [ "${#lines[@]}" == 1 ]
 }
@@ -58,7 +58,7 @@
   until [ $(kubectl get pod -a local-pod-quota --no-headers | wc -l) == 0 ]; do
     sleep 0.5
   done
-  run kubectl apply -f tests/local-volume-quota/pod.yaml
+  run kubectl apply -f tests/local-volume/pod.yaml
   [ $status == 0 ]
   [ "${#lines[@]}" == 1 ]
 }
@@ -76,7 +76,7 @@
 }
 
 @test "pv quota: undeploy pod with persistent local volume" {
-  run kubectl delete -f tests/local-volume-quota
+  run kubectl delete -f tests/local-volume
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 2 ]
 }

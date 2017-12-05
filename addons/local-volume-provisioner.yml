@@ -9,7 +9,7 @@ items:
     data:
       storageClassMap: |
         local-storage:
-          hostDir: "/mnt/disks/local-storage"
+          hostDir: "/var/lib/local-storage"
           mountDir: "/local-storage"
   - apiVersion: v1
     kind: ServiceAccount

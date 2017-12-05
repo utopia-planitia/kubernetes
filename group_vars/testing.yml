@@ -1,11 +1,48 @@
 
 authorization_mode: AlwaysAllow
 
-local_volumes:
-  - name: example-quota
-    size: 10M
-    path: /mnt/disks/dynamic/example_quota
-    type: quota
-    xfs_quota_project_id: 1
-    xfs_root: /mnt/disks/dynamic
-    inodes: 5000
+local_volumes_all_nodes:
+  managed:
+  - xfs:
+      root: /xfs
+      sub_directory: /general-cluster
+    volumes:
+    - name: example-general
+#      size: 100M # optional
+#      inodes: 5000 # optional
+#      count: 2 # optional
+  labeled:
+  - xfs:
+      name: xfs-cluster
+      root: /xfs
+      sub_directory: /dedicated-cluster
+    volumes:
+    - name: example-dedicated
+      labels:
+        dedicated: application-name
+      size: 100M # optional
+      inodes: 5000 # optional
+      count: 1 # optional
+
+local_volumes_node_specific:
+  managed:
+  - xfs:
+      root: /xfs
+      sub_directory: /general-node
+    volumes:
+    - name: example-general
+      size: 10M # optional
+      inodes: 500 # optional
+      count: 2 # optional
+  labeled:
+  - xfs:
+      name: xfs-node
+      root: /xfs
+      sub_directory: /dedicated-node
+    volumes:
+    - name: example-dedicated
+      labels:
+        dedicated: application-name
+      size: 5M # optional
+      inodes: 50 # optional
+      count: 3 # optional

@@ -1,0 +1,7 @@
+
+- name: create volume
+  include_tasks: "volume.yml"
+  with_indexed_items:
+    - "{{ xfs_location.volumes }}"
+  loop_control:
+    loop_var: volume

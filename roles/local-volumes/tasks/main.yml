@@ -1,5 +1,44 @@
 ---
 
-- name: create volumes
-  include_tasks: "{{ item.type }}.yml"
-  with_items: "{{ local_volumes }}"
+- name: render labeled volume definition
+  file:
+    state: directory
+    path: "addons/labeled-volume/"
+    recurse: true
+  delegate_to: localhost
+
+- name: create managed cluster wide volumes
+  include_tasks: "xfs_location.yml"
+  with_items: "{{ local_volumes_all_nodes.managed }}"
+  loop_control:
+    loop_var: xfs_location
+  vars:
+    xfs_quota_project_id_prefix: 1
+    type: managed
+
+- name: create labeled cluster wide volumes
+  include_tasks: "xfs_location.yml"
+  with_items: "{{ local_volumes_all_nodes.labeled }}"
+  loop_control:
+    loop_var: xfs_location
+  vars:
+    xfs_quota_project_id_prefix: 2
+    type: labeled
+
+- name: create managed host specific volumes
+  include_tasks: "xfs_location.yml"
+  with_items: "{{ local_volumes_node_specific.managed }}"
+  loop_control:
+    loop_var: xfs_location
+  vars:
+    xfs_quota_project_id_prefix: 3
+    type: managed
+
+- name: create labeled host specific volumes
+  include_tasks: "xfs_location.yml"
+  with_items: "{{ local_volumes_node_specific.labeled }}"
+  loop_control:
+    loop_var: xfs_location
+  vars:
+    xfs_quota_project_id_prefix: 4
+    type: labeled

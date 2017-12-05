@@ -1,1 +1,2 @@
-local_volumes: []
+local_volumes_all_nodes: []
+local_volumes_node_specific: []
