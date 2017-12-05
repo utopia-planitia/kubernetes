@@ -10,7 +10,7 @@
 
 - hosts: testing
   roles:
-    - { role: fake-xfs-filesystem }
+    - { role: xfs-fake-filesystem }
 
 - hosts: all
   roles:

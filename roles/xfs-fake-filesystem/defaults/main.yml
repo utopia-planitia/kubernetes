@@ -1,0 +1,5 @@
+
+fake_xfs_file: /xfs.img
+fake_xfs_size: 2G
+fake_xfs_path: /xfs
+fake_xfs_opts: defaults,prjquota
