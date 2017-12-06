@@ -68,6 +68,7 @@ deploy:
   artifacts:
     paths:
       - addons/labeled-volume
+      - certificates/users
 
 redeploy:
   stage: tests

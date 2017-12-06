@@ -13,6 +13,7 @@ nginx_image:      "nginx:{{ nginx_version }}"
 etcd_cert_dir:     "{{ playbook_dir }}/certificates/etcd"
 etcd_config_dir:   "{{ playbook_dir }}/roles/etcd-certificates/files"
 master_cert_dir:   "{{ playbook_dir }}/certificates/master"
+users_cert_dir:    "{{ playbook_dir }}/certificates/users"
 master_config_dir: "{{ playbook_dir }}/roles/master-certificates/files"
 addons_cert_dir:   "{{ playbook_dir }}/certificates/addons"
 
