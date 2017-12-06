@@ -38,8 +38,8 @@ provision:
     - cat inventory
   artifacts:
     paths:
-      - inventory
       - certificates
+      - inventory
 
 destroy:
   stage: destroy
@@ -65,6 +65,9 @@ deploy:
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
     - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
     - make deploy
+  artifacts:
+    paths:
+      - addons/labeled-volume
 
 redeploy:
   stage: tests
