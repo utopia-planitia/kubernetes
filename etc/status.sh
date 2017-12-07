@@ -14,7 +14,7 @@ fi
 
 NODES=$( kubectl get no -o wide 2>&1 | grep -v 'No resources found.' )
 NODES_COUNT=$( echo "$NODES" | tail -n +2 | wc -l )
-NODES_READY=$( echo "$NODES" | tail -n +2 | grep Ready | wc -l )
+NODES_READY=$( echo "$NODES" | tail -n +2 | grep -v NotReady | wc -l )
 echo "${NODES_READY} of ${NODES_COUNT} nodes are ready"
 if [[ ! "${NODES_READY}" = "${NODES_COUNT}" ]]; then
 	echo "$NODES" | head -n 1
