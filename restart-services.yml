@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+    - name: stop all containers
+      shell: docker stop $(docker ps -a -q)
+    - name: restart service
+      systemd:
+        name: "{{ item }}"
+        daemon_reload: yes
+        state: "{{ state | default('restarted') }}"
+        enabled: yes
+      with_items:
+        - kubelet
+        - docker
