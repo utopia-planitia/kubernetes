@@ -5,7 +5,6 @@ metadata:
   namespace: kube-system
   labels:
     name: master-proxy
-    host: {{ inventory_hostname_short }}
 spec:
   hostNetwork: true
   containers:
