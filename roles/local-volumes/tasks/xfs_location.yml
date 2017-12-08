@@ -1,4 +1,26 @@
 
+
+- name: enable prjquota
+  lineinfile:
+    dest: /etc/fstab
+    backrefs: true
+    state: present
+    regexp: '^UUID=(.*) {{ xfs_location.xfs.root | regex_escape() }} xfs (.*(?<!prjquota)) 0 0$'
+    line: "UUID=\\1 {{ xfs_location.xfs.root }} xfs \\2,prjquota 0 0"
+  register: prjquota
+
+- name: unmount device
+  command: "umount {{ xfs_location.xfs.root }}"
+  when: prjquota.changed
+  tags:
+    - skip_ansible_lint
+
+- name: mount device
+  command: "mount {{ xfs_location.xfs.root }}"
+  when: prjquota.changed
+  tags:
+    - skip_ansible_lint
+
 - name: create volume
   include_tasks: "volume.yml"
   with_indexed_items:

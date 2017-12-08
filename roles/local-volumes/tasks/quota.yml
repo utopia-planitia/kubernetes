@@ -15,12 +15,12 @@
     recurse: yes
 
 - name: check blocks
-  shell: "xfs_quota -x -c 'quota -p {{ xfs_project_id }} -vbNh' {{ path }} {{ xfs_location.xfs.root }} | awk '{print $4}'"
+  shell: "xfs_quota -x -c 'quota -p {{ xfs_project_id }} -vbNh' {{ xfs_location.xfs.root }} | tail -n +2 | awk '{print $3}'"
   register: blocks_result
   changed_when: false
 
 - name: check inodes
-  shell: "xfs_quota -x -c 'quota -p {{ xfs_project_id }} -viN' {{ path }} {{ xfs_location.xfs.root }} | awk '{print $4}'"
+  shell: "xfs_quota -x -c 'quota -p {{ xfs_project_id }} -viN' {{ xfs_location.xfs.root }} | awk '{print $4}'"
   register: inodes_result
   changed_when: false
 
