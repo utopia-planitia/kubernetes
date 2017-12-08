@@ -9,7 +9,7 @@
 
 - name: create managed cluster wide volumes
   include_tasks: "xfs_location.yml"
-  with_items: "{{ local_volumes_all_nodes.managed }}"
+  with_items: "{{ local_volumes_all_nodes_managed }}"
   loop_control:
     loop_var: xfs_location
   vars:
@@ -18,7 +18,7 @@
 
 - name: create labeled cluster wide volumes
   include_tasks: "xfs_location.yml"
-  with_items: "{{ local_volumes_all_nodes.labeled }}"
+  with_items: "{{ local_volumes_all_nodes_labeled }}"
   loop_control:
     loop_var: xfs_location
   vars:
@@ -27,7 +27,7 @@
 
 - name: create managed host specific volumes
   include_tasks: "xfs_location.yml"
-  with_items: "{{ local_volumes_node_specific.managed }}"
+  with_items: "{{ local_volumes_node_specific_managed }}"
   loop_control:
     loop_var: xfs_location
   vars:
@@ -36,7 +36,7 @@
 
 - name: create labeled host specific volumes
   include_tasks: "xfs_location.yml"
-  with_items: "{{ local_volumes_node_specific.labeled }}"
+  with_items: "{{ local_volumes_node_specific_labeled }}"
   loop_control:
     loop_var: xfs_location
   vars:

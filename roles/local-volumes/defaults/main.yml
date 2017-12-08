@@ -1,6 +1,4 @@
-local_volumes_all_nodes:
-  managed: []
-  labeled: []
-local_volumes_node_specific:
-  managed: []
-  labeled: []
+local_volumes_all_nodes_managed: []
+local_volumes_all_nodes_labeled: []
+local_volumes_node_specific_managed: []
+local_volumes_node_specific_labeled: []

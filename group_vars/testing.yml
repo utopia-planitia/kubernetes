@@ -9,8 +9,7 @@ cluster:
       uid: ffce35b8-3901-4c95-aa45-27401de67418
       groups: system:masters
 
-local_volumes_all_nodes:
-  managed:
+local_volumes_all_nodes_managed:
   - xfs:
       root: /xfs
       sub_directory: /general-cluster
@@ -19,7 +18,7 @@ local_volumes_all_nodes:
 #      size: 100M # optional
 #      inodes: 5000 # optional
 #      count: 2 # optional
-  labeled:
+local_volumes_all_nodes_labeled:
   - xfs:
       name: xfs-cluster
       root: /xfs
@@ -32,8 +31,7 @@ local_volumes_all_nodes:
       inodes: 5000 # optional
       count: 1 # optional
 
-local_volumes_node_specific:
-  managed:
+local_volumes_node_specific_managed:
   - xfs:
       root: /xfs
       sub_directory: /general-node
@@ -42,7 +40,7 @@ local_volumes_node_specific:
       size: 10M # optional
       inodes: 500 # optional
       count: 2 # optional
-  labeled:
+local_volumes_node_specific_labeled:
   - xfs:
       name: xfs-node
       root: /xfs
