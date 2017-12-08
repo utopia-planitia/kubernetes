@@ -3,6 +3,8 @@
   tasks:
     - name: stop all containers
       shell: docker stop $(docker ps -a -q)
+      tags:
+        - skip_ansible_lint
     - name: restart service
       systemd:
         name: "{{ item }}"
