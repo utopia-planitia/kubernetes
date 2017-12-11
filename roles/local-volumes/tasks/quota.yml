@@ -14,6 +14,12 @@
     state: directory
     recurse: yes
 
+- name: open permissions to directories
+  file:
+    path: "{{ path }}"
+    state: directory
+    mode: '0777'
+
 - name: check blocks
   shell: "xfs_quota -x -c 'quota -p {{ xfs_project_id }} -vbNh' {{ xfs_location.xfs.root }} | tail -n +2 | awk '{print $3}'"
   register: blocks_result
