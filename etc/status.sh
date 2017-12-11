@@ -30,15 +30,6 @@ if [[ ! "${VOLUMES_BOUND_AVAILABLE}" = "${VOLUMES_COUNT}" ]]; then
 	echo "$VOLUMES" | tail -n +2 | grep -v -e Bound -e Available | sort
 fi
 
-CLAIMS=$( kubectl get pvc 2>&1 | grep -v 'No resources found.' )
-CLAIMS_COUNT=$( echo "$CLAIMS" | tail -n +2 | wc -l )
-CLAIMS_BOUND_AVAILABLE=$( echo "$CLAIMS" | tail -n +2 | grep -e Bound | wc -l )
-echo "${CLAIMS_BOUND_AVAILABLE} of ${CLAIMS_COUNT} volume claims are bound"
-if [[ ! "${CLAIMS_BOUND_AVAILABLE}" = "${CLAIMS_COUNT}" ]]; then
-	echo "$CLAIMS" | head -n 1
-	echo "$CLAIMS" | tail -n +2 | grep -v -e Bound | sort
-fi
-
 NAMESPACES=$( kubectl get ns )
 NAMESPACES_COUNT=$( echo "$NAMESPACES" | tail -n +2 | wc -l )
 NAMESPACES_ACTIVE=$( echo "$NAMESPACES" | tail -n +2 | grep Active | wc -l )
@@ -46,6 +37,15 @@ echo "${NAMESPACES_ACTIVE} of ${NAMESPACES_COUNT} namespaces are active"
 if [[ ! "${NAMESPACES_ACTIVE}" = "${NAMESPACES_COUNT}" ]]; then
 	echo "$NAMESPACES" | head -n 1
 	echo "$NAMESPACES" | tail -n +2 | grep -v Active | sort
+fi
+
+CLAIMS=$( kubectl get --all-namespaces=true pvc 2>&1 | grep -v 'No resources found.' )
+CLAIMS_COUNT=$( echo "$CLAIMS" | tail -n +2 | wc -l )
+CLAIMS_BOUND_AVAILABLE=$( echo "$CLAIMS" | tail -n +2 | grep -e Bound | wc -l )
+echo "${CLAIMS_BOUND_AVAILABLE} of ${CLAIMS_COUNT} volume claims are bound"
+if [[ ! "${CLAIMS_BOUND_AVAILABLE}" = "${CLAIMS_COUNT}" ]]; then
+	echo "$CLAIMS" | head -n 1
+	echo "$CLAIMS" | tail -n +2 | grep -v -e Bound | sort
 fi
 
 PODS=$( kubectl get po --all-namespaces=true -o wide 2>&1 | grep -v 'No resources found.' )
