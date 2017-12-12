@@ -1,5 +1,6 @@
 
-include ./etc/help.mk
+include ../kubernetes-tools/etc/help.mk
+include ../kubernetes-tools/etc/cli.mk
 include ./etc/cli.mk
 include ./etc/tests.mk
 include ./etc/ovh.mk
