@@ -1,6 +1,5 @@
 
-IMAGE_TAG ?= v5
-DEV_TOOLS_DOCKER_IMAGE ?= registry.gitlab.com/$(shell basename $(shell dirname $(PWD)))/kubernetes-tools:${IMAGE_TAG}
+DEV_TOOLS_DOCKER_IMAGE ?= $(shell docker build -q ../kubernetes-tools)
 DOCKER = docker
 DOCKER_OPTIONS += -v $(PWD):/workspace -w /workspace
 DOCKER_OPTIONS += $(shell [ ! -z "$(SSH_AUTH_SOCK)" ] && echo -v $(SSH_AUTH_SOCK):$(SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$(SSH_AUTH_SOCK))
