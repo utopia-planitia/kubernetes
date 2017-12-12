@@ -9,14 +9,14 @@
     - /opt/cni/bin
     - /etc/cni/net.d
 
-- name: download
+- name: cni download
   get_url:
     url: "{{ item.url }}"
     dest: "{{ item.local_file }}"
     checksum: "{{ item.checksum }}"
   with_items: "{{ cni_packages }}"
 
-- name: unpack
+- name: cni unpack
   unarchive:
     dest: /opt/cni/bin
     copy: no
@@ -24,7 +24,7 @@
     creates: "{{ item.creates }}"
   with_items: "{{ cni_packages }}"
 
-- name: unpack cni plugins
+- name: cni unpack plugins
   unarchive:
     src: /opt/cni.tar.gz
     dest: /opt/cni/bin
