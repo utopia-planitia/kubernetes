@@ -43,7 +43,7 @@
 - name: render labeled volume definition
   template:
     src: volume.yml.j2
-    dest: "addons/labeled-volume/{{ inventory_hostname }}-{{ xfs_location_name }}-{{ name }}.yml"
+    dest: "addons/labeled-volumes/{{ inventory_hostname }}-{{ xfs_location_name }}-{{ name }}.yml"
   delegate_to: localhost
   when: type == "labeled"
 

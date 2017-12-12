@@ -67,7 +67,7 @@ deploy:
     - make deploy
   artifacts:
     paths:
-      - addons/labeled-volume
+      - addons/labeled-volumes
       - certificates/users
 
 redeploy:

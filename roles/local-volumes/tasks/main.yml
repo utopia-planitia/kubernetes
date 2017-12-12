@@ -1,11 +1,12 @@
 ---
 
-- name: render labeled volume definition
+- name: create directory for labeled volume definitions
   file:
     state: directory
-    path: "addons/labeled-volume/"
+    path: "addons/labeled-volumes/"
     recurse: true
   delegate_to: localhost
+  run_once: true
 
 - name: create managed cluster wide volumes
   include_tasks: "xfs_location.yml"

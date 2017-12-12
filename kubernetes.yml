@@ -15,7 +15,6 @@
 - hosts: all
   roles:
     - { role: disable-swap }
-    - { role: local-volumes }
     - { role: docker }
     - { role: node }
 

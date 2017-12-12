@@ -16,14 +16,27 @@ certificates:
 	$(CLI) ansible-playbook certificates.yml $(ANSIBLE_OPTIONS)
 
 .PHONY: deploy
-deploy: ##@ansible deploy to nodes
+deploy: ##@ansible setup cluster
+	$(MAKE) kubernetes
+	$(MAKE) local-volumes
+
+.PHONY: kubernetes
+kubernetes: ##@ansible deploy kubernetes
+	$(CLI) ansible-playbook kubernetes.yml $(ANSIBLE_OPTIONS)
+	$(CLI) bash etc/wait-for-nodes.sh
+	$(CLI) kubectl apply -f addons/kube-dns.yaml \
+	                     -f addons/weave-daemonset-k8s-1.7.yaml \
+	                     -f certificates/addons/
+	$(CLI) bash etc/wait-for-addons.sh
+
+.PHONY: local-volumes
+local-volumes: ##@ansible create local volumes
 	$(CLI) kubectl -n kube-system delete ds local-volume-provisioner || true
 	$(CLI) kubectl -n kube-system delete job local-volume-provisioner-bootstrap || true
-	$(CLI) ansible-playbook deploy.yml $(ANSIBLE_OPTIONS)
-	$(CLI) bash etc/wait-for-nodes.sh
-	$(CLI) kubectl apply  -R -f addons/ \
-	                         -f certificates/addons/
-	$(CLI) bash etc/wait-for-addons.sh
+	$(CLI) ansible-playbook local-volumes.yml $(ANSIBLE_OPTIONS)
+	$(CLI) kubectl apply -f addons/labeled-volumes \
+	                     -f addons/local-volume-provisioner.yml
+	$(CLI) bash etc/wait-for-local-volume-provisioner.sh
 	$(CLI) kubectl -n kube-system delete job local-volume-provisioner-bootstrap
 
 .PHONY: restart
