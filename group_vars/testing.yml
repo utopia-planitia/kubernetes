@@ -14,7 +14,7 @@ local_volumes_all_nodes_managed:
       root: /xfs
       sub_directory: /general-cluster
     volumes:
-    - name: example-general
+    - name: example-general-cluster
 #      size: 100M # optional
 #      inodes: 5000 # optional
 #      count: 2 # optional
@@ -24,7 +24,7 @@ local_volumes_all_nodes_labeled:
       root: /xfs
       sub_directory: /dedicated-cluster
     volumes:
-    - name: example-dedicated
+    - name: example-dedicated-cluster
       labels:
         dedicated: application-name
       size: 100M # optional
@@ -36,7 +36,7 @@ local_volumes_node_specific_managed:
       root: /xfs
       sub_directory: /general-node
     volumes:
-    - name: example-general
+    - name: example-general-node
       size: 10M # optional
       inodes: 500 # optional
       count: 2 # optional
@@ -46,7 +46,7 @@ local_volumes_node_specific_labeled:
       root: /xfs
       sub_directory: /dedicated-node
     volumes:
-    - name: example-dedicated
+    - name: example-dedicated-node
       labels:
         dedicated: application-name
       size: 5M # optional
