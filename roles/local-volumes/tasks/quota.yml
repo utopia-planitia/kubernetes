@@ -21,24 +21,24 @@
     mode: '0777'
 
 - name: check blocks
-  shell: "xfs_quota -x -c 'quota -p {{ xfs_project_id }} -vbNh' {{ xfs_location.xfs.root }} | tail -n +2 | awk '{print $3}'"
+  shell: "xfs_quota -x -c 'quota -p {{ xfs_project_id }} -vbNh' {{ xfs_location.xfs.root }} | grep -s ' {{ size }} ' | wc -l"
   register: blocks_result
   changed_when: false
 
 - name: check inodes
-  shell: "xfs_quota -x -c 'quota -p {{ xfs_project_id }} -viN' {{ xfs_location.xfs.root }} | awk '{print $4}'"
+  shell: "xfs_quota -x -c 'quota -p {{ xfs_project_id }} -viN' {{ xfs_location.xfs.root }} | grep -s ' {{ inodes }} ' | wc -l"
   register: inodes_result
   changed_when: false
 
 - name: create project
   command: "xfs_quota -x -c 'project -s -p {{ path }} {{ xfs_project_id }}' {{ xfs_location.xfs.root }}"
   when:
-    - blocks_result.stdout != size or inodes_result.stdout != inodes
+    - blocks_result.stdout != '1' or inodes_result.stdout != '1'
 
 - name: set limit
   command: "xfs_quota -x -c 'limit -p bhard={{ size }} ihard={{ inodes }} {{ xfs_project_id }}' {{ xfs_location.xfs.root }}"
   when:
-    - blocks_result.stdout != size or inodes_result.stdout != inodes
+    - blocks_result.stdout != '1' or inodes_result.stdout != '1'
 
 - name: render labeled volume definition
   template:
