@@ -20,3 +20,5 @@ scheduler_limits_cpu:               1000m
 scheduler_limits_memory:            "{{ scheduler_requests_memory }}"
 
 authorization_mode: Node,RBAC
+
+service_node_port_range: "30000-32767"

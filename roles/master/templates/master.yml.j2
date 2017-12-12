@@ -43,6 +43,7 @@ spec:
           --max-requests-inflight={{ apiserver_max_requests_inflight | int }}
           --max-mutating-requests-inflight={{ apiserver_max_mutating_requests_inflight | int }}
           --feature-gates={{ feature_gates }}
+          --service-node-port-range={{ service_node_port_range }}
       env:
         - name: CONFIG_HASH
           value: {{ master_config_hash }}
