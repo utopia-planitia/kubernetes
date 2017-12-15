@@ -8,8 +8,8 @@ stages:
   - destroy
 
 variables:
-  DEV_TOOLS_IMAGE:            ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}:${CI_COMMIT_SHA}
-  DOCKER_VERSION:             17.12.1-ce
+  DEV_TOOLS_IMAGE:            ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/dev-tools:${CI_COMMIT_SHA}
+  E2E_IMAGE:                  ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/e2e-tests:${CI_COMMIT_SHA}
   KUBECONFIG:                 ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
   E2E_PARALLELIZATION:        25
   OVH_REGION_NAME:            SBG3
@@ -19,12 +19,19 @@ variables:
   DIGITAL_OCEAN_NODES_PREFIX: ci-${CI_PIPELINE_ID}
   DIGITAL_OCEAN_KEYPAIR_NAME: utopia-planitia-ci-runner
 
-tools image:
+dev-tools image:
   stage: prepare
-  image: docker:${DOCKER_VERSION}
+  image: ${DOCKER_IMAGE}
   script:
-    - docker build -t ${DEV_TOOLS_IMAGE} dev-tools
+    - docker build -t ${DEV_TOOLS_IMAGE} docker/dev-tools
     - docker push ${DEV_TOOLS_IMAGE}
+
+e2e-tests image:
+  stage: prepare
+  image: ${DOCKER_IMAGE}
+  script:
+    - docker build -t ${E2E_IMAGE} docker/e2e-tests
+    - docker push ${E2E_IMAGE}
 
 lint:
   stage: provision
@@ -111,21 +118,21 @@ cleanup e2e ns:
 
 conformance:
   stage: e2e parallel
-  image: ${DEV_TOOLS_IMAGE}
+  image: ${E2E_IMAGE}
   retry: 2
   script:
     - make conformance
 
 port-forward:
   stage: e2e parallel
-  image: ${DEV_TOOLS_IMAGE}
+  image: ${E2E_IMAGE}
   retry: 2
   script:
     - make port-forward
 
 serial:
   stage: e2e serial
-  image: ${DEV_TOOLS_IMAGE}
+  image: ${E2E_IMAGE}
   retry: 2
   script:
     - make serial

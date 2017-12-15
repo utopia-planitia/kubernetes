@@ -16,17 +16,16 @@ bats: ##@development run bats tests
 
 .PHONY: conformance
 conformance: ##@development run conformance tests
-	$(CLI) sh -c 'cd /go/src/k8s.io/kubernetes && go run hack/e2e.go -get=false -- -v 2 --test --check-version-skew=false --provider=skeleton --test_args="--ginkgo.focus=\[Conformance\] --ginkgo.skip=\[Serial\]|\[Flaky\]|\[Feature:.+\]" --ginkgo-parallel'
+	$(E2E) sh -c 'E2E_PARALLEL=y E2E_SKIP="Alpha|Kubectl|Serial|\[(Disruptive|Feature:[^\]]+|Flaky)\]" E2E_FOCUS="\[Conformance\]" /run_e2e.sh'
 
 .PHONY: port-forward
 port-forward: ##@development run port-forward test
-	$(CLI) sh -c 'cd /go/src/k8s.io/kubernetes && go run hack/e2e.go -get=false -- -v 2 --test --check-version-skew=false --provider=skeleton --test_args="--ginkgo.focus=port-forward"'
+	$(E2E) sh -c 'E2E_PARALLEL=y E2E_SKIP="Alpha|\[(Disruptive|Feature:[^\]]+|Flaky)\]" E2E_FOCUS="port-forward" /run_e2e.sh'
 
 .PHONY: serial
 serial: ##@development run serial test
-	$(CLI) sh -c 'cd /go/src/k8s.io/kubernetes && go run hack/e2e.go -get=false -- -v 2 --test --check-version-skew=false --provider=skeleton --test_args="--ginkgo.focus=\[Serial\].*\[Conformance\]"'
+	$(E2E) sh -c 'E2E_PARALLEL=n E2E_SKIP="Alpha|Kubectl|\[(Disruptive|Feature:[^\]]+|Flaky)\]" E2E_FOCUS="Serial.*Conformance" /run_e2e.sh'
 
 .PHONY: delete-e2e-namespaces
 delete-e2e-namespaces: ##@development remove namespaces created by failed e2e tests
 	$(CLI) ./etc/delete-e2e-namespaces.sh
-
