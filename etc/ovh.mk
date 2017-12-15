@@ -4,7 +4,6 @@ OVH_REGION_NAME ?= SBG3
 
 .PHONY: ovh-provision
 ovh-provision: ##@ovh start vms and create inventory
-	$(CLI) sh -c 'touch certificates && rm -r certificates'
 	$(CLI) touch inventory
 	$(CLI) ansible-playbook ovh-provision.yml -e "region_name=$(OVH_REGION_NAME) OVH_NODES_PREFIX=$(OVH_NODES_PREFIX) OVH_KEYPAIR_NAME=$(OVH_KEYPAIR_NAME)" ${ANSIBLE_OPTIONS}
 

@@ -12,6 +12,7 @@ system-requirements-check: ##@setup checks system for required dependencies
 
 .PHONY: certificates
 certificates:
+	$(CLI) sh -c 'touch certificates && rm -r certificates'
 	$(CLI) ansible-playbook certificates.yml $(ANSIBLE_OPTIONS)
 
 .PHONY: deploy
