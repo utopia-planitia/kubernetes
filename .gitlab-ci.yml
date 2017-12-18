@@ -1,5 +1,6 @@
 stages:
   - prepare
+  - provision
   - build
   - tests
   - e2e parallel
@@ -7,7 +8,8 @@ stages:
   - destroy
 
 variables:
-  DEV_TOOLS_IMAGE:            ${CI_REGISTRY_IMAGE}-tools:latest
+  DEV_TOOLS_IMAGE:            ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}:${CI_COMMIT_SHA}
+  DOCKER_VERSION:             17.06.0-ce
   KUBECONFIG:                 ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
   E2E_PARALLELIZATION:        25
   OVH_REGION_NAME:            SBG3
@@ -17,14 +19,21 @@ variables:
   DIGITAL_OCEAN_NODES_PREFIX: ci-${CI_PIPELINE_ID}
   DIGITAL_OCEAN_KEYPAIR_NAME: utopia-planitia-ci-runner
 
-lint:
+tools image:
   stage: prepare
+  image: docker:${DOCKER_VERSION}
+  script:
+    - docker build -t ${DEV_TOOLS_IMAGE} dev-tools
+    - docker push ${DEV_TOOLS_IMAGE}
+
+lint:
+  stage: provision
   image: ${DEV_TOOLS_IMAGE}
   script:
     - ansible-lint *.yml roles
 
 provision:
-  stage: prepare
+  stage: provision
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
@@ -79,8 +88,8 @@ redeploy:
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/id_rsa
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/id_rsa.pub
     - chmod 400 ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
-    - ansible-playbook deploy.yml ${ANSIBLE_OPTIONS} | tee deploy.log
-    - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 4
+    - make deploy | tee deploy.log
+    - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 8
 
 bats:
   stage: tests
