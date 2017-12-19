@@ -11,15 +11,18 @@ endif
 
 ifndef IS_CONTAINERIZED
   KUBERNETES_TOOLS_IMAGE = $(shell docker build -q ../kubernetes/dev-tools)
-  KUBERNETES_CERTIFICATES ?= $(shell realpath ../kubernetes/certificates)
-  KUBERNETES_ETC ?= $(shell realpath ../kubernetes/etc)
   DOCKER = docker
   DOCKER_OPTIONS += -v $(PWD):/workspace -w /workspace
   DOCKER_OPTIONS += $(shell [ ! -z "$(SSH_AUTH_SOCK)" ] && echo -v $(SSH_AUTH_SOCK):$(SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$(SSH_AUTH_SOCK))
   DOCKER_OPTIONS += -v ~/.ssh/ovh:/root/.ssh/ovh
   DOCKER_OPTIONS += -v ~/.vagrant.d/:/root/.vagrant.d/
-  DOCKER_OPTIONS += -v $(KUBERNETES_CERTIFICATES):/kubernetes/certificates -e KUBECONFIG=/kubernetes/certificates/master/admin-kube-config
-  DOCKER_OPTIONS += -v $(KUBERNETES_ETC):/kubernetes/etc
+  DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/certificates:/kubernetes/certificates
+  DOCKER_OPTIONS += -e KUBECONFIG=/kubernetes/certificates/master/admin-kube-config
+  DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/etc:/kubernetes/etc
+  DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/ansible.cfg:/workspace/ansible.cfg
+  DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/inventory:/workspace/inventory
+  DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/group_vars:/workspace/group_vars
+  DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/host_vars:/workspace/host_vars
   CLI = $(DOCKER) run --net=host --rm -ti $(DOCKER_OPTIONS) $(KUBERNETES_TOOLS_IMAGE)
 endif
 
