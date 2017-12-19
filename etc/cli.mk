@@ -1,7 +1,15 @@
 
 
 CLI =
-ifeq ($(shell cat /proc/1/cgroup | grep docker | wc -l), 0)
+IS_CONTAINERIZED =
+ifneq ($(shell cat /proc/1/cgroup | grep docker | wc -l), 0)
+  IS_CONTAINERIZED = yes
+endif
+ifneq ($(shell cat /proc/1/cgroup | grep kubepods | wc -l), 0)
+  IS_CONTAINERIZED = yes
+endif
+
+ifndef IS_CONTAINERIZED
   KUBERNETES_TOOLS_IMAGE = $(shell docker build -q ../kubernetes/dev-tools)
   KUBERNETES_CERTIFICATES ?= $(shell realpath ../kubernetes/certificates)
   KUBERNETES_ETC ?= $(shell realpath ../kubernetes/etc)
