@@ -36,7 +36,7 @@
   shell: |
     kubectl --kubeconfig=admin-kube-config config set-cluster default --server=https://{{ hostvars[groups['masters'][0]]['ansible_host'] }}:6443 --embed-certs=true --certificate-authority=ca.pem &&
     kubectl --kubeconfig=admin-kube-config config set-credentials default --embed-certs=true --client-certificate=admin.pem --client-key=admin-key.pem &&
-    kubectl --kubeconfig=admin-kube-config config set-context default --cluster=default --user=default &&
+    kubectl --kubeconfig=admin-kube-config config set-context default --cluster=default --user=default --namespace=default &&
     kubectl --kubeconfig=admin-kube-config config use-context default
   args:
     chdir: "{{ master_cert_dir }}"
@@ -86,7 +86,7 @@
   shell: |
     kubectl --kubeconfig={{ item.username }}-kube-config config set-cluster {{ cluster.name }} --server=https://{{ hostvars[groups['masters'][0]]['ansible_host'] }}:6443 --embed-certs=true --certificate-authority={{ master_cert_dir }}/ca.pem &&
     kubectl --kubeconfig={{ item.username }}-kube-config config set-credentials {{ item.username }} --token={{ item.token }} &&
-    kubectl --kubeconfig={{ item.username }}-kube-config config set-context {{ cluster.name }} --cluster={{ cluster.name }} --user={{ item.username }} &&
+    kubectl --kubeconfig={{ item.username }}-kube-config config set-context {{ cluster.name }} --cluster={{ cluster.name }} --user={{ item.username }} --namespace=default &&
     kubectl --kubeconfig={{ item.username }}-kube-config config use-context {{ cluster.name }}
   args:
     chdir: "{{ users_cert_dir }}"
