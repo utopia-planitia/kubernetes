@@ -1,16 +1,19 @@
 ---
 - hosts: all
   tasks:
-    - name: stop all containers
-      shell: docker stop $(docker ps -a -q)
-      tags:
-        - skip_ansible_lint
-    - name: restart service
+    - name: restart docker
       systemd:
-        name: "{{ item }}"
+        name: "docker"
         daemon_reload: yes
         state: "{{ state | default('restarted') }}"
         enabled: yes
-      with_items:
-        - kubelet
-        - docker
+    - name: restart kubelet
+      systemd:
+        name: "kubelet"
+        daemon_reload: yes
+        state: "{{ state | default('restarted') }}"
+        enabled: yes
+    - name: remove all containers
+      shell: docker stop $(docker ps -a -q) && docker rm -f $(docker ps -a -q)
+      tags:
+        - skip_ansible_lint
