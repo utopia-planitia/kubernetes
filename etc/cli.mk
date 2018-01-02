@@ -19,10 +19,12 @@ ifndef IS_CONTAINERIZED
   DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/certificates:/kubernetes/certificates
   DOCKER_OPTIONS += -e KUBECONFIG=/kubernetes/certificates/master/admin-kube-config
   DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/etc:/kubernetes/etc
-  DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/ansible.cfg:/workspace/ansible.cfg
-  DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/inventory:/workspace/inventory
-  DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/group_vars:/workspace/group_vars
-  DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/host_vars:/workspace/host_vars
+  ifdef NEED_ANSIBLE
+    DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/ansible.cfg:/workspace/ansible.cfg
+    DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/inventory:/workspace/inventory
+    DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/group_vars:/workspace/group_vars
+    DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/host_vars:/workspace/host_vars
+  endif
   CLI = $(DOCKER) run --net=host --rm -ti $(DOCKER_OPTIONS) $(KUBERNETES_TOOLS_IMAGE)
 endif
 
