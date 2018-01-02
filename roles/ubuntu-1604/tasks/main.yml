@@ -32,5 +32,5 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - docker-ce=17.03.2~ce-0~ubuntu-xenial
+    - docker-ce
     - socat
