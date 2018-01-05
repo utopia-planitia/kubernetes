@@ -11,7 +11,7 @@ system-requirements-check: ##@setup checks system for required dependencies
 	./etc/system-requirements-check.sh
 
 .PHONY: certificates
-certificates:
+certificates: ##@ansible delete and recreate cluster secrets
 	$(CLI) sh -c 'touch certificates && rm -r certificates'
 	$(CLI) ansible-playbook certificates.yml $(ANSIBLE_OPTIONS)
 
