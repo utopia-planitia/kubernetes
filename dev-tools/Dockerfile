@@ -13,6 +13,7 @@ RUN apt-get update && \
 		openssh-client \
 		make \
 		bash-completion \
+		apache2-utils \
 		bats && \
 	apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
