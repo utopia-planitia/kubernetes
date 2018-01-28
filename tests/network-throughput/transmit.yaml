@@ -1,0 +1,20 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: transmit
+  labels:
+    app: network-throughput
+    component: transmit
+spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - topologyKey: "kubernetes.io/hostname"
+          labelSelector:
+            matchLabels:
+              app: network-throughput
+              component: receive
+  containers:
+    - name: transmit
+      image: alpine:3.7
+      command: [/bin/sh, -c, 'sleep 86400']
