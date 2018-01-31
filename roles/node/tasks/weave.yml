@@ -10,8 +10,8 @@
     - /usr/local/bin/
 
 - name: weave binary
-  template:
-    src: weave.j2
+  copy:
+    src: weave
     dest: /usr/local/bin/weave
     mode: 0755
 
