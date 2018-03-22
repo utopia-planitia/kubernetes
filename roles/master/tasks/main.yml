@@ -47,12 +47,12 @@
   changed_when: false
 
 - name: checksum of token-auth-file
-  local_action: shell md5sum /etc/kubernetes/token-auth-file | head -c 32
+  action: shell md5sum /etc/kubernetes/token-auth-file | head -c 32
   register: token_auth_file_hashsum
   changed_when: false
 
 - name: checksum of audit-policy
-  local_action: shell md5sum /etc/kubernetes/audit-policy.yaml | head -c 32
+  action: shell md5sum /etc/kubernetes/audit-policy.yaml | head -c 32
   register: audit_policy_file_hashsum
   changed_when: false
 
