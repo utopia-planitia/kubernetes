@@ -4,9 +4,10 @@
     path: "{{ users_cert_dir }}"
     state: directory
     recurse: true
+  delegate_to: localhost
 
 - name: set up user config files
-  shell: |
+  shell: |  
     kubectl --kubeconfig={{ item.username }}-kube-config config set-cluster {{ cluster.name }} --server=https://{{ hostvars[groups['masters'][0]]['ansible_host'] }}:6443 --embed-certs=true --certificate-authority={{ master_cert_dir }}/ca.pem &&
     kubectl --kubeconfig={{ item.username }}-kube-config config set-credentials {{ item.username }} --token={{ item.token }} &&
     kubectl --kubeconfig={{ item.username }}-kube-config config set-context {{ cluster.name }} --cluster={{ cluster.name }} --user={{ item.username }} --namespace=default &&
@@ -15,3 +16,4 @@
     chdir: "{{ users_cert_dir }}"
     creates: "{{ item.username }}-kube-config"
   with_items: "{{ cluster.users }}"
+  delegate_to: localhost
