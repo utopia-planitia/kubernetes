@@ -27,9 +27,17 @@
 - name: download kubelet binary
   get_url:
     url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubelet"
-    dest: /usr/local/bin/kubelet
-    checksum: sha256:75c34afbd46fb3b85fc65d850a1615d0f8526d08531f01c07d4a9ad166e38fbe.
+    dest: "/usr/local/bin/kubelet-{{ kubernetes_version }}"
     mode: 0771
+
+- name: select kubelet version
+  file:
+    state: link
+    force: yes
+    path: /usr/local/bin/kubelet
+    src: "/usr/local/bin/kubelet-{{ kubernetes_version }}"
+  notify:
+    - restart kubelet
 
 - name: create kubelet service
   template:
