@@ -25,12 +25,15 @@
     filename: docker
   notify: update repositories
 
+- name: select latest k8s supported docker version
+  copy:
+    dest: /etc/apt/preferences.d/docker.pref
+    src: docker.pref
+
 - meta: flush_handlers
+  notify: update repositories
 
 - name: install packages
   package:
-    name: "{{ item }}"
+    name: "docker-ce"
     state: present
-  with_items:
-    - docker-ce
-    - socat
