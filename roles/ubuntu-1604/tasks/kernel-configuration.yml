@@ -1,0 +1,27 @@
+
+- name: configure open files per process
+  lineinfile:
+    path: /etc/security/limits.conf
+    line: '{{ item }}'
+  with_items:
+    - "*    soft nofile 1048576"
+    - "*    hard nofile 1048576"
+    - "root soft nofile 1048576"
+    - "root hard nofile 1048576"
+  notify: apply kernel configuration
+
+- name: configure global open files
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: '{{ item }}'
+  with_items:
+    - "fs.file-max = 2097152"
+    - "fs.nr_open = 1048576"
+    - "fs.inotify.max_user_watches=1048576"
+  notify: apply kernel configuration
+
+- name: enable limits for user sessions
+  lineinfile:
+    path: /etc/pam.d/common-session
+    line: 'session required pam_limits.so'
+  notify: apply kernel configuration
