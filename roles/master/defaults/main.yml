@@ -1,10 +1,10 @@
 ---
-apiserver_max_requests_inflight:          "{{ nodes_count|int * kubelet_max_pods / 2 }}"
-apiserver_max_mutating_requests_inflight: "{{ nodes_count|int * kubelet_max_pods / 3 }}"
-apiserver_limit_target_ram_mb:            "{{ 350 + (nodes_count|int * kubelet_max_pods * 2) }}"
+apiserver_max_requests_inflight:          "{{ nodes_count|int * kubelet_max_pods * 1.4 }}"
+apiserver_max_mutating_requests_inflight: "{{ nodes_count|int * kubelet_max_pods * 0.9 }}"
+apiserver_limit_target_ram_mb:            "{{ 350 + (nodes_count|int * kubelet_max_pods * 5) }}"
 
-scheduler_api_qps:   "{{ apiserver_max_requests_inflight|int * 0.2 }}"
-scheduler_api_burst: "{{ apiserver_max_requests_inflight|int * 0.3 }}"
+scheduler_api_qps:   "{{ apiserver_max_requests_inflight|int * 0.4 }}"
+scheduler_api_burst: "{{ apiserver_max_requests_inflight|int * 0.6 }}"
 
 apiserver_requests_cpu:             100m
 apiserver_requests_memory:          "{{ 20 + (apiserver_limit_target_ram_mb|int * 1.1) | int }}Mi"
