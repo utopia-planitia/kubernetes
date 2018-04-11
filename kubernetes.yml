@@ -30,8 +30,9 @@
 - hosts: masters
   tasks:
     - name: create user access tokens
-      include_role:
+      import_role:
         name: authentication-tokens
+      delegate_to: localhost
       run_once: true
   roles:
     - { role: master }

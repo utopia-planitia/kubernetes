@@ -4,7 +4,6 @@
     path: "{{ users_cert_dir }}"
     state: directory
     recurse: true
-  delegate_to: localhost
 
 - name: set up user config files
   shell: |  
@@ -16,4 +15,3 @@
     chdir: "{{ users_cert_dir }}"
     creates: "{{ item.username }}-kube-config"
   with_items: "{{ cluster.users }}"
-  delegate_to: localhost

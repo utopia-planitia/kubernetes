@@ -2,17 +2,17 @@
 - hosts: masters
   tasks:
     - name: create etcd certificates
-      include_role:
+      import_role:
         name: etcd-certificates
       delegate_to: localhost
       run_once: true
     - name: create kubernetes certificates
-      include_role:
+      import_role:
         name: master-certificates
       delegate_to: localhost
       run_once: true
     - name: create weave certificates
-      include_role:
+      import_role:
         name: weave-certificates
       delegate_to: localhost
       run_once: true

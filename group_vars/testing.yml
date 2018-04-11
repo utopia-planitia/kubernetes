@@ -3,6 +3,7 @@ authorization_mode: AlwaysAllow
 
 cluster:
   name: kubernetes-development
+  api_domain: kubernetes
   users:
     - username: demo
       token: 11f050eb-d658-47a0-ab74-7a830d6aaa1c
