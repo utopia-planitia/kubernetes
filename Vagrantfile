@@ -46,6 +46,8 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
       end
 
+      config.vm.provision "shell", inline: "sed -i '/search/d' /etc/resolv.conf"
+
     end    
   end
 
