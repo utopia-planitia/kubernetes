@@ -19,16 +19,17 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 CMD ["bash"]
 
-# ansible
-ENV ANSIBLE_VERSION 2.5.0
-RUN apt-add-repository ppa:ansible/ansible && \
-	apt-get update && \
-    apt-get install -y --no-install-recommends ansible=${ANSIBLE_VERSION}-1ppa~artful python-pip python-shade && \
+# pip
+RUN apt-get update && \
+#    apt-get install -y --no-install-recommends python-pip python-shade && \
+    apt-get install -y python-pip && \
 	apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+#RUN pip install --upgrade pip && pip install wheel
 
-# update pip
-RUN pip install --upgrade pip && pip install wheel
+# ansible
+ENV ANSIBLE_VERSION 2.5.0
+RUN pip install ansible==${ANSIBLE_VERSION}
 
 # ansible lint
 RUN pip install ansible-lint
