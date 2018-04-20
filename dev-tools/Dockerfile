@@ -35,12 +35,12 @@ RUN echo . /etc/bash_completion >> /root/.bashrc
 
 # golang
 ENV GOPATH /go
-ENV GOROOT /usr/lib/go-1.9
+ENV GOROOT /usr/lib/go-1.10
 ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
 RUN add-apt-repository ppa:gophers/archive && \
 	apt-get update && \
 	apt-get install -y \
-		golang-1.9-go && \
+		golang-1.10-go && \
 	apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
   mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
