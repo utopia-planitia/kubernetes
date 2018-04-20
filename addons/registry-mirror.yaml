@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: registry-mirror
+  namespace: kube-system
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: registry-mirror
+    spec:
+      containers:
+      - name: mirror
+        image: registry:2.6.2
+        resources:
+          limits:
+            cpu: 200m
+            memory: 200Mi
+        env:
+        - name: REGISTRY_HTTP_ADDR
+          value: :5000
+        - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+          value: /var/lib/registry
+        - name: REGISTRY_PROXY_REMOTEURL
+          value: https://registry-1.docker.io
+        ports:
+        - containerPort: 5000
+          name: mirror
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry-mirror
+  namespace: kube-system
+spec:
+  clusterIP: 10.16.0.7
+  ports:
+    - name: http
+      port: 80
+      targetPort: mirror
+    - name: https
+      port: 443
+      targetPort: mirror
+    - name: mirror
+      port: 5000
+      targetPort: mirror
+  selector:
+    name: registry-mirror

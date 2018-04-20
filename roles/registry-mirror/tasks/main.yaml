@@ -1,0 +1,6 @@
+
+- name: let docker discover internal registry mirror
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^10\.16\.0\.7'
+    line: '10.16.0.7 registry-mirror.kube-system.svc'

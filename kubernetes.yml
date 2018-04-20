@@ -17,6 +17,7 @@
     - { role: disable-swap }
     - { role: docker }
     - { role: node }
+    - { role: registry-mirror }
 
 - hosts: etcds
   pre_tasks:
