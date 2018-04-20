@@ -1,7 +1,7 @@
 ---
 
 kubernetes_version: v1.10.0
-etcd_version:       v3.2.9
+etcd_version:       v3.2.18
 nginx_version:      1.13.3-alpine
 
 kubernetes_image: "gcr.io/google_containers/hyperkube:{{ kubernetes_version }}"
