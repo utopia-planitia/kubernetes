@@ -166,7 +166,7 @@ spec:
         - name: kube-dns-config
           mountPath: /etc/k8s/dns/dnsmasq-nanny
       - name: sidecar
-        image: gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.7
+        image: gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.9
         livenessProbe:
           httpGet:
             path: /metrics
