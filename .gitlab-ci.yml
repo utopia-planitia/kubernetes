@@ -9,7 +9,7 @@ stages:
 
 variables:
   DEV_TOOLS_IMAGE:            ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}:${CI_COMMIT_SHA}
-  DOCKER_VERSION:             17.06.0-ce
+  DOCKER_VERSION:             17.12.1-ce
   KUBECONFIG:                 ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
   E2E_PARALLELIZATION:        25
   OVH_REGION_NAME:            SBG3
