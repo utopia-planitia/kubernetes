@@ -4,6 +4,7 @@ FROM ubuntu:17.10
 RUN apt-get update && \
 	apt-get install -y --no-install-recommends \
 		software-properties-common \
+		python-pip \
 		git \
 		curl \
 		rsync \
@@ -19,16 +20,8 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 CMD ["bash"]
 
-# pip
-RUN apt-get update && \
-#    apt-get install -y --no-install-recommends python-pip python-shade && \
-    apt-get install -y python-pip && \
-	apt-get clean && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-#RUN pip install --upgrade pip && pip install wheel
-
 # ansible
-ENV ANSIBLE_VERSION 2.5.0
+ENV ANSIBLE_VERSION 2.5.1
 RUN pip install ansible==${ANSIBLE_VERSION}
 
 # ansible lint
