@@ -23,7 +23,7 @@ tools image:
   stage: prepare
   image: docker:${DOCKER_VERSION}
   script:
-    - docker build -t ${DEV_TOOLS_IMAGE} dev-tools
+    - docker build --cache-from=currentBranch=$CI_COMMIT_REF_SLUG -t ${DEV_TOOLS_IMAGE} dev-tools
     - docker push ${DEV_TOOLS_IMAGE}
 
 lint:
