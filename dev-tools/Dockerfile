@@ -52,7 +52,7 @@ RUN curl -s -L -o /usr/local/bin/cfssl		https://pkg.cfssl.org/R1.2/cfssl_linux-a
 	chmod +x /usr/local/bin/cfssljson
 
 # kubernetes
-ENV KUBERNETES_VERSION v1.8.10
+ENV KUBERNETES_VERSION v1.10.0
 ENV KUBERNETES_CONFORMANCE_TEST=y
 RUN go get -u github.com/jteeuwen/go-bindata/go-bindata && \
 	go get -u k8s.io/test-infra/kubetest && \
