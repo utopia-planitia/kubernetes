@@ -2,7 +2,7 @@ FROM ubuntu:17.10
 
 # tools
 RUN apt-get update && \
-	apt-get install -y --no-install-recommends \
+	apt-get install -y \
 		software-properties-common \
 		python-pip \
 		git \
