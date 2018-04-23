@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load test_helper
+
 @test "verify kubernetes version node1" {
   IP=`grep node1 inventory | grep ansible_host | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
   run kubectl --server=https://${IP}:6443/ version

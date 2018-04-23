@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load test_helper
+
 @test "deploy dns jobs" {
   run kubectl apply -f tests/kube-dns
   [ $status -eq 0 ]

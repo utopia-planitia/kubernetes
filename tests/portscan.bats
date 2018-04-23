@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load test_helper
+
 @test "portscan on node1" {
   NODE=`grep node1 inventory | grep ansible_host | awk '{print $1;}'`
   run diff tests/portscan/node1.golden <(ansible -i inventory ${NODE} -m shell -a "netstat -lntu" | grep -v "udp        0      0 0.0.0.0:68              0.0.0.0:*" | tail -n +2 | sort -h)

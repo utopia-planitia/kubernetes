@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load test_helper
+
 @test "deploy ping jobs" {
   run kubectl apply -f tests/ping
   [ $status -eq 0 ]

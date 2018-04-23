@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load test_helper
+
 # Retry a command $1 times until it succeeds. Wait $2 seconds between retries.
 function retry {
     local attempts=$1

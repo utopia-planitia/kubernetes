@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load test_helper
+
 @test "deploy logging jobs" {
   run kubectl apply -f tests/logging
   [ $status -eq 0 ]

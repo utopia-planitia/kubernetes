@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load test_helper
+
 @test "pv quota: deploy pod with persistent local volume" {
   run kubectl apply -f tests/local-volume
   [ $status -eq 0 ]

@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load test_helper
+
 @test "verify componentstatus node1" {
   IP=`grep node1 inventory | grep ansible_host | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
   run sh -c "kubectl --server=https://${IP}:6443/ get componentstatus --no-headers=true | sort"

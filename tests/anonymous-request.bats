@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load test_helper
+
 @test "deploy anonymous-request jobs" {
   run kubectl apply -f tests/anonymous-request/jobs.yml
   [ $status -eq 0 ]
