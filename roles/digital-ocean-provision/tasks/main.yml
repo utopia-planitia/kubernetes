@@ -31,7 +31,6 @@
     unique_name: yes
   register: droplet_details
   with_items: "{{ servers }}"
-  when: item.name == "{{ NODE_NAME | default(item.name) }}"
 
 - name: remove old inventory file
   copy:
