@@ -38,12 +38,10 @@ addons: ##@ansible deploy addons
 .PHONY: local-volumes
 local-volumes: ##@ansible create local volumes
 	$(CLI) kubectl -n kube-system delete --ignore-not-found=true --timeout=60s ds local-volume-provisioner
-	$(CLI) kubectl -n kube-system delete --ignore-not-found=true --timeout=60s job local-volume-provisioner-bootstrap
 	$(CLI) ansible-playbook local-volumes.yml $(ANSIBLE_OPTIONS)
 	$(CLI) kubectl apply -f addons/labeled-volumes \
 	                     -f addons/local-volume-provisioner.yaml
 	$(CLI) bash etc/wait-for-local-volume-provisioner.sh
-	$(CLI) kubectl -n kube-system delete --ignore-not-found=true --timeout=60s job local-volume-provisioner-bootstrap
 
 .PHONY: restart
 restart: ##@ansible restart kubelet & docker
