@@ -2,21 +2,21 @@
 
 - name: generate SSH key directory
   file:
-    path: /root/.ssh
+    path: /root/.ssh/digital-ocean/
     state: directory
     recurse: yes
 
 - name: generate SSH key
-  command: ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+  command: ssh-keygen -b 2048 -t rsa -f /root/.ssh/digital-ocean/id_rsa -q -N ""
   args:
-    creates: /root/.ssh/id_rsa
+    creates: /root/.ssh/digital-ocean/id_rsa
 
 - name: upload public ssh key
   digital_ocean:
     state: present
     command: ssh
     name: "{{ DIGITAL_OCEAN_KEYPAIR_NAME }}"
-    ssh_pub_key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+    ssh_pub_key: "{{ lookup('file', '/root/.ssh/digital-ocean/id_rsa.pub') }}"
   register: ssh_key_at_digital_ocean
 
 - name: launch instances

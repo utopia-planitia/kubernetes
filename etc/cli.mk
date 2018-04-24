@@ -18,6 +18,7 @@ ifndef IS_CONTAINERIZED
   DOCKER_OPTIONS += -v $(PWD):/workspace -w /workspace
   DOCKER_OPTIONS += $(shell [ ! -z "$(SSH_AUTH_SOCK)" ] && echo -v $(SSH_AUTH_SOCK):$(SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$(SSH_AUTH_SOCK))
   DOCKER_OPTIONS += -v ~/.ssh/ovh:/root/.ssh/ovh
+  DOCKER_OPTIONS += -v ~/.ssh/digital-ocean:/root/.ssh/digital-ocean
   DOCKER_OPTIONS += -v ~/.vagrant.d/:/root/.vagrant.d/
   DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/certificates:/kubernetes/certificates
   DOCKER_OPTIONS += -e KUBECONFIG=/kubernetes/certificates/master/admin-kube-config
