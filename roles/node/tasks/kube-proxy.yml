@@ -11,20 +11,28 @@
 
 - name: copy kube-proxy certificates
   copy:
-    src: "{{ master_cert_dir }}/{{ item.local }}"
-    dest: "/etc/kube-proxy/{{ item.remote }}"
-  with_items:
-    - { local: 'kube-proxy-config', remote: 'kubeconfig' }
+    src: "{{ master_cert_dir }}/kube-proxy-config"
+    dest: "/etc/kube-proxy/kubeconfig"
   no_log: true
 
-- name: checksum of kube proxy config
+- name: copy kube-proxy config
+  template:
+    src: kube-proxy-config.j2
+    dest: /etc/kube-proxy/config
+
+- name: checksum of kube proxy certificates
   shell: md5sum /etc/kube-proxy/kubeconfig | head -c 32
+  register: kube_proxy_certificates_hashsum
+  changed_when: false
+
+- name: checksum of kube proxy config
+  shell: md5sum /etc/kube-proxy/config | head -c 32
   register: kube_proxy_config_hashsum
   changed_when: false
 
 - name: "set kube_proxy_config_hashsum variable"
   set_fact:
-    kube_proxy_config_hashsum: "{{ kube_proxy_config_hashsum.stdout }}"
+    kube_proxy_config_hashsum: "{{ kube_proxy_certificates_hashsum.stdout }}-{{ kube_proxy_config_hashsum.stdout }}"
 
 - name: install kube-proxy
   template:

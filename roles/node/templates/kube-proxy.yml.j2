@@ -14,9 +14,7 @@ spec:
         privileged: true
       args:
         - /usr/local/bin/kube-proxy
-        - --kubeconfig=/etc/kube-proxy/kubeconfig
-        - --hostname-override={{ ansible_host }}
-        - --cluster-cidr=10.48.0.0/12
+        - --config=/etc/kube-proxy/config
         - --logtostderr=true
       env:
         - name: CONFIG_HASH

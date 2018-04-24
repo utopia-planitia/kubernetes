@@ -1,0 +1,6 @@
+apiVersion: componentconfig/v1alpha1
+kind: KubeProxyConfiguration
+clusterCIDR: "10.48.0.0/12"
+hostnameOverride: "{{ ansible_host }}"
+clientConnection:
+  kubeconfig: "/etc/kube-proxy/kubeconfig"
