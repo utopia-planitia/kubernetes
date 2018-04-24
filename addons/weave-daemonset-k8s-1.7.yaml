@@ -9,8 +9,8 @@ items:
         cloud.weave.works/launcher-info: |-
           {
             "original-request": {
-              "url": "/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiI5IiwgR2l0VmVyc2lvbjoidjEuOS42IiwgR2l0Q29tbWl0OiI5ZjhlYmQxNzE0NzliZWMwYWRhODM3ZDdlZTY0MWRlYzJmOGM2ZGQxIiwgR2l0VHJlZVN0YXRlOiJjbGVhbiIsIEJ1aWxkRGF0ZToiMjAxOC0wMy0yMVQxNToyMTo1MFoiLCBHb1ZlcnNpb246ImdvMS45LjMiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQpTZXJ2ZXIgVmVyc2lvbjogdmVyc2lvbi5JbmZve01ham9yOiIxIiwgTWlub3I6IjgiLCBHaXRWZXJzaW9uOiJ2MS44LjIiLCBHaXRDb21taXQ6ImJkYWVhZmE3MWY2YzdjMDQ2MzYyNTEwMzFmOTM0NjQzODRkNTQ5NjMiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDE3LTEwLTI0VDE5OjM4OjEwWiIsIEdvVmVyc2lvbjoiZ28xLjguMyIsIENvbXBpbGVyOiJnYyIsIFBsYXRmb3JtOiJsaW51eC9hbWQ2NCJ9Cg==&password-secret=weave-passwd&trusted-subnets=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8,169.254.0.0/16&env.KUBERNETES_SERVICE_HOST=127.0.0.1&env.KUBERNETES_SERVICE_PORT=6443&env.IPALLOC_RANGE=10.48.0.0/12&env.WEAVE_STATUS_ADDR=127.0.0.1:6782",
-              "date": "Tue Mar 27 2018 21:38:40 GMT+0000 (UTC)"
+              "url": "/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiI5IiwgR2l0VmVyc2lvbjoidjEuOS42IiwgR2l0Q29tbWl0OiI5ZjhlYmQxNzE0NzliZWMwYWRhODM3ZDdlZTY0MWRlYzJmOGM2ZGQxIiwgR2l0VHJlZVN0YXRlOiJjbGVhbiIsIEJ1aWxkRGF0ZToiMjAxOC0wMy0yMVQxNToyMTo1MFoiLCBHb1ZlcnNpb246ImdvMS45LjMiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQpTZXJ2ZXIgVmVyc2lvbjogdmVyc2lvbi5JbmZve01ham9yOiIxIiwgTWlub3I6IjgiLCBHaXRWZXJzaW9uOiJ2MS44LjIiLCBHaXRDb21taXQ6ImJkYWVhZmE3MWY2YzdjMDQ2MzYyNTEwMzFmOTM0NjQzODRkNTQ5NjMiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDE3LTEwLTI0VDE5OjM4OjEwWiIsIEdvVmVyc2lvbjoiZ28xLjguMyIsIENvbXBpbGVyOiJnYyIsIFBsYXRmb3JtOiJsaW51eC9hbWQ2NCJ9Cg==&password-secret=weave-password&trusted-subnets=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8,169.254.0.0/16&env.KUBERNETES_SERVICE_HOST=127.0.0.1&env.KUBERNETES_SERVICE_PORT=6443&env.IPALLOC_RANGE=10.48.0.0/12",
+              "date": "Tue Apr 24 2018 18:58:44 GMT+0000 (UTC)"
             },
             "email-address": "support@weave.works"
           }
@@ -25,8 +25,8 @@ items:
         cloud.weave.works/launcher-info: |-
           {
             "original-request": {
-              "url": "/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiI5IiwgR2l0VmVyc2lvbjoidjEuOS42IiwgR2l0Q29tbWl0OiI5ZjhlYmQxNzE0NzliZWMwYWRhODM3ZDdlZTY0MWRlYzJmOGM2ZGQxIiwgR2l0VHJlZVN0YXRlOiJjbGVhbiIsIEJ1aWxkRGF0ZToiMjAxOC0wMy0yMVQxNToyMTo1MFoiLCBHb1ZlcnNpb246ImdvMS45LjMiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQpTZXJ2ZXIgVmVyc2lvbjogdmVyc2lvbi5JbmZve01ham9yOiIxIiwgTWlub3I6IjgiLCBHaXRWZXJzaW9uOiJ2MS44LjIiLCBHaXRDb21taXQ6ImJkYWVhZmE3MWY2YzdjMDQ2MzYyNTEwMzFmOTM0NjQzODRkNTQ5NjMiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDE3LTEwLTI0VDE5OjM4OjEwWiIsIEdvVmVyc2lvbjoiZ28xLjguMyIsIENvbXBpbGVyOiJnYyIsIFBsYXRmb3JtOiJsaW51eC9hbWQ2NCJ9Cg==&password-secret=weave-passwd&trusted-subnets=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8,169.254.0.0/16&env.KUBERNETES_SERVICE_HOST=127.0.0.1&env.KUBERNETES_SERVICE_PORT=6443&env.IPALLOC_RANGE=10.48.0.0/12&env.WEAVE_STATUS_ADDR=127.0.0.1:6782",
-              "date": "Tue Mar 27 2018 21:38:40 GMT+0000 (UTC)"
+              "url": "/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiI5IiwgR2l0VmVyc2lvbjoidjEuOS42IiwgR2l0Q29tbWl0OiI5ZjhlYmQxNzE0NzliZWMwYWRhODM3ZDdlZTY0MWRlYzJmOGM2ZGQxIiwgR2l0VHJlZVN0YXRlOiJjbGVhbiIsIEJ1aWxkRGF0ZToiMjAxOC0wMy0yMVQxNToyMTo1MFoiLCBHb1ZlcnNpb246ImdvMS45LjMiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQpTZXJ2ZXIgVmVyc2lvbjogdmVyc2lvbi5JbmZve01ham9yOiIxIiwgTWlub3I6IjgiLCBHaXRWZXJzaW9uOiJ2MS44LjIiLCBHaXRDb21taXQ6ImJkYWVhZmE3MWY2YzdjMDQ2MzYyNTEwMzFmOTM0NjQzODRkNTQ5NjMiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDE3LTEwLTI0VDE5OjM4OjEwWiIsIEdvVmVyc2lvbjoiZ28xLjguMyIsIENvbXBpbGVyOiJnYyIsIFBsYXRmb3JtOiJsaW51eC9hbWQ2NCJ9Cg==&password-secret=weave-password&trusted-subnets=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8,169.254.0.0/16&env.KUBERNETES_SERVICE_HOST=127.0.0.1&env.KUBERNETES_SERVICE_PORT=6443&env.IPALLOC_RANGE=10.48.0.0/12",
+              "date": "Tue Apr 24 2018 18:58:44 GMT+0000 (UTC)"
             },
             "email-address": "support@weave.works"
           }
@@ -60,8 +60,8 @@ items:
         cloud.weave.works/launcher-info: |-
           {
             "original-request": {
-              "url": "/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiI5IiwgR2l0VmVyc2lvbjoidjEuOS42IiwgR2l0Q29tbWl0OiI5ZjhlYmQxNzE0NzliZWMwYWRhODM3ZDdlZTY0MWRlYzJmOGM2ZGQxIiwgR2l0VHJlZVN0YXRlOiJjbGVhbiIsIEJ1aWxkRGF0ZToiMjAxOC0wMy0yMVQxNToyMTo1MFoiLCBHb1ZlcnNpb246ImdvMS45LjMiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQpTZXJ2ZXIgVmVyc2lvbjogdmVyc2lvbi5JbmZve01ham9yOiIxIiwgTWlub3I6IjgiLCBHaXRWZXJzaW9uOiJ2MS44LjIiLCBHaXRDb21taXQ6ImJkYWVhZmE3MWY2YzdjMDQ2MzYyNTEwMzFmOTM0NjQzODRkNTQ5NjMiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDE3LTEwLTI0VDE5OjM4OjEwWiIsIEdvVmVyc2lvbjoiZ28xLjguMyIsIENvbXBpbGVyOiJnYyIsIFBsYXRmb3JtOiJsaW51eC9hbWQ2NCJ9Cg==&password-secret=weave-passwd&trusted-subnets=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8,169.254.0.0/16&env.KUBERNETES_SERVICE_HOST=127.0.0.1&env.KUBERNETES_SERVICE_PORT=6443&env.IPALLOC_RANGE=10.48.0.0/12&env.WEAVE_STATUS_ADDR=127.0.0.1:6782",
-              "date": "Tue Mar 27 2018 21:38:40 GMT+0000 (UTC)"
+              "url": "/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiI5IiwgR2l0VmVyc2lvbjoidjEuOS42IiwgR2l0Q29tbWl0OiI5ZjhlYmQxNzE0NzliZWMwYWRhODM3ZDdlZTY0MWRlYzJmOGM2ZGQxIiwgR2l0VHJlZVN0YXRlOiJjbGVhbiIsIEJ1aWxkRGF0ZToiMjAxOC0wMy0yMVQxNToyMTo1MFoiLCBHb1ZlcnNpb246ImdvMS45LjMiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQpTZXJ2ZXIgVmVyc2lvbjogdmVyc2lvbi5JbmZve01ham9yOiIxIiwgTWlub3I6IjgiLCBHaXRWZXJzaW9uOiJ2MS44LjIiLCBHaXRDb21taXQ6ImJkYWVhZmE3MWY2YzdjMDQ2MzYyNTEwMzFmOTM0NjQzODRkNTQ5NjMiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDE3LTEwLTI0VDE5OjM4OjEwWiIsIEdvVmVyc2lvbjoiZ28xLjguMyIsIENvbXBpbGVyOiJnYyIsIFBsYXRmb3JtOiJsaW51eC9hbWQ2NCJ9Cg==&password-secret=weave-password&trusted-subnets=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8,169.254.0.0/16&env.KUBERNETES_SERVICE_HOST=127.0.0.1&env.KUBERNETES_SERVICE_PORT=6443&env.IPALLOC_RANGE=10.48.0.0/12",
+              "date": "Tue Apr 24 2018 18:58:44 GMT+0000 (UTC)"
             },
             "email-address": "support@weave.works"
           }
@@ -84,8 +84,8 @@ items:
         cloud.weave.works/launcher-info: |-
           {
             "original-request": {
-              "url": "/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiI5IiwgR2l0VmVyc2lvbjoidjEuOS42IiwgR2l0Q29tbWl0OiI5ZjhlYmQxNzE0NzliZWMwYWRhODM3ZDdlZTY0MWRlYzJmOGM2ZGQxIiwgR2l0VHJlZVN0YXRlOiJjbGVhbiIsIEJ1aWxkRGF0ZToiMjAxOC0wMy0yMVQxNToyMTo1MFoiLCBHb1ZlcnNpb246ImdvMS45LjMiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQpTZXJ2ZXIgVmVyc2lvbjogdmVyc2lvbi5JbmZve01ham9yOiIxIiwgTWlub3I6IjgiLCBHaXRWZXJzaW9uOiJ2MS44LjIiLCBHaXRDb21taXQ6ImJkYWVhZmE3MWY2YzdjMDQ2MzYyNTEwMzFmOTM0NjQzODRkNTQ5NjMiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDE3LTEwLTI0VDE5OjM4OjEwWiIsIEdvVmVyc2lvbjoiZ28xLjguMyIsIENvbXBpbGVyOiJnYyIsIFBsYXRmb3JtOiJsaW51eC9hbWQ2NCJ9Cg==&password-secret=weave-passwd&trusted-subnets=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8,169.254.0.0/16&env.KUBERNETES_SERVICE_HOST=127.0.0.1&env.KUBERNETES_SERVICE_PORT=6443&env.IPALLOC_RANGE=10.48.0.0/12&env.WEAVE_STATUS_ADDR=127.0.0.1:6782",
-              "date": "Tue Mar 27 2018 21:38:40 GMT+0000 (UTC)"
+              "url": "/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiI5IiwgR2l0VmVyc2lvbjoidjEuOS42IiwgR2l0Q29tbWl0OiI5ZjhlYmQxNzE0NzliZWMwYWRhODM3ZDdlZTY0MWRlYzJmOGM2ZGQxIiwgR2l0VHJlZVN0YXRlOiJjbGVhbiIsIEJ1aWxkRGF0ZToiMjAxOC0wMy0yMVQxNToyMTo1MFoiLCBHb1ZlcnNpb246ImdvMS45LjMiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQpTZXJ2ZXIgVmVyc2lvbjogdmVyc2lvbi5JbmZve01ham9yOiIxIiwgTWlub3I6IjgiLCBHaXRWZXJzaW9uOiJ2MS44LjIiLCBHaXRDb21taXQ6ImJkYWVhZmE3MWY2YzdjMDQ2MzYyNTEwMzFmOTM0NjQzODRkNTQ5NjMiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDE3LTEwLTI0VDE5OjM4OjEwWiIsIEdvVmVyc2lvbjoiZ28xLjguMyIsIENvbXBpbGVyOiJnYyIsIFBsYXRmb3JtOiJsaW51eC9hbWQ2NCJ9Cg==&password-secret=weave-password&trusted-subnets=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8,169.254.0.0/16&env.KUBERNETES_SERVICE_HOST=127.0.0.1&env.KUBERNETES_SERVICE_PORT=6443&env.IPALLOC_RANGE=10.48.0.0/12",
+              "date": "Tue Apr 24 2018 18:58:44 GMT+0000 (UTC)"
             },
             "email-address": "support@weave.works"
           }
@@ -116,8 +116,8 @@ items:
         cloud.weave.works/launcher-info: |-
           {
             "original-request": {
-              "url": "/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiI5IiwgR2l0VmVyc2lvbjoidjEuOS42IiwgR2l0Q29tbWl0OiI5ZjhlYmQxNzE0NzliZWMwYWRhODM3ZDdlZTY0MWRlYzJmOGM2ZGQxIiwgR2l0VHJlZVN0YXRlOiJjbGVhbiIsIEJ1aWxkRGF0ZToiMjAxOC0wMy0yMVQxNToyMTo1MFoiLCBHb1ZlcnNpb246ImdvMS45LjMiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQpTZXJ2ZXIgVmVyc2lvbjogdmVyc2lvbi5JbmZve01ham9yOiIxIiwgTWlub3I6IjgiLCBHaXRWZXJzaW9uOiJ2MS44LjIiLCBHaXRDb21taXQ6ImJkYWVhZmE3MWY2YzdjMDQ2MzYyNTEwMzFmOTM0NjQzODRkNTQ5NjMiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDE3LTEwLTI0VDE5OjM4OjEwWiIsIEdvVmVyc2lvbjoiZ28xLjguMyIsIENvbXBpbGVyOiJnYyIsIFBsYXRmb3JtOiJsaW51eC9hbWQ2NCJ9Cg==&password-secret=weave-passwd&trusted-subnets=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8,169.254.0.0/16&env.KUBERNETES_SERVICE_HOST=127.0.0.1&env.KUBERNETES_SERVICE_PORT=6443&env.IPALLOC_RANGE=10.48.0.0/12&env.WEAVE_STATUS_ADDR=127.0.0.1:6782",
-              "date": "Tue Mar 27 2018 21:38:40 GMT+0000 (UTC)"
+              "url": "/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiI5IiwgR2l0VmVyc2lvbjoidjEuOS42IiwgR2l0Q29tbWl0OiI5ZjhlYmQxNzE0NzliZWMwYWRhODM3ZDdlZTY0MWRlYzJmOGM2ZGQxIiwgR2l0VHJlZVN0YXRlOiJjbGVhbiIsIEJ1aWxkRGF0ZToiMjAxOC0wMy0yMVQxNToyMTo1MFoiLCBHb1ZlcnNpb246ImdvMS45LjMiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQpTZXJ2ZXIgVmVyc2lvbjogdmVyc2lvbi5JbmZve01ham9yOiIxIiwgTWlub3I6IjgiLCBHaXRWZXJzaW9uOiJ2MS44LjIiLCBHaXRDb21taXQ6ImJkYWVhZmE3MWY2YzdjMDQ2MzYyNTEwMzFmOTM0NjQzODRkNTQ5NjMiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDE3LTEwLTI0VDE5OjM4OjEwWiIsIEdvVmVyc2lvbjoiZ28xLjguMyIsIENvbXBpbGVyOiJnYyIsIFBsYXRmb3JtOiJsaW51eC9hbWQ2NCJ9Cg==&password-secret=weave-password&trusted-subnets=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8,169.254.0.0/16&env.KUBERNETES_SERVICE_HOST=127.0.0.1&env.KUBERNETES_SERVICE_PORT=6443&env.IPALLOC_RANGE=10.48.0.0/12",
+              "date": "Tue Apr 24 2018 18:58:44 GMT+0000 (UTC)"
             },
             "email-address": "support@weave.works"
           }
@@ -140,8 +140,8 @@ items:
         cloud.weave.works/launcher-info: |-
           {
             "original-request": {
-              "url": "/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiI5IiwgR2l0VmVyc2lvbjoidjEuOS42IiwgR2l0Q29tbWl0OiI5ZjhlYmQxNzE0NzliZWMwYWRhODM3ZDdlZTY0MWRlYzJmOGM2ZGQxIiwgR2l0VHJlZVN0YXRlOiJjbGVhbiIsIEJ1aWxkRGF0ZToiMjAxOC0wMy0yMVQxNToyMTo1MFoiLCBHb1ZlcnNpb246ImdvMS45LjMiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQpTZXJ2ZXIgVmVyc2lvbjogdmVyc2lvbi5JbmZve01ham9yOiIxIiwgTWlub3I6IjgiLCBHaXRWZXJzaW9uOiJ2MS44LjIiLCBHaXRDb21taXQ6ImJkYWVhZmE3MWY2YzdjMDQ2MzYyNTEwMzFmOTM0NjQzODRkNTQ5NjMiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDE3LTEwLTI0VDE5OjM4OjEwWiIsIEdvVmVyc2lvbjoiZ28xLjguMyIsIENvbXBpbGVyOiJnYyIsIFBsYXRmb3JtOiJsaW51eC9hbWQ2NCJ9Cg==&password-secret=weave-passwd&trusted-subnets=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8,169.254.0.0/16&env.KUBERNETES_SERVICE_HOST=127.0.0.1&env.KUBERNETES_SERVICE_PORT=6443&env.IPALLOC_RANGE=10.48.0.0/12&env.WEAVE_STATUS_ADDR=127.0.0.1:6782",
-              "date": "Tue Mar 27 2018 21:38:40 GMT+0000 (UTC)"
+              "url": "/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiI5IiwgR2l0VmVyc2lvbjoidjEuOS42IiwgR2l0Q29tbWl0OiI5ZjhlYmQxNzE0NzliZWMwYWRhODM3ZDdlZTY0MWRlYzJmOGM2ZGQxIiwgR2l0VHJlZVN0YXRlOiJjbGVhbiIsIEJ1aWxkRGF0ZToiMjAxOC0wMy0yMVQxNToyMTo1MFoiLCBHb1ZlcnNpb246ImdvMS45LjMiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQpTZXJ2ZXIgVmVyc2lvbjogdmVyc2lvbi5JbmZve01ham9yOiIxIiwgTWlub3I6IjgiLCBHaXRWZXJzaW9uOiJ2MS44LjIiLCBHaXRDb21taXQ6ImJkYWVhZmE3MWY2YzdjMDQ2MzYyNTEwMzFmOTM0NjQzODRkNTQ5NjMiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDE3LTEwLTI0VDE5OjM4OjEwWiIsIEdvVmVyc2lvbjoiZ28xLjguMyIsIENvbXBpbGVyOiJnYyIsIFBsYXRmb3JtOiJsaW51eC9hbWQ2NCJ9Cg==&password-secret=weave-password&trusted-subnets=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8,169.254.0.0/16&env.KUBERNETES_SERVICE_HOST=127.0.0.1&env.KUBERNETES_SERVICE_PORT=6443&env.IPALLOC_RANGE=10.48.0.0/12",
+              "date": "Tue Apr 24 2018 18:58:44 GMT+0000 (UTC)"
             },
             "email-address": "support@weave.works"
           }
@@ -173,14 +173,12 @@ items:
                   value: '6443'
                 - name: IPALLOC_RANGE
                   value: 10.48.0.0/12
-                - name: WEAVE_STATUS_ADDR
-                  value: '127.0.0.1:6782'
                 - name: WEAVE_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: weave-passwd
-                      key: weave-passwd
-              image: 'weaveworks/weave-kube:2.2.1'
+                      name: weave-password
+                      key: weave-password
+              image: 'weaveworks/weave-kube:2.3.0'
               livenessProbe:
                 httpGet:
                   host: 127.0.0.1
@@ -215,7 +213,7 @@ items:
                     fieldRef:
                       apiVersion: v1
                       fieldPath: spec.nodeName
-              image: 'weaveworks/weave-npc:2.2.1'
+              image: 'weaveworks/weave-npc:2.3.0'
               resources:
                 requests:
                   cpu: 10m
