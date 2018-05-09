@@ -1,0 +1,46 @@
+ApiVersion: kubelet.config.k8s.io/v1beta1
+Kind: KubeletConfiguration
+StaticPodPath: /etc/kubernetes/manifests
+ClusterDNS:
+  - 10.16.0.3
+ClusterDomain: cluster.local
+SerializeImagePulls: false
+Authentication:
+  X509:
+    ClientCAFile: /etc/kubelet/ca.pem
+  Anonymous:
+   Enabled: false
+TLSCertFile: /etc/kubelet/kubelet.pem
+TLSPrivateKeyFile: /etc/kubelet/kubelet-key.pem
+MaxOpenFiles: {{ kubelet_max_open_files | int }}
+MaxPods: {{ kubelet_max_pods | int }}
+KubeReserved:
+  cpu: {{ kubelet_kube_reserved.cpu }}
+  memory: {{ kubelet_kube_reserved.memory }}
+SystemReserved:
+  cpu: {{ kubelet_system_reserved.cpu }}
+  memory: {{ kubelet_system_reserved.memory }}
+EvictionHard:
+  memory.available: {{ kubelet_eviction_hard['memory.available'] }}
+  nodefs.available: {{ kubelet_eviction_hard['nodefs.available'] }}
+  nodefs.inodesFree: {{ kubelet_eviction_hard['nodefs.inodesFree'] }}
+  imagefs.available: {{ kubelet_eviction_hard['imagefs.available'] }}
+  imagefs.inodesFree: {{ kubelet_eviction_hard['imagefs.inodesFree'] }}
+EvictionSoft:
+  memory.available: {{ kubelet_eviction_soft['memory.available'] }}
+  nodefs.available: {{ kubelet_eviction_soft['nodefs.available'] }}
+  nodefs.inodesFree: {{ kubelet_eviction_soft['nodefs.inodesFree'] }}
+  imagefs.available: {{ kubelet_eviction_soft['imagefs.available'] }}
+  imagefs.inodesFree: {{ kubelet_eviction_soft['imagefs.inodesFree'] }}
+EvictionSoftGracePeriod:
+  memory.available: {{ kubelet_eviction_soft_grace_period['memory.available'] }}
+  nodefs.available: {{ kubelet_eviction_soft_grace_period['nodefs.available'] }}
+  nodefs.inodesFree: {{ kubelet_eviction_soft_grace_period['nodefs.inodesFree'] }}
+  imagefs.available: {{ kubelet_eviction_soft_grace_period['imagefs.available'] }}
+  imagefs.inodesFree: {{ kubelet_eviction_soft_grace_period['imagefs.inodesFree'] }}
+FeatureGates:
+{% for item in feature_gates %}
+{% for key, value in item.items() %}
+   {{key}}: {{value}}
+{% endfor %}
+{% endfor %}

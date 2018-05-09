@@ -7,7 +7,6 @@ tcp        0      0 127.0.0.1:10248         0.0.0.0:*               LISTEN
 tcp        0      0 127.0.0.1:10249         0.0.0.0:*               LISTEN     
 tcp        0      0 127.0.0.1:6784          0.0.0.0:*               LISTEN     
 tcp6       0      0 :::10250                :::*                    LISTEN     
-tcp6       0      0 :::10255                :::*                    LISTEN     
 tcp6       0      0 :::10256                :::*                    LISTEN     
 tcp6       0      0 :::22                   :::*                    LISTEN     
 tcp6       0      0 :::4194                 :::*                    LISTEN     
