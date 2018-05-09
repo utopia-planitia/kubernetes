@@ -12,3 +12,10 @@ for ID in $(seq 1 ${NODES_COUNT}); do
   done
   echo done
 done
+
+echo waiting local-volume-provisioner-bootstrap job
+until [[ $( kubectl -n kube-system get job -l app=local-volume-provisioner-bootstrap --no-headers=true | grep "1         1" | wc -l ) -eq "1" ]]; do
+ sleep 0.5
+ echo -n .
+done
+echo done
