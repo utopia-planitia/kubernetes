@@ -13,8 +13,28 @@ cni_packages:
 
 kubelet_max_pods: 250
 kubelet_max_open_files:             250000
-kubelet_kube_reserved:              cpu=500m,memory=1Gi
-kubelet_system_reserved:            cpu=500m,memory=1Gi
-kubelet_eviction_hard:              memory.available<2Gi,nodefs.available<5%,nodefs.inodesFree<5%,imagefs.available<5%,imagefs.inodesFree<5%
-kubelet_eviction_soft:              memory.available<4Gi,nodefs.available<10%,nodefs.inodesFree<10%,imagefs.available<10%,imagefs.inodesFree<10%
-kubelet_eviction_soft_grace_period: memory.available=2m30s,nodefs.available=2m30s,nodefs.inodesFree=2m30s,imagefs.available=2m30s,imagefs.inodesFree=2m30s
+
+kubelet_kube_reserved:
+  cpu: 500m
+  memory: 1Gi
+kubelet_system_reserved:
+  cpu: 500m
+  memory: 1Gi
+kubelet_eviction_hard:
+  memory.available: 2Gi
+  nodefs.available: 5%
+  nodefs.inodesFree: 5%
+  imagefs.available: 5%
+  imagefs.inodesFree: 5%
+kubelet_eviction_soft:
+  memory.available: 4Gi
+  nodefs.available: 10%
+  nodefs.inodesFree: 10%
+  imagefs.available: 10%
+  imagefs.inodesFree: 10%
+kubelet_eviction_soft_grace_period:
+  memory.available: 2m30s
+  nodefs.available: 2m30s
+  nodefs.inodesFree: 2m30s
+  imagefs.available: 2m30s
+  imagefs.inodesFree: 2m30s
