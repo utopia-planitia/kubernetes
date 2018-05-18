@@ -5,14 +5,30 @@ Requires=docker.service
 
 [Service]
 ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
-  --allow-privileged=true \
+  --anonymous-auth=false \
+  --pod-manifest-path=/etc/kubernetes/manifests \
   --register-node=true \
   --container-runtime docker \
   --image-pull-progress-deadline=2m \
-  --config=/etc/kubelet/config.yaml \
+  --allow-privileged=true \
+  --cluster-dns=10.16.0.3 \
+  --cluster-domain=cluster.local \
   --kubeconfig=/etc/kubelet/kubeconfig \
+  --serialize-image-pulls=false \
+  --client-ca-file=/etc/kubelet/ca.pem \
+  --tls-cert-file=/etc/kubelet/kubelet.pem \
+  --tls-private-key-file=/etc/kubelet/kubelet-key.pem \
   --network-plugin=cni \
   --node-ip={{ ansible_host }} \
+  --max-open-files={{ kubelet_max_open_files | int }} \
+  --max-pods={{ kubelet_max_pods | int }} \
+  --kube-reserved={{ kubelet_kube_reserved }} \
+  --system-reserved={{ kubelet_system_reserved }} \
+  --eviction-hard="{{ kubelet_eviction_hard }}" \
+  --eviction-soft="{{ kubelet_eviction_soft }}" \
+  --eviction-soft-grace-period={{ kubelet_eviction_soft_grace_period }} \
+  --docker-disable-shared-pid=false \
+  --feature-gates={{ feature_gates }} \
   2>&1 | tee -a /var/log/kubelet.log '
 Restart=on-failure
 ResetSec=5

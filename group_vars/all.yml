@@ -19,5 +19,4 @@ addons_cert_dir:   "{{ playbook_dir }}/certificates/addons"
 
 nodes_count: "{{ groups['all'] | length }}"
 
-feature_gates: {}
-feature_gates_string: ""
+feature_gates: ""

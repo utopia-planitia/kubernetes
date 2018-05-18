@@ -24,13 +24,6 @@
   notify:
     - restart kubelet
 
-- name: create kubelet config
-  template:
-    src: kubelet-config.yaml.j2
-    dest: /etc/kubelet/config.yaml
-  notify:
-    - restart kubelet
-
 - name: download kubelet binary
   get_url:
     url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubelet"
