@@ -9,10 +9,10 @@ load test_helper
 }
 
 @test "check logging hello, world" {
-  until [ $(kubectl get pod -a --selector=job-name=hello-world --no-headers | grep Completed | wc -l) -eq 1 ]; do
+  until [ $(kubectl get pod --selector=job-name=hello-world --no-headers | grep Completed | wc -l) -eq 1 ]; do
     sleep 0.5
   done
-  run kubectl logs `kubectl get pod -a --selector=job-name=hello-world --output=jsonpath={.items..metadata.name}`
+  run kubectl logs `kubectl get pod --selector=job-name=hello-world --output=jsonpath={.items..metadata.name}`
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 1 ]
   [ "${lines[0]}" = "Hello, World." ]

@@ -12,7 +12,7 @@ load test_helper
   if [ "$SKIP_LOCAL_VOLUME_QUOTA_TESTS" == "true" ]; then
     skip "skip quota based local volume tests"
   fi
-  until [ $(kubectl get pod -a local-pod-quota --no-headers | grep Running | wc -l) == 1 ]; do
+  until [ $(kubectl get pod local-pod-quota --no-headers | grep Running | wc -l) == 1 ]; do
     sleep 0.5
   done
   run kubectl exec local-pod-quota -- ls -1 /data/
@@ -24,7 +24,7 @@ load test_helper
   if [ "$SKIP_LOCAL_VOLUME_QUOTA_TESTS" == "true" ]; then
     skip "skip quota based local volume tests"
   fi
-  until [ $(kubectl get pod -a local-pod-quota --no-headers | grep Running | wc -l) == 1 ]; do
+  until [ $(kubectl get pod local-pod-quota --no-headers | grep Running | wc -l) == 1 ]; do
     sleep 0.5
   done
   run kubectl exec local-pod-quota -- touch /data/file
@@ -36,7 +36,7 @@ load test_helper
   if [ "$SKIP_LOCAL_VOLUME_QUOTA_TESTS" == "true" ]; then
     skip "skip quota based local volume tests"
   fi
-  until [ $(kubectl get pod -a local-pod-quota --no-headers | grep Running | wc -l) == 1 ]; do
+  until [ $(kubectl get pod local-pod-quota --no-headers | grep Running | wc -l) == 1 ]; do
     sleep 0.5
   done
   run kubectl exec local-pod-quota -- ls -1 /data/
@@ -57,7 +57,7 @@ load test_helper
   if [ "$SKIP_LOCAL_VOLUME_QUOTA_TESTS" == "true" ]; then
     skip "skip quota based local volume tests"
   fi
-  until [ $(kubectl get pod -a local-pod-quota --no-headers | wc -l) == 0 ]; do
+  until [ $(kubectl get pod local-pod-quota --no-headers | wc -l) == 0 ]; do
     sleep 0.5
   done
   run kubectl apply -f tests/local-volume/pod.yaml
@@ -69,7 +69,7 @@ load test_helper
   if [ "$SKIP_LOCAL_VOLUME_QUOTA_TESTS" == "true" ]; then
     skip "skip quota based local volume tests"
   fi
-  until [ $(kubectl get pod -a local-pod-quota --no-headers | grep Running | wc -l) == 1 ]; do
+  until [ $(kubectl get pod local-pod-quota --no-headers | grep Running | wc -l) == 1 ]; do
     sleep 0.5
   done
   run kubectl exec local-pod-quota -- ls -1 /data/

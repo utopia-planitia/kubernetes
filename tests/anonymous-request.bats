@@ -9,20 +9,20 @@ load test_helper
 }
 
 @test "check anonymous request to apiserver (pod network)" {
-  until [ $(kubectl get pod -a --selector=job-name=anonymous-request-pod --no-headers | grep Completed | wc -l) -eq 1 ]; do
+  until [ $(kubectl get pod --selector=job-name=anonymous-request-pod --no-headers | grep Completed | wc -l) -eq 1 ]; do
     sleep 0.5
   done
-  run diff tests/anonymous-request/request.golden <(kubectl logs `kubectl get pod -a --selector=job-name=anonymous-request-pod --output=jsonpath={.items..metadata.name}`)
+  run diff tests/anonymous-request/request.golden <(kubectl logs `kubectl get pod --selector=job-name=anonymous-request-pod --output=jsonpath={.items..metadata.name}`)
   printf '%s\n' "${lines[@]}"
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 0 ]
 }
 
 @test "check anonymous request to apiserver (host network)" {
-  until [ $(kubectl get pod -a --selector=job-name=anonymous-request-host --no-headers | grep Completed | wc -l) -eq 1 ]; do
+  until [ $(kubectl get pod --selector=job-name=anonymous-request-host --no-headers | grep Completed | wc -l) -eq 1 ]; do
     sleep 0.5
   done
-  run diff tests/anonymous-request/request.golden <(kubectl logs `kubectl get pod -a --selector=job-name=anonymous-request-host --output=jsonpath={.items..metadata.name}`)
+  run diff tests/anonymous-request/request.golden <(kubectl logs `kubectl get pod --selector=job-name=anonymous-request-host --output=jsonpath={.items..metadata.name}`)
   printf '%s\n' "${lines[@]}"
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 0 ]
