@@ -12,6 +12,7 @@ RUN apt-get update && \
 		nano dnsutils \
 		iputils-ping \
 		openssh-client \
+		sshpass \
 		make \
 		bash-completion \
 		apache2-utils \
