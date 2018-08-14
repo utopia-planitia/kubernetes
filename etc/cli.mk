@@ -1,5 +1,4 @@
 
-
 IS_CONTAINERIZED =
 ifneq ($(shell uname), Darwin)
   ifneq ($(shell cat /proc/1/cgroup | grep docker | wc -l), 0)
@@ -14,13 +13,15 @@ CLI =
 ifndef IS_CONTAINERIZED
   KUBERNETES_TOOLS_IMAGE ?= $(shell docker build -q ../kubernetes/docker/dev-tools)
   KUBERNETES_E2E_IMAGE ?= $(shell docker build -q ../kubernetes/docker/e2e-tests)
-  KUBERNETES_CERTIFICATES ?= $(shell realpath ../kubernetes/certificates)
-  KUBERNETES_ETC ?= $(shell realpath ../kubernetes/etc)
-  KUBECONFIG ?= /kubernetes/certificates/master/admin-kube-config
+
+  ifneq ("$(wildcard roles)","")
+    NEED_ANSIBLE ?= yes
+  endif
 
   DOCKER ?= docker
   DOCKER_OPTIONS += -v $(PWD):/workspace -w /workspace
 
+  # ssh
   ifneq ($(shell uname), Darwin)
     DOCKER_OPTIONS += $(shell [ ! -z "$(SSH_AUTH_SOCK)" ] && echo -v $(SSH_AUTH_SOCK):$(SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$(SSH_AUTH_SOCK))
     DOCKER_OPTIONS += -v ~/.ssh/ovh:/root/.ssh/ovh
@@ -28,17 +29,26 @@ ifndef IS_CONTAINERIZED
   else
     DOCKER_OPTIONS += -v ~/.ssh:/root/.ssh
   endif
-
   DOCKER_OPTIONS += -v ~/.vagrant.d/:/root/.vagrant.d/
-  DOCKER_OPTIONS += -v $(KUBERNETES_CERTIFICATES):/kubernetes/certificates
+
+  # make status
+  DOCKER_OPTIONS += -v $(shell realpath ../kubernetes/etc):/kubernetes/etc
+
+  # customized config
+  CONFIG_PATH = $(shell realpath ../customized/ansible)
+
+  KUBECONFIG ?= /workspace/certificates/master/admin-kube-config
+  DOCKER_OPTIONS += -v $(CONFIG_PATH)/certificates:/workspace/certificates
   DOCKER_OPTIONS += -e KUBECONFIG=$(KUBECONFIG)
-  DOCKER_OPTIONS += -v $(KUBERNETES_ETC):/kubernetes/etc
 
   ifdef NEED_ANSIBLE
-    DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/ansible.cfg:/workspace/ansible.cfg
-    DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/inventory:/workspace/inventory
-    DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/group_vars:/workspace/group_vars
-    DOCKER_OPTIONS += -v $(shell realpath ../kubernetes)/host_vars:/workspace/host_vars
+    ifneq ("$(wildcard $(CONFIG_PATH)/ansible.cfg)","")
+      DOCKER_OPTIONS += $(CONFIG_PATH)/ansible.cfg:/workspace/ansible.cfg
+    endif
+    DOCKER_OPTIONS += -v $(CONFIG_PATH)/files:/workspace/files
+    DOCKER_OPTIONS += -v $(CONFIG_PATH)/inventory:/workspace/inventory
+    DOCKER_OPTIONS += -v $(CONFIG_PATH)/group_vars:/workspace/group_vars
+    DOCKER_OPTIONS += -v $(CONFIG_PATH)/host_vars:/workspace/host_vars
   endif
 
   CLI = $(DOCKER) run --net=host --rm -ti $(DOCKER_OPTIONS) $(KUBERNETES_TOOLS_IMAGE)
