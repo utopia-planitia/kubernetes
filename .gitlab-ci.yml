@@ -65,7 +65,7 @@ destroy:
     - make ${CI_PROVISION}-destroy
 
 destroy now:
-  stage: destroy
+  stage: provision
   image: ${DEV_TOOLS_IMAGE}
   script:
     - make ${CI_PROVISION}-destroy
