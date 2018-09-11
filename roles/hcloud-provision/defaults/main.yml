@@ -1,13 +1,16 @@
 ---
-image: ubuntu-16.04
-type: cx11
-region_name: fsn1-dc8
-servers:
-  - name: node1
+- hcloud_server:
+  name:
+    - node1
     groups: hcloud,ubuntu-1604,testing,etcds,masters
-  - name: node2
+    - node2
     groups: hcloud,ubuntu-1604,testing,etcds,masters
-  - name: node3
+    - node3
     groups: hcloud,ubuntu-1604,testing,etcds
-  - name: node4
+    - node4
     groups: hcloud,ubuntu-1604,testing
+ image: ubuntu-16.04
+ server_type: cx11
+ location: nbg1
+ ssh_keys: hcloud-ssh-Key
+ start_after_create: true
