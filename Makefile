@@ -6,6 +6,7 @@ include ./etc/update.mk
 include ./etc/ovh.mk
 include ./etc/digital-ocean.mk
 include ./etc/vagrant/vagrant.mk
+include ./etc/hetzner-cloud.mk
 
 .PHONY: system-requirements-check
 system-requirements-check: ##@setup checks system for required dependencies

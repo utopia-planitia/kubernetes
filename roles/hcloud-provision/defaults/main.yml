@@ -1,0 +1,13 @@
+---
+image: ubuntu-16.04
+type: cx11
+region_name: fsn1-dc8
+servers:
+  - name: node1
+    groups: hcloud,ubuntu-1604,testing,etcds,masters
+  - name: node2
+    groups: hcloud,ubuntu-1604,testing,etcds,masters
+  - name: node3
+    groups: hcloud,ubuntu-1604,testing,etcds
+  - name: node4
+    groups: hcloud,ubuntu-1604,testing
