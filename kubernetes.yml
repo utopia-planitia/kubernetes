@@ -37,6 +37,7 @@
       run_once: true
   roles:
     - { role: master }
+    - { role: resources-webhook }
 
 - hosts: all:!masters
   roles:

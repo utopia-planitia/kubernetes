@@ -1,0 +1,39 @@
+---
+
+- name: create resources-webhook ssl directory
+  file:
+    path: /etc/resources-webhook/ssl/
+    state: directory
+    recurse: true
+
+- name: copy resources-webhook certificates
+  copy:
+    src: "{{ resources_webhook_cert_dir }}/{{ item }}"
+    dest: "/etc/resources-webhook/ssl/{{ item }}"
+  with_items:
+    - ca.pem
+    - server.pem
+    - server-key.pem
+    - client.pem # todo: maybe has to move to the master role
+    - client-key.pem # todo: maybe has to move to the master role
+  no_log: true
+
+# kubelet creates / changes pods based on the manifests in the manifests directory
+# when files / certificates changes we also need the pods to be changed
+# bec. of this we create a md5 hash and pass it as env var to the pod manifest
+# so when so files change the manifest changes and kublet reacts
+- name: checksum of certificates
+  local_action: shell cd {{ resources_webhook_cert_dir }}; md5sum ca.pem server.pem server-key.pem client.pem client-key.pem | md5sum | head -c 32
+  register: resources_webhook_cert_hashsum
+  changed_when: false
+
+- name: "set resources_webhook_config_hash variable"
+  set_fact:
+    resources_webhook_config_hash: "{{ resources_webhook_cert_hashsum.stdout }}"
+
+- name: install resources_webhook
+  template: src=resources_webhook.yml.j2 dest=/etc/kubernetes/manifests/resources_webhook.yml
+
+- name: wait for resources_webhook to be available
+  wait_for:
+    port: 8083 # todo: maybe the resources-webhook needs an additional port?
