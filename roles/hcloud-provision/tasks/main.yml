@@ -1,5 +1,4 @@
 ---
-
 - name: generate SSH key directory
   file:
     path: /root/.ssh/hcloud/
@@ -19,30 +18,15 @@
     ssh_pub_key: "{{ lookup('file', '/root/.ssh/hcloud/id_rsa.pub') }}"
   register: ssh_key_at_hcloud
 
-- name: launch instances
-  digital_ocean:
-    state: present
-    command: droplet
-    name: "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
-    size_id: "{{ flavor }}"
-    image_id: "{{ image }}"
-    region_id: "{{ region_name }}"
-    ssh_key_ids: "{{ ssh_key_at_hcloud.ssh_key.id }}"
-    unique_name: yes
-  register: droplet_details
-  with_items: "{{ servers }}"
-
-- name: remove old inventory file
-  copy:
-    dest: ./inventory
-    content: ""
-
-- name: load empty inventory
-  meta: refresh_inventory
-
-- name: add hosts to inventory
-  add_host:
-    name: "{{ HCLOUD_NODES_PREFIX }}-{{ item.item.name }}"
-    groups: "{{ item.item.groups }}"
-    ansible_host: "{{ item.droplet.ip_address }}"
-  with_items: "{{ droplet_details.results }}"
+# - name: launch instances
+#   digital_ocean:
+#     state: present
+#     command: hcloud
+#     name: "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
+#     size_id: "{{ flavor }}"
+#     image_id: "{{ image }}"
+#     region_id: "{{ region_name }}"
+#     ssh_key_ids: "{{ ssh_key_at_digital_ocean.ssh_key.id }}"
+#     unique_name: yes
+#   register: droplet_details
+#   with_items: "{{ servers }}"
