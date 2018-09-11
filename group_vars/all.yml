@@ -1,21 +1,24 @@
 ---
 
-kubernetes_version: v1.10.2
-etcd_version:       v3.2.18
-nginx_version:      1.13.3-alpine
+kubernetes_version:                 v1.10.2
+etcd_version:                       v3.2.18
+nginx_version:                      1.13.3-alpine
+default_resources_webhook_version:  "1.3.0"
 
-kubernetes_image: "gcr.io/google_containers/hyperkube:{{ kubernetes_version }}"
-kube_proxy_image: "gcr.io/google_containers/kube-proxy:{{ kubernetes_version }}"
-etcd_image:       "gcr.io/etcd-development/etcd:{{ etcd_version }}"
-nginx_image:      "nginx:{{ nginx_version }}"
+kubernetes_image:                 "gcr.io/google_containers/hyperkube:{{ kubernetes_version }}"
+kube_proxy_image:                 "gcr.io/google_containers/kube-proxy:{{ kubernetes_version }}"
+etcd_image:                       "gcr.io/etcd-development/etcd:{{ etcd_version }}"
+nginx_image:                      "nginx:{{ nginx_version }}"
+default_resources_webhook_image:  "pandorasnox/kubernetes-default-container-resources:{{ default_resources_webhook_version }}"
 
-
-etcd_cert_dir:     "{{ playbook_dir }}/certificates/etcd"
-etcd_config_dir:   "{{ playbook_dir }}/roles/etcd-certificates/files"
-master_cert_dir:   "{{ playbook_dir }}/certificates/master"
-users_cert_dir:    "{{ playbook_dir }}/certificates/users"
-master_config_dir: "{{ playbook_dir }}/roles/master-certificates/files"
-addons_cert_dir:   "{{ playbook_dir }}/certificates/addons"
+etcd_cert_dir:                "{{ playbook_dir }}/certificates/etcd"
+etcd_config_dir:              "{{ playbook_dir }}/roles/etcd-certificates/files"
+master_cert_dir:              "{{ playbook_dir }}/certificates/master"
+users_cert_dir:               "{{ playbook_dir }}/certificates/users"
+master_config_dir:            "{{ playbook_dir }}/roles/master-certificates/files"
+resources_webhook_config_dir: "{{ playbook_dir }}/roles/resources-webhook-certificates/files"
+resources_webhook_cert_dir:   "{{ playbook_dir }}/certificates/resources-webhook"
+addons_cert_dir:              "{{ playbook_dir }}/certificates/addons"
 
 nodes_count: "{{ groups['all'] | length }}"
 

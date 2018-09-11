@@ -18,6 +18,10 @@ scheduler_requests_cpu:             50m
 scheduler_requests_memory:          "{{ 100 + (nodes_count|int * kubelet_max_pods) }}Mi"
 scheduler_limits_cpu:               1000m
 scheduler_limits_memory:            "{{ scheduler_requests_memory }}"
+default_resources_webhook_requests_cpu:             100m
+default_resources_webhook_requests_memory:          "{{ 100 + (nodes_count|int * kubelet_max_pods) }}Mi"
+default_resources_webhook_limits_cpu:               1000m
+default_resources_webhook_limits_memory:            "{{ default_resources_webhook_requests_memory }}"
 
 authorization_mode: Node,RBAC
 

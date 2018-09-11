@@ -16,3 +16,8 @@
         name: weave-certificates
       delegate_to: localhost
       run_once: true
+    - name: create resources-webhook certificates
+      import_role:
+        name: resources-webhook-certificates
+      delegate_to: localhost
+      run_once: true

@@ -1,0 +1,37 @@
+---
+
+- name: Set up a Certificate directory
+  file:
+    path: "{{ resources_webhook_cert_dir }}"
+    state: directory
+    recurse: true
+
+- name: Set up a Certificate Authority
+  shell: cfssl gencert -initca {{ resources_webhook_config_dir }}/ca.json | cfssljson -bare ca
+  args:
+    chdir: "{{ resources_webhook_cert_dir }}"
+    creates: "{{ item }}"
+  with_items:
+    - ca-key.pem
+    - ca.csr
+    - ca.pem
+
+- name: Create the Client certificate
+  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ resources_webhook_config_dir }}/config.json -profile=client {{ resources_webhook_config_dir }}/client.json | cfssljson -bare client
+  args:
+    chdir: "{{ resources_webhook_cert_dir }}"
+    creates: "{{ item }}"
+  with_items:
+    - client-key.pem
+    - client.csr
+    - client.pem
+
+- name: Create the Server certificate
+  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ resources_webhook_config_dir }}/config.json -profile=server {{ resources_webhook_config_dir }}/server.json | cfssljson -bare server
+  args:
+    chdir: "{{ resources_webhook_cert_dir }}"
+    creates: "{{ item }}"
+  with_items:
+    - server-key.pem
+    - server.csr
+    - server.pem
