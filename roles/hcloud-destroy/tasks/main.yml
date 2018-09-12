@@ -1,9 +1,6 @@
 ---
-- name: remove instances
-  hcloud_server:
-     name:
-       - node1
-       - node2
-       - node3
-       - node4
-     state: absent
+- hcloud_server:
+    name:
+    - "test-{{ item.name }}"
+    state: absent
+  with_items: "{{ servers }}"

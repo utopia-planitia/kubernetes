@@ -1,7 +1,4 @@
 ---
-image: ubuntu-16.04
-server_type: cx11
-location: nbg1
 servers:
   - name: konz1
   - name: konz2

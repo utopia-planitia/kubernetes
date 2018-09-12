@@ -10,25 +10,25 @@
 #   args:
 #     creates: /root/.ssh/hcloud/id_rsa
 
+- hcloud_ssh_key:
+    state: list
+  register: hcloud_ssh_keys
+
+
 # create three servers at once
 - hcloud_server:
-    name:
-    - node1
-    - node2
-    - node3
-    - node4
-    image: ubuntu-16.04
-    server_type: cx51
-    location: nbg1
-#    ssh_keys: "{{ HCLOUD_KEYPAIR_NAME }}"
-    token : MiKjIhmsivQKZBPas5f3ld1phv2SGUAUu8I5fm4x0JINNLUPFd4bZpk7TibxZYle
-
+      name:
+      - "test-{{ item.name }}"
+      image: "{{ image }}"
+      server_type: "{{ server_type }}"
+      location: "{{ location }}"
+      ssh_keys: "{{ hcloud_ssh_keys.ssh_keys }}"
+      token : Wu4ih6Gb2mPasuf4LCNGbHJVvvODXVAvjRyOG3n3Lg3jejggMEG6pptYVHYb3tpc
+  with_items: "{{ servers }}"
 
 # ensure server is running (if the server already exists)
 - hcloud_server:
     name:
-      - node1
-      - node2
-      - node3
-      - node4
+    - "test-{{ item.name }}"
     state: running
+  with_items: "{{ servers }}"
