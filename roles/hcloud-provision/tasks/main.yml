@@ -18,15 +18,25 @@
     ssh_pub_key: "{{ lookup('file', '/root/.ssh/hcloud/id_rsa.pub') }}"
   register: ssh_key_at_hcloud
 
-# - name: launch instances
-#   digital_ocean:
-#     state: present
-#     command: hcloud
-#     name: "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
-#     size_id: "{{ flavor }}"
-#     image_id: "{{ image }}"
-#     region_id: "{{ region_name }}"
-#     ssh_key_ids: "{{ ssh_key_at_digital_ocean.ssh_key.id }}"
-#     unique_name: yes
-#   register: droplet_details
-#   with_items: "{{ servers }}"
+# create three servers at once
+- hcloud_server:
+    name:
+    - node1
+    - node2
+    - node3
+    - node4
+    image: ubuntu-16.04
+    server_type: cx51
+    location: nbg1
+    ssh_keys: "{{ HCLOUD_KEYPAIR_NAME }}"
+    token : HCLOUD_TOKEN
+    
+
+# ensure server is running (if the server already exists)
+- hcloud_server:
+    name:
+      - node1
+      - node2
+      - node3
+      - node4
+    state: running
