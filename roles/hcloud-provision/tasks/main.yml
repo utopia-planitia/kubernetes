@@ -1,22 +1,14 @@
 ---
-- name: generate SSH key directory
-  file:
-    path: /root/.ssh/hcloud/
-    state: directory
-    recurse: yes
-
-- name: generate SSH key
-  command: ssh-keygen -b 2048 -t rsa -f /root/.ssh/hcloud/id_rsa -q -N ""
-  args:
-    creates: /root/.ssh/hcloud/id_rsa
-
-- name: upload public ssh key
-  digital_ocean:
-    state: present
-    command: ssh
-    name: "{{ HCLOUD_KEYPAIR_NAME }}"
-    ssh_pub_key: "{{ lookup('file', '/root/.ssh/hcloud/id_rsa.pub') }}"
-  register: ssh_key_at_hcloud
+# - name: generate SSH key directory
+#   file:
+#     path: /root/.ssh/hcloud/
+#     state: directory
+#     recurse: yes
+#
+# - name: generate SSH key
+#   command: ssh-keygen -b 2048 -t rsa -f /root/.ssh/hcloud/id_rsa -q -N ""
+#   args:
+#     creates: /root/.ssh/hcloud/id_rsa
 
 # create three servers at once
 - hcloud_server:
@@ -28,9 +20,9 @@
     image: ubuntu-16.04
     server_type: cx51
     location: nbg1
-    ssh_keys: "{{ HCLOUD_KEYPAIR_NAME }}"
-    token : HCLOUD_TOKEN
-    
+#    ssh_keys: "{{ HCLOUD_KEYPAIR_NAME }}"
+    token : MiKjIhmsivQKZBPas5f3ld1phv2SGUAUu8I5fm4x0JINNLUPFd4bZpk7TibxZYle
+
 
 # ensure server is running (if the server already exists)
 - hcloud_server:

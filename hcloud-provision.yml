@@ -3,4 +3,4 @@
   hosts: localhost
   roles:
     - { role: hcloud-provision }
-    - { role: rewrite-inventory }
+#    - { role: rewrite-inventory }

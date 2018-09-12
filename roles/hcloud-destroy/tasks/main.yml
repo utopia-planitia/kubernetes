@@ -1,0 +1,9 @@
+---
+- name: remove instances
+  hcloud_server:
+     name:
+       - node1
+       - node2
+       - node3
+       - node4
+     state: absent
