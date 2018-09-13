@@ -10,13 +10,13 @@
      server_type: "{{ server_type }}"
      location: "{{ location }}"
      ssh_keys: "{{ hcloud_ssh_keys.ssh_keys }}"
-     token : Wu4ih6Gb2mPasuf4LCNGbHJVvvODXVAvjRyOG3n3Lg3jejggMEG6pptYVHYb3tpc
+     token : "{{ HCLOUD_TOKEN }}"
   with_items: "{{ servers }}"
   register: hcloud_details
 
-- debug:
-    msg: "System {{ item.servers[0].status }} "
-  with_items: "{{ hcloud_details.results }}"
+#- debug:
+#    msg: "System {{ item.servers[0].status }} "
+#  with_items: "{{ hcloud_details.results }}"
 
 
 # ensure server is running (if the server already exists)

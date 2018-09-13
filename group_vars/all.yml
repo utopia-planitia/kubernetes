@@ -22,3 +22,4 @@ nodes_count: "{{ groups['all'] | length }}"
 feature_gates: ""
 
 HCLOUD_NODES_PREFIX: "konz-testet"
+HCLOUD_TOKEN: "Wu4ih6Gb2mPasuf4LCNGbHJVvvODXVAvjRyOG3n3Lg3jejggMEG6pptYVHYb3tpc"
