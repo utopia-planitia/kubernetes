@@ -1,5 +1,5 @@
-DIGITAL_OCEAN_NODES_PREFIX ?= $(shell git rev-parse --abbrev-ref HEAD)
-DIGITAL_OCEAN_KEYPAIR_NAME ?= $(shell hostname -s)
+HCLOUD_NODES_PREFIX ?= $(shell git rev-parse --abbrev-ref HEAD)
+HCLOUD_KEYPAIR_NAME ?= $(shell hostname -s)
 HCLOUD_DATACENTER ?= fsn1-dc8
 
 .PHONY: hcloud-provision

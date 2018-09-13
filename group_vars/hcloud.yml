@@ -2,6 +2,8 @@
 ansible_ssh_common_args: -o StrictHostKeyChecking=no
 #ansible_ssh_private_key_file: ~/.ssh/digital-ocean/id_rsa
 
+HCLOUD_NODES_PREFIX: "konz-testet"
+
 kubelet_max_pods:                   15
 kubelet_kube_reserved:              cpu=100m,memory=200Mi
 kubelet_system_reserved:            cpu=200m,memory=100Mi
