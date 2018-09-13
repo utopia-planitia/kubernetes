@@ -1,6 +1,6 @@
 ---
 - hcloud_server:
     name:
-    - "test-{{ item.name }}"
+    - "HCLOUD_NODES_PREFIX-{{ item.name }}"
     state: absent
   with_items: "{{ servers }}"

@@ -1,34 +1,42 @@
 ---
-# - name: generate SSH key directory
-#   file:
-#     path: /root/.ssh/hcloud/
-#     state: directory
-#     recurse: yes
-#
-# - name: generate SSH key
-#   command: ssh-keygen -b 2048 -t rsa -f /root/.ssh/hcloud/id_rsa -q -N ""
-#   args:
-#     creates: /root/.ssh/hcloud/id_rsa
-
 - hcloud_ssh_key:
     state: list
   register: hcloud_ssh_keys
-
-
-# create three servers at once
+# create some servers at once
 - hcloud_server:
-      name:
-      - "test-{{ item.name }}"
-      image: "{{ image }}"
-      server_type: "{{ server_type }}"
-      location: "{{ location }}"
-      ssh_keys: "{{ hcloud_ssh_keys.ssh_keys }}"
-      token : Wu4ih6Gb2mPasuf4LCNGbHJVvvODXVAvjRyOG3n3Lg3jejggMEG6pptYVHYb3tpc
+     name:
+     - "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
+     image: "{{ image }}"
+     server_type: "{{ server_type }}"
+     location: "{{ location }}"
+     ssh_keys: "{{ hcloud_ssh_keys.ssh_keys }}"
+     token : Wu4ih6Gb2mPasuf4LCNGbHJVvvODXVAvjRyOG3n3Lg3jejggMEG6pptYVHYb3tpc
   with_items: "{{ servers }}"
+  register: hcloud_details
+
+- debug:
+    msg: "System {{ item.servers[0].status }} "
+  with_items: "{{ hcloud_details.results }}"
+
 
 # ensure server is running (if the server already exists)
 - hcloud_server:
-    name:
-    - "test-{{ item.name }}"
-    state: running
+   name:
+   - "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
+   state: running
   with_items: "{{ servers }}"
+
+- name: remove old inventory file
+  copy:
+    dest: ./inventory
+    content: ""
+
+- name: load empty inventory
+  meta: refresh_inventory
+
+- name: add hosts to inventory
+  add_host:
+    name: "{{ HCLOUD_NODES_PREFIX }}-{{ item.item.name }}"
+    groups: "{{ item.item.groups }}"
+    ansible_host: "{{ item.servers[0].public_ipv4 }}"
+  with_items: "{{ hcloud_details.results }}"
