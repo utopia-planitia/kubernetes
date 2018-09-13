@@ -1,4 +1,6 @@
 ---
+ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null
+ansible_ssh_common_args: -o StrictHostKeyChecking=no
 
 kubernetes_version: v1.10.2
 etcd_version:       v3.2.18
@@ -21,5 +23,6 @@ nodes_count: "{{ groups['all'] | length }}"
 
 feature_gates: ""
 
+
 HCLOUD_NODES_PREFIX: "konz-testet"
-HCLOUD_TOKEN: "Wu4ih6Gb2mPasuf4LCNGbHJVvvODXVAvjRyOG3n3Lg3jejggMEG6pptYVHYb3tpc"
+HCLOUD_TOKEN: "DPy5sEeuDYuCfwaVer2Z7dvEVh2pnRLfHVcgM2a3Nxh61eioNPBYiA71wE0xpqEU"

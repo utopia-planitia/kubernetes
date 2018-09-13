@@ -1,7 +1,20 @@
 ---
+- debug:
+    msg: "TOKEN {{ HCLOUD_TOKEN }} "
+# create an ssh key
+# - hcloud_ssh_key:
+#     name: hcloud-ssh-key
+#     public_key: "{{lookup('file', './hcloud-ssh-key/id_rsa.pub')}}"
+
 - hcloud_ssh_key:
     state: list
   register: hcloud_ssh_keys
+
+- debug:
+    msg: "ssh_keys {{ hcloud_ssh_keys }} "
+- debug:
+    msg: "sshkey.sshkey {{ hcloud_ssh_keys.ssh_keys }} "
+
 # create some servers at once
 - hcloud_server:
      name:
