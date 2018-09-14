@@ -3,7 +3,7 @@
 load test_helper
 
 @test "verify componentstatus node1" {
-  IP=`grep node1 inventory | grep ansible_host | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
+  IP=`grep -o '1 ansible_host=[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' inventory | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
   run sh -c "kubectl --server=https://${IP}:6443/ get componentstatus --no-headers=true | sort"
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 5 ]
@@ -15,7 +15,7 @@ load test_helper
 }
 
 @test "verify componentstatus node2" {
-  IP=`grep node2 inventory | grep ansible_host | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
+  IP=`grep -o '2 ansible_host=[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' inventory | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
   run sh -c "kubectl --server=https://${IP}:6443/ get componentstatus --no-headers=true | sort"
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 5 ]
