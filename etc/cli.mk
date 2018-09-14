@@ -34,21 +34,24 @@ ifndef IS_CONTAINERIZED
   # make status
   DOCKER_OPTIONS += -v $(shell realpath ../kubernetes/etc):/kubernetes/etc
 
+
+
   # customized config
-  CONFIG_PATH = $(shell realpath ../customized/ansible)
+  ANSIBLE_PATH = $(shell realpath ../kubernetes)
+  ifneq ("$(wildcard ../customized)","")
+    ANSIBLE_PATH = $(shell realpath ../customized)
+  endif
 
   KUBECONFIG ?= /workspace/certificates/master/admin-kube-config
-  DOCKER_OPTIONS += -v $(CONFIG_PATH)/certificates:/workspace/certificates
   DOCKER_OPTIONS += -e KUBECONFIG=$(KUBECONFIG)
 
   ifdef NEED_ANSIBLE
-    ifneq ("$(wildcard $(CONFIG_PATH)/ansible.cfg)","")
-      DOCKER_OPTIONS += $(CONFIG_PATH)/ansible.cfg:/workspace/ansible.cfg
-    endif
-    DOCKER_OPTIONS += -v $(CONFIG_PATH)/files:/workspace/files
-    DOCKER_OPTIONS += -v $(CONFIG_PATH)/inventory:/workspace/inventory
-    DOCKER_OPTIONS += -v $(CONFIG_PATH)/group_vars:/workspace/group_vars
-    DOCKER_OPTIONS += -v $(CONFIG_PATH)/host_vars:/workspace/host_vars
+    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/certificates:/workspace/certificates
+    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/ansible.cfg:/workspace/ansible.cfg
+    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/files:/workspace/files
+    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/inventory:/workspace/inventory
+    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/group_vars:/workspace/group_vars
+    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/host_vars:/workspace/host_vars
   endif
 
   CLI = $(DOCKER) run --net=host --rm -ti $(DOCKER_OPTIONS) $(KUBERNETES_TOOLS_IMAGE)
