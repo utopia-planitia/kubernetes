@@ -1,7 +1,8 @@
 ---
 - hcloud_ssh_key:
     state: list
-  register: hcloud_ssh_keys
+    token : "{{ HCLOUD_TOKEN }}"
+  register: 'hcloud_ssh_keys'
 # create some servers at once
 - hcloud_server:
      name:
@@ -20,11 +21,11 @@
 
 
 # ensure server is running (if the server already exists)
-- hcloud_server:
-   name:
-   - "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
-   state: running
-  with_items: "{{ servers }}"
+# - hcloud_server:
+#    name:
+#    - "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
+#    state: running
+#   with_items: "{{ servers }}"
 
 - name: remove old inventory file
   copy:
