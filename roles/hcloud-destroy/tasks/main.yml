@@ -1,6 +1,12 @@
 ---
+# - hcloud_ssh_key:
+#     state: list
+#     token : "{{ HCLOUD_TOKEN }}"
+#   register: 'hcloud_ssh_keys'
+
 - hcloud_server:
     name:
     - "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
     state: absent
+    token : "{{ HCLOUD_TOKEN }}"
   with_items: "{{ servers }}"

@@ -1,7 +1,8 @@
 ---
 ansible_ssh_common_args: -o StrictHostKeyChecking=no
-#ansible_ssh_private_key_file: ./hcloud-ssh-key/id_rsa
-
+#ansible_ssh_private_key_file: ~/.ssh/digital-ocean/id_rsa
+HCLOUD_NODES_PREFIX: "hcloud"
+HCLOUD_TOKEN: "set token before"
 kubelet_max_pods:                   15
 kubelet_kube_reserved:              cpu=100m,memory=200Mi
 kubelet_system_reserved:            cpu=200m,memory=100Mi
