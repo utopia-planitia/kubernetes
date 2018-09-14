@@ -1,0 +1,15 @@
+
+---
+- name: base64 encoded resources webhook client certificate
+  local_action: shell cd {{ resources_webhook_cert_dir }}; cat client.pem | base64 | tr -d " \t\n\r"
+  register: resources_webhook_client_cert_base64_cli
+  changed_when: false
+
+- name: "set resources_webhook_client_cert_base64 variable"
+  set_fact:
+    resources_webhook_client_cert_base64: "{{ resources_webhook_client_cert_base64_cli.stdout }}"
+
+- name: install resources_webhook
+  template:
+    src: MutatingWebhookConfiguration.yml.j2
+    dest: /etc/kubernetes/manifests/MutatingWebhookConfiguration.yml

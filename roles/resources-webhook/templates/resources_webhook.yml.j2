@@ -11,7 +11,9 @@ spec:
       command:
         - "/kubernetes-default-container-resources"
       args:
-        - -tlsDisabled=true
+        - "-addr='{{ resources_webhook_addr }}'"
+        - "-sslCert='{{ resources_webhook_cert_dir }}/server.pem'"
+        - "-sslKey='{{ resources_webhook_cert_dir }}/server-key.pem'"
       env:
         - name: CONFIG_HASH
           value: {{ resources_webhook_config_hash }}

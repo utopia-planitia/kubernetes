@@ -1,0 +1,31 @@
+==> vagrant: A new version of Vagrant is available: 2.1.5!
+==> vagrant: To upgrade visit: https://www.vagrantup.com/downloads.html
+
+
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: resources-webhook
+webhooks:
+  - name: resources-webhook.kube-system.svc
+    rules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+        resources:
+          - pods
+    failurePolicy: Fail
+    clientConfig:
+      # url: "127.0.0.1:8083"
+      url: resources-webhook.kube-system.svc:8083
+      service:
+        namespace: kube-system
+        name: resources-webhook
+        path: /
+      # `caBundle` is a PEM encoded CA bundle which will be used to validate
+      # the webhook's server certificate.
+      # Required.
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURRakNDQWlxZ0F3SUJBZ0lVS0JPN054bG1valI5YlIrN3pza2grL2ZIcE1Vd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0hERWFNQmdHQTFVRUF4TVJVbVZ6YjNWeVkyVnpMVmRsWW1odmIyc3dIaGNOTVRnd09URTBNVFl3T0RBdwpXaGNOTWpnd09URXhNVFl3T0RBd1dqQWpNU0V3SHdZRFZRUURFeGh5WlhOdmRYSmpaWE10ZDJWaWFHOXZheUJqCmJHbGxiblF3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRQzk0anl6cS9abWs1T2cKV1lNTWxTUVpOUGhDbFNmOHY3RjVSc0RMa3ZRbnQ3K2xWQldvcktoTThGNzNXNitvb0E5ZnBIWnl1MCt3TmE4TgorUnF3MXl1MmUrM1N1MXB3RUNKL1E3Q051N1g2cnAvRENaRzFTOUFTeElhai8xM2ptSjZpZU1OV0lrK2xjeDVrCklGc1BUWFZ1MmRyUkpVbTE2WU1qUFZ1RHVZaDFuaFN4SmdCM3VyMGdRV1RJN0hKRFVsZm1jTTJGeU44aHlSRW4KTFM3K3dGek1WM3ZYV1g0c0Y5Z2wxTkhWSXNFZkdONkVlOFdRSFFtMW5vNXlpUWlmMzBjeC9OeTAycEJLRkpQbgp1T1ZSR0FSeDB1QTJTUUNsMWFyejJNUEVrMzc3djF3eWlpTG4wczJuc1BzcjN2TlIwSDdpMy8yT0RTRkhkZCtwCkZHYzN3ZHg5QWdNQkFBR2pkVEJ6TUE0R0ExVWREd0VCL3dRRUF3SUZvREFUQmdOVkhTVUVEREFLQmdnckJnRUYKQlFjREFqQU1CZ05WSFJNQkFmOEVBakFBTUIwR0ExVWREZ1FXQkJTVXhnVHNmYWNMQi9pZzNMdWlTWDVkQWlISwpZVEFmQmdOVkhTTUVHREFXZ0JTZzdDcjNBdmY3cmhZOXB6d2h4OGJDbmxtdVJ6QU5CZ2txaGtpRzl3MEJBUXNGCkFBT0NBUUVBd3hDaWdpVzFpbEJzVklTYTlFVDJaM0lVeCtuVDQvWlZrKzg0Y1VSQmdMaHA5TGRuUVIrZk53TTgKWkswSU5Kazk3NzFvdUFHcVo3MjVheHQ2SnVHUmJ6L3RjaG03WW12WVREcDVSWWl3WnZkWXZZTm94V1liamE3QQpOWW9ZMDZNazJjTVIzelF5MFYwaGRkZTZqeUhRZkhUVVV4WjE5WGV0dk9oRGhXSEpkYXhkWmFYR1FZditDb0UyCjlqWTZOVUxmbTM4dXhsanlnZkVmcUpuMEpsK2VjYjNUNEovUE1rMUtJL1NoOW1GdXVqVHZScG9mNmU5NlRjd2QKa3UwOWtSdnlJdHlaSVBCMFcxY0owMjl3b3d3amdZOWNmaHNhNWV6enpheHo2VEZ2SFI0cUdKR2Zaa3RsRkFNdgpycFBaOVFNbkN2RXIzYVcyTXlKU0VsRHFFT2JScWc9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==

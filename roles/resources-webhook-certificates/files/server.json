@@ -3,9 +3,7 @@
     "hosts": [
         "localhost",
         "127.0.0.1",
-        "etcd1",
-        "etcd2",
-        "etcd3"
+        "resources-webhook.kube-system.svc"
     ],
     "key": {
       "algo": "rsa",

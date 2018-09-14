@@ -1,0 +1,28 @@
+
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: resources-webhook
+webhooks:
+  - name: resources-webhook.kube-system.svc
+    rules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+        resources:
+          - pods
+    failurePolicy: Fail
+    clientConfig:
+      # url: "127.0.0.1:8083"
+      url: resources-webhook.kube-system.svc:8083
+      service:
+        namespace: kube-system
+        name: resources-webhook
+        path: /
+      # `caBundle` is a PEM encoded CA bundle which will be used to validate
+      # the webhook's server certificate.
+      # Required.
+      caBundle: {{ resources_webhook_client_cert_base64 }}

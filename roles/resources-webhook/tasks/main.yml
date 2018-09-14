@@ -37,3 +37,12 @@
 - name: wait for resources_webhook to be available
   wait_for:
     port: 8083 # todo: maybe the resources-webhook needs an additional port?
+
+- name: import k8s-webhook-config task
+  import_tasks: k8s-webhook-config.yml
+
+- name: let k8s discover internal resources-webhook
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.0\.1'
+    line: '127.0.0.1 resources-webhook.kube-system.svc'
