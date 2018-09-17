@@ -14,10 +14,10 @@ $box_url = case ENV["VAGRANT_OS"]
     when "coreos-stable"
         $box = "coreos-stable"
         $box_url = "https://stable.release.core-os.net/amd64-usr/current/coreos_production_vagrant.json"
-    when "ubuntu-16.04"
-        $box = "ubuntu/xenial64"
-    when "bento-16.04"
-        $box = "bento/ubuntu-16.04"
+    when "ubuntu-18.04"
+        $box = "ubuntu/bionic64"
+    when "bento-18.04"
+        $box = "bento/ubuntu-18.04"
 end
 
 Vagrant.configure("2") do |config|
@@ -48,7 +48,7 @@ Vagrant.configure("2") do |config|
 
       config.vm.provision "shell", inline: "sed -i '/search/d' /etc/resolv.conf"
 
-    end    
+    end
   end
 
 end
