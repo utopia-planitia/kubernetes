@@ -17,11 +17,11 @@ webhooks:
     failurePolicy: Fail
     clientConfig:
       # url: "127.0.0.1:8083"
-      url: resources-webhook.kube-system.svc:8083
-      service:
-        namespace: kube-system
-        name: resources-webhook
-        path: /
+      url: https://resources-webhook.kube-system.svc:{{ resources_webhook_port }}
+      #service:
+      #  namespace: kube-system
+      #  name: resources-webhook
+      #  path: /
       # `caBundle` is a PEM encoded CA bundle which will be used to validate
       # the webhook's server certificate.
       # Required.

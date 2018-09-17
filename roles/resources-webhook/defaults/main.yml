@@ -1,3 +1,3 @@
 
 ---
-resources_webhook_addr: ":8083"
+resources_webhook_port: "8083"

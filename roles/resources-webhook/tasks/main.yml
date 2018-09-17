@@ -36,7 +36,7 @@
 
 - name: wait for resources_webhook to be available
   wait_for:
-    port: 8083 # todo: maybe the resources-webhook needs an additional port?
+    port: "{{ resources_webhook_port }}" # todo: maybe the resources-webhook needs an additional port?
 
 - name: import k8s-webhook-config task
   import_tasks: k8s-webhook-config.yml
