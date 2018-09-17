@@ -42,7 +42,7 @@ items:
           restartPolicy: Never
           containers:
           - name: bootstrapper
-            image: quay.io/external_storage/local-volume-provisioner-bootstrap:v2.2.0
+            image: quay.io/external_storage/local-volume-provisioner-bootstrap:v2.0.0
             env:
             - name: MY_NAMESPACE
               valueFrom:
