@@ -6,29 +6,22 @@
 #     name: hcloud-ssh-key
 #     public_key: "{{lookup('file', './hcloud-ssh-key/id_rsa.pub')}}"
 
-- hcloud_ssh_key:
+- name: set ssh-key and token
+  hcloud_ssh_key:
     state: list
-<<<<<<< HEAD
-  register: hcloud_ssh_keys
-
-- debug:
-    msg: "ssh_keys {{ hcloud_ssh_keys }} "
-- debug:
-    msg: "sshkey.sshkey {{ hcloud_ssh_keys.ssh_keys }} "
-
-=======
     token : "{{ HCLOUD_TOKEN }}"
   register: 'hcloud_ssh_keys'
->>>>>>> 4d3129e9a5cbf9944df118fa841633f888379448
+
 # create some servers at once
-- hcloud_server:
-     name:
-     - "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
-     image: "{{ image }}"
-     server_type: "{{ server_type }}"
-     location: "{{ location }}"
-     ssh_keys: "{{ hcloud_ssh_keys.ssh_keys }}"
-     token : "{{ HCLOUD_TOKEN }}"
+- name: create servers
+  hcloud_server:
+    name:
+    - "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
+    image: "{{ image }}"
+    server_type: "{{ server_type }}"
+    location: "{{ location }}"
+    ssh_keys: "{{ hcloud_ssh_keys.ssh_keys }}"
+    token : "{{ HCLOUD_TOKEN }}"
   with_items: "{{ servers }}"
   register: hcloud_details
 
@@ -38,11 +31,12 @@
 
 
 # ensure server is running (if the server already exists)
-# - hcloud_server:
-#    name:
-#    - "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
-#    state: running
-#   with_items: "{{ servers }}"
+- name: check for running servers
+  hcloud_server:
+   name:
+   - "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
+   state: running
+  with_items: "{{ servers }}"
 
 - name: remove old inventory file
   copy:
