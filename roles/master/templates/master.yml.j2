@@ -28,7 +28,6 @@ spec:
           --kubelet-client-key=/etc/kubernetes/ssl/master-key.pem
           --service-cluster-ip-range=10.16.0.0/12
           --enable-admission-plugins=NodeRestriction
-          --disable-admission-plugins=PersistentVolumeLabel
           --allow-privileged=true
           --apiserver-count={{ groups['masters'] | length }}
           --authorization-mode={{ authorization_mode }}
