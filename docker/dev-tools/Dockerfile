@@ -41,7 +41,7 @@ RUN curl -s -L -o /usr/local/bin/cfssl		https://pkg.cfssl.org/R1.2/cfssl_linux-a
 	chmod +x /usr/local/bin/cfssljson
 
 # kubectl
-ENV KUBERNETES_VERSION v1.10.1
+ENV KUBERNETES_VERSION v1.11.3
 RUN curl -s -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl && \
 	chmod +x /usr/local/bin/kubectl && \
 	echo "source <(kubectl completion bash)" >> ~/.bashrc
