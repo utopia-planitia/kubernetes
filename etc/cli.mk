@@ -11,8 +11,9 @@ endif
 
 CLI =
 ifndef IS_CONTAINERIZED
-  KUBERNETES_TOOLS_IMAGE ?= $(shell docker build -q ../kubernetes/docker/dev-tools)
-  KUBERNETES_E2E_IMAGE ?= $(shell docker build -q ../kubernetes/docker/e2e-tests)
+  CLI_MK_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+  KUBERNETES_TOOLS_IMAGE ?= $(shell docker build -q $(CLI_MK_DIR)/../docker/dev-tools)
+  KUBERNETES_E2E_IMAGE ?= $(shell docker build -q $(CLI_MK_DIR)/../docker/e2e-tests)
 
   ifneq ("$(wildcard roles)","")
     NEED_ANSIBLE ?= yes
@@ -32,28 +33,30 @@ ifndef IS_CONTAINERIZED
   DOCKER_OPTIONS += -v ~/.vagrant.d/:/root/.vagrant.d/
 
   # make status
-  DOCKER_OPTIONS += -v $(shell realpath ../kubernetes/etc):/kubernetes/etc
+  DOCKER_OPTIONS += -v $(shell realpath $(CLI_MK_DIR)):/kubernetes/etc
 
 
 
   # customized config
-  ANSIBLE_PATH = $(shell realpath ../kubernetes)
-  ifneq ("$(wildcard ../customized)","")
-    ANSIBLE_PATH = $(shell realpath ../customized)
+  CONFIGURATION_PATH = $(shell realpath $(CLI_MK_DIR)/..)
+  ifneq ("$(wildcard $(CLI_MK_DIR)/../../customized)","")
+    CONFIGURATION_PATH = $(shell realpath $(CLI_MK_DIR)/../../customized)
   endif
 
-  KUBECONFIG ?= /workspace/certificates/master/admin-kube-config
+  KUBECONFIG ?= /kubernetes/certificates/master/admin-kube-config
   DOCKER_OPTIONS += -e KUBECONFIG=$(KUBECONFIG)
+  DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/certificates:/kubernetes/certificates
 
   ifdef NEED_ANSIBLE
-    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/certificates:/workspace/certificates
-    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/ansible.cfg:/workspace/ansible.cfg
-    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/files:/workspace/files
-    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/inventory:/workspace/inventory
-    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/group_vars:/workspace/group_vars
-    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/host_vars:/workspace/host_vars
+    DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/kubernetes/addons/labeled-volumes:/workspace/addons/labeled-volumes
+    DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/ansible.cfg:/workspace/ansible.cfg
+    DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/files:/workspace/files
+    DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/inventory:/workspace/inventory
+    DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/group_vars:/workspace/group_vars
+    DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/host_vars:/workspace/host_vars
   endif
 
+  CMD = $(DOCKER) run --net=host --rm $(DOCKER_OPTIONS) $(KUBERNETES_TOOLS_IMAGE)
   CLI = $(DOCKER) run --net=host --rm -ti $(DOCKER_OPTIONS) $(KUBERNETES_TOOLS_IMAGE)
   E2E = $(DOCKER) run --net=host --rm -ti $(DOCKER_OPTIONS) $(KUBERNETES_E2E_IMAGE)
 endif
