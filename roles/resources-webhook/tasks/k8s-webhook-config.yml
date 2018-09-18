@@ -12,5 +12,8 @@
 
 - name: install resources_webhook
   template:
-    src: MutatingWebhookConfiguration.yml.j2
-    dest: /etc/kubernetes/manifests/MutatingWebhookConfiguration.yml
+    src: ResourcesWebhookConfiguration.yml.j2
+    # dest: /etc/kubernetes/manifests/ResourcesWebhookConfiguration.yml
+    dest: "{{ addons_dir }}/ResourcesWebhookConfiguration.yaml"
+  delegate_to: localhost
+  run_once: true

@@ -18,6 +18,7 @@ users_cert_dir:               "{{ playbook_dir }}/certificates/users"
 master_config_dir:            "{{ playbook_dir }}/roles/master-certificates/files"
 resources_webhook_config_dir: "{{ playbook_dir }}/roles/resources-webhook-certificates/files"
 resources_webhook_cert_dir:   "{{ playbook_dir }}/certificates/resources-webhook"
+addons_dir:                   "{{ playbook_dir }}/addons"
 addons_cert_dir:              "{{ playbook_dir }}/certificates/addons"
 
 nodes_count: "{{ groups['all'] | length }}"
