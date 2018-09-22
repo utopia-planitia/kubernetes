@@ -43,9 +43,9 @@ ifndef IS_CONTAINERIZED
     CONFIGURATION_PATH = $(shell realpath $(CLI_MK_DIR)/../../customized)
   endif
 
-  KUBECONFIG ?= /kubernetes/certificates/master/admin-kube-config
+  KUBECONFIG ?= /workspace/certificates/master/admin-kube-config
   DOCKER_OPTIONS += -e KUBECONFIG=$(KUBECONFIG)
-  DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/certificates:/kubernetes/certificates
+  DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/certificates:/workspace/certificates
 
   ifdef NEED_ANSIBLE
     DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/kubernetes/addons/labeled-volumes:/workspace/addons/labeled-volumes
