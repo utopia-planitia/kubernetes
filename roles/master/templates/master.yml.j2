@@ -21,6 +21,7 @@ spec:
           --etcd-certfile=/etc/kubernetes/ssl/etcd.pem
           --etcd-keyfile=/etc/kubernetes/ssl/etcd-key.pem
           --client-ca-file=/etc/kubernetes/ssl/kubernetes-ca.pem
+          --requestheader-client-ca-file=/etc/kubernetes/ssl/kubernetes-client-ca.pem
           --tls-cert-file=/etc/kubernetes/ssl/master.pem
           --tls-private-key-file=/etc/kubernetes/ssl/master-key.pem
           --kubelet-certificate-authority=/etc/kubernetes/ssl/kubernetes-ca.pem

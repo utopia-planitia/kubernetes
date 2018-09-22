@@ -17,11 +17,17 @@
     dest: "{{ master_cert_dir }}/node-{{ item }}.json"
   with_items: "{{ groups['all'] }}"
 
-- name: set up a Certificate Authority
+- name: set up a Apiserver Certificate Authority
   shell: cfssl gencert -initca {{ master_config_dir }}/ca.json | cfssljson -bare ca
   args:
     chdir: "{{ master_cert_dir }}"
     creates: "ca-key.pem"
+
+- name: set up a Client Certificate Authority
+  shell: cfssl gencert -initca {{ master_config_dir }}/ca.json | cfssljson -bare client-ca
+  args:
+    chdir: "{{ master_cert_dir }}"
+    creates: "client-ca-key.pem"
 
 - name: set up admin certificate
   shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes {{ master_config_dir }}/admin.json | cfssljson -bare admin

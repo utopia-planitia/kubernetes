@@ -22,6 +22,7 @@
     dest: "/etc/kubernetes/ssl/{{ item.remote }}"
   with_items:
     - { local: 'ca.pem', remote: 'kubernetes-ca.pem' }
+    - { local: 'client-ca.pem', remote: 'kubernetes-client-ca.pem' }
     - { local: 'master.pem', remote: 'master.pem' }
     - { local: 'master-key.pem', remote: 'master-key.pem' }
   no_log: true
