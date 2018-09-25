@@ -80,5 +80,5 @@ load test_helper
 @test "pv quota: undeploy pod with persistent local volume" {
   run kubectl delete -f tests/local-volume
   [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 2 ]
+  [ "${#lines[@]}" -eq 3 ]
 }
