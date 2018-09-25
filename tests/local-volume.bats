@@ -5,7 +5,7 @@ load test_helper
 @test "pv quota: deploy pod with persistent local volume" {
   run kubectl apply -f tests/local-volume
   [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 2 ]
+  [ "${#lines[@]}" -eq 3 ]
 }
 
 @test "pv quota: list empty volume" {
