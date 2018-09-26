@@ -2,7 +2,7 @@
 ---
 - name: base64 encoded resources webhook client certificate
   # todo: figure useing instead of server.pem ca.pem or client pem or better why client.pem is not working
-  local_action: shell cd {{ resources_webhook_cert_dir }}; cat ca.pem | base64 | tr -d " \t\n\r"
+  local_action: shell cd {{ resources_webhook_cert_dir }}; cat ca.pem | base64 -w 0
   register: resources_webhook_client_cert_base64_cli
   changed_when: false
 
