@@ -13,7 +13,6 @@ system-requirements-check: ##@setup checks system for required dependencies
 
 .PHONY: certificates
 certificates: ##@ansible delete and recreate cluster secrets
-	$(CLI) sh -c 'rm -r certificates/* || true'
 	$(CLI) ansible-playbook certificates.yml $(ANSIBLE_OPTIONS)
 
 .PHONY: deploy
