@@ -32,7 +32,7 @@
     src: token-auth-file.j2
     dest: /etc/kubernetes/token-auth-file
 
-- name: copy kubernetes certificates
+- name: configure audit logging
   copy:
     src: audit-policy.yaml
     dest: /etc/kubernetes/audit-policy.yaml
