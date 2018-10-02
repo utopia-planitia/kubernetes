@@ -50,9 +50,9 @@ fi
 
 PODS=$( kubectl get po --all-namespaces=true -o wide 2>&1 | grep -v 'No resources found.' )
 PODS_COUNT=$( echo "$PODS" | tail -n +2 | wc -l )
-PODS_READY=$( echo "$PODS" | tail -n +2 | grep Running | wc -l )
-echo "${PODS_READY} of ${PODS_COUNT} pods are running"
+PODS_READY=$( echo "$PODS" | tail -n +2 | grep 'Running\|Completed' | wc -l )
+echo "${PODS_READY} of ${PODS_COUNT} pods are running/completed"
 if [[ ! "${PODS_COUNT}" = "${PODS_READY}" ]]; then
 	echo "$PODS" | head -n 1
-	echo "$PODS" | tail -n +2 | grep -v Running | sort
+	echo "$PODS" | tail -n +2 | grep -v 'Running\|Completed' | sort
 fi
