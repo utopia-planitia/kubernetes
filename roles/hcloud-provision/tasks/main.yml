@@ -36,6 +36,8 @@
    name:
    - "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
    state: running
+   token : "{{ HCLOUD_TOKEN }}"
+
   with_items: "{{ servers }}"
 
 - name: remove old inventory file
