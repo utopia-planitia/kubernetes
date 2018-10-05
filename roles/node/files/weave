@@ -3,7 +3,7 @@ set -e
 
 [ -n "$WEAVE_DEBUG" ] && set -x
 
-SCRIPT_VERSION="2.3.0"
+SCRIPT_VERSION="2.4.1"
 IMAGE_VERSION=latest
 [ "$SCRIPT_VERSION" = "unreleased" ] || IMAGE_VERSION=$SCRIPT_VERSION
 IMAGE_VERSION=${WEAVE_VERSION:-$IMAGE_VERSION}
@@ -53,6 +53,7 @@ weave launch        [--password <pass>] [--trusted-subnets <cidr>,...]
                     [--hostname-replacement <replacement>]
                     [--rewrite-inspect]
                     [--log-level=debug|info|warning|error]
+                    [--token <weave-cloud-service-token>]
                     <peer> ...
 
 weave prime
@@ -492,10 +493,20 @@ destroy_bridge() {
     run_iptables -t filter -D FORWARD -o $BRIDGE -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT 2>/dev/null || true
     run_iptables -t filter -D FORWARD -i $BRIDGE -o $BRIDGE -j ACCEPT 2>/dev/null || true
     run_iptables -F WEAVE-NPC >/dev/null 2>&1 || true
-    run_iptables -t filter -D FORWARD -o $BRIDGE -j WEAVE-NPC 2>/dev/null || true
+    run_iptables -t filter -D FORWARD -o $BRIDGE -m comment --comment "NOTE: this must go before '-j KUBE-FORWARD'" -j WEAVE-NPC 2>/dev/null || true
     run_iptables -t filter -D FORWARD -o $BRIDGE -m state --state NEW -j NFLOG --nflog-group 86 2>/dev/null || true
     run_iptables -t filter -D FORWARD -o $BRIDGE -j DROP 2>/dev/null || true
     run_iptables -X WEAVE-NPC >/dev/null 2>&1 || true
+    run_iptables -F WEAVE-NPC-EGRESS >/dev/null 2>&1 || true
+    run_iptables -t filter -D FORWARD -i $BRIDGE -m comment --comment "NOTE: this must go before '-j KUBE-FORWARD'" -j WEAVE-NPC-EGRESS 2>/dev/null || true
+    run_iptables -t filter -D INPUT -i $BRIDGE -j WEAVE-NPC-EGRESS 2>/dev/null || true
+    run_iptables -X WEAVE-NPC-EGRESS >/dev/null 2>&1 || true
+    run_iptables -F WEAVE-NPC-EGRESS-DEFAULT >/dev/null 2>&1 || true
+    run_iptables -X WEAVE-NPC-EGRESS-DEFAULT >/dev/null 2>&1 || true
+    run_iptables -F WEAVE-NPC-EGRESS-CUSTOM >/dev/null 2>&1 || true
+    run_iptables -X WEAVE-NPC-EGRESS-CUSTOM >/dev/null 2>&1 || true
+    run_iptables -F WEAVE-NPC-EGRESS-ACCEPT >/dev/null 2>&1 || true
+    run_iptables -X WEAVE-NPC-EGRESS-ACCEPT >/dev/null 2>&1 || true
 
     run_iptables -F WEAVE-EXPOSE >/dev/null 2>&1 || true
     run_iptables -t filter -D FORWARD -o $BRIDGE -j WEAVE-EXPOSE 2>/dev/null || true
@@ -505,6 +516,8 @@ destroy_bridge() {
     run_iptables -t nat -D POSTROUTING -j WEAVE >/dev/null 2>&1 || true
     run_iptables -t nat -D POSTROUTING -o $BRIDGE -j ACCEPT >/dev/null 2>&1 || true
     run_iptables -t nat -X WEAVE >/dev/null 2>&1 || true
+
+    ipset destroy weaver-no-masq-local >/dev/null 2>&1 || true
 }
 
 add_iface_fastdp() {
@@ -705,10 +718,10 @@ upgrade_cni_plugin() {
 
     # Create two symlinks to the plugin, as it has different
     # behaviour depending on its name:
-    if [ "$(readlink -f $1/weave-net)" != "$CNI_PLUGIN_NAME" ]; then
+    if [ "$(readlink -f $1/weave-net)" != "$1/$CNI_PLUGIN_NAME" ]; then
         upgrade_cni_plugin_symlink $1 weave-net
     fi
-    if [ "$(readlink -f $1/weave-ipam)" != "$CNI_PLUGIN_NAME" ]; then
+    if [ "$(readlink -f $1/weave-ipam)" != "$1/$CNI_PLUGIN_NAME" ]; then
         upgrade_cni_plugin_symlink $1 weave-ipam
     fi
 }
@@ -1246,7 +1259,7 @@ launch() {
 stop() {
     util_op remove-plugin-network weave || true
     warn_if_stopping_proxy_in_env
-    util_op stop-container $CONTAINER_NAME >/dev/null 2>&1 || echo "Weave is not running." >&2
+    util_op stop-container $CONTAINER_NAME >/dev/null 2>&1 || echo "Weave is not running (ignore on Kubernetes)." >&2
     # In case user has upgraded from <v2.0 and left old containers running
     util_op stop-container $OLD_PLUGIN_CONTAINER_NAME >/dev/null 2>&1 || true
     util_op stop-container $OLD_PROXY_CONTAINER_NAME >/dev/null 2>&1 || true

@@ -29,7 +29,7 @@ kubernetes: ##@ansible deploy kubernetes
 .PHONY: addons
 addons: ##@ansible deploy addons
 	$(CLI) kubectl apply -f addons/kube-dns.yaml \
-	                     -f addons/weave-daemonset-k8s-1.7.yaml \
+	                     -f addons/weave-daemonset.yaml \
 	                     -f addons/registry-mirror.yaml \
 	                     -f certificates/addons/
 	$(CLI) bash etc/wait-for-addons.sh
