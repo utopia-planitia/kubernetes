@@ -48,7 +48,7 @@ data:
   Corefile: |
     .:53 {
         errors
-        health
+        health :8081
         kubernetes cluster.local in-addr.arpa ip6.arpa {
           pods insecure
           upstream
@@ -62,17 +62,15 @@ data:
         loadbalance
     }
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1
+kind: DaemonSet
 metadata:
   name: coredns
   namespace: kube-system
   labels:
     k8s-app: kube-dns
-    kubernetes.io/name: "CoreDNS"
 spec:
-  replicas: 2
-  strategy:
+  updateStrategy:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 1
@@ -126,12 +124,13 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
-            port: 8080
+            port: 8081
             scheme: HTTP
           initialDelaySeconds: 60
           timeoutSeconds: 5
           successThreshold: 1
           failureThreshold: 5
+      hostNetwork: true
       dnsPolicy: Default
       volumes:
         - name: config-volume

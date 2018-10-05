@@ -11,7 +11,7 @@ ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
   --container-runtime docker \
   --image-pull-progress-deadline=2m \
   --allow-privileged=true \
-  --cluster-dns=10.16.0.3 \
+  --cluster-dns={{ ansible_host }} \
   --cluster-domain=cluster.local \
   --kubeconfig=/etc/kubelet/kubeconfig \
   --serialize-image-pulls=false \
