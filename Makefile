@@ -33,6 +33,7 @@ addons: ##@ansible deploy addons
 	                     -f addons/registry-mirror.yaml \
 	                     -f certificates/addons/
 	$(CLI) bash etc/wait-for-addons.sh
+	$(CLI) kubectl -n kube-system delete svc kube-dns --ignore-not-found=false
 
 .PHONY: local-volumes
 local-volumes: ##@ansible create local volumes
