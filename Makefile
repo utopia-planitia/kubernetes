@@ -28,12 +28,12 @@ kubernetes: ##@ansible deploy kubernetes
 
 .PHONY: addons
 addons: ##@ansible deploy addons
-	$(CLI) kubectl apply -f addons/kube-dns.yaml \
-	                     -f addons/weave-daemonset.yaml \
+	$(CLI) kubectl apply -f addons/core-dns.yaml \
+	                     -f addons/weave-daemonset-k8s.yaml \
 	                     -f addons/registry-mirror.yaml \
 	                     -f certificates/addons/
 	$(CLI) bash etc/wait-for-addons.sh
-	$(CLI) kubectl -n kube-system delete svc kube-dns --ignore-not-found=false
+	$(CLI) kubectl -n kube-system delete svc kube-dns --ignore-not-found=true
 
 .PHONY: local-volumes
 local-volumes: ##@ansible create local volumes
