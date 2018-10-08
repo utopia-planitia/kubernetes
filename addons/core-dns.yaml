@@ -48,13 +48,14 @@ data:
   Corefile: |
     .:53 {
         errors
-        health :8081
+        bind 192.168.0.3
+        health 192.168.0.3:8081
         kubernetes cluster.local in-addr.arpa ip6.arpa {
           pods insecure
           upstream
           fallthrough in-addr.arpa ip6.arpa
         }
-        prometheus :9153
+        prometheus 192.168.0.3:9153
         proxy . /etc/resolv.conf
         cache 30
         loop
@@ -88,6 +89,16 @@ spec:
           effect: NoSchedule
         - key: "CriticalAddonsOnly"
           operator: "Exists"
+      initContainers:
+      - name: create-network-interface
+        image: alpine:3.7
+        command: [ "ifconfig", "lo:0", "192.168.0.3", "up" ]
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            add:
+            - all
+          readOnlyRootFilesystem: true
       containers:
       - name: coredns
         image: coredns/coredns:1.2.2
@@ -124,6 +135,7 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
+            host: 192.168.0.3
             port: 8081
             scheme: HTTP
           initialDelaySeconds: 60
