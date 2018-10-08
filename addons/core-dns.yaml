@@ -55,12 +55,42 @@ data:
           upstream
           fallthrough in-addr.arpa ip6.arpa
         }
-        prometheus 192.168.0.3:9153
+        prometheus 192.168.0.3:9154
         proxy . /etc/resolv.conf
         cache 30
         loop
         reload
         loadbalance
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-nginx
+  namespace: kube-system
+data:
+  nginx.conf: |
+    user  nginx;
+    worker_processes  1;
+
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+
+    events {
+        worker_connections  1024;
+    }
+
+    stream {
+        server {
+            listen     9153;
+            proxy_pass 192.168.0.3:9154;
+            allow 10.0.0.0/8;
+            allow 172.16.0.0/12;
+            allow 192.168.0.0/16;
+            allow 127.0.0.0/8;
+            allow 169.254.0.0/16;
+            deny all;
+        }
     }
 ---
 apiVersion: apps/v1
@@ -121,9 +151,6 @@ spec:
         - containerPort: 53
           name: dns-tcp
           protocol: TCP
-        - containerPort: 9153
-          name: metrics
-          protocol: TCP
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -142,6 +169,33 @@ spec:
           timeoutSeconds: 5
           successThreshold: 1
           failureThreshold: 5
+      # This is needed until coredns does support ACL, allow, deny or filewalling.
+      - name: forwarder
+        image: nginx:1.13.3-alpine
+        livenessProbe:
+          tcpSocket:
+            port: 53
+        resources:
+          requests:
+            cpu: 100m
+            memory: 50Mi
+          limits:
+            cpu: 100m
+            memory: 50Mi
+        volumeMounts:
+          - name: config
+            mountPath: /etc/nginx/
+        ports:
+        - containerPort: 9153
+          name: metrics
+          protocol: TCP
+        livenessProbe:
+          tcpSocket:
+            port: 9153
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
       hostNetwork: true
       dnsPolicy: Default
       volumes:
@@ -151,3 +205,9 @@ spec:
             items:
             - key: Corefile
               path: Corefile
+        - name: config
+          configMap:
+            name: coredns-nginx
+            items:
+            - key: nginx.conf
+              path: nginx.conf
