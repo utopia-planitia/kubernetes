@@ -172,9 +172,6 @@ spec:
       # This is needed until coredns does support ACL, allow, deny or filewalling.
       - name: forwarder
         image: nginx:1.13.3-alpine
-        livenessProbe:
-          tcpSocket:
-            port: 53
         resources:
           requests:
             cpu: 100m
