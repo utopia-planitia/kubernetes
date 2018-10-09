@@ -2,12 +2,16 @@ Active Internet connections (only servers)
 Proto Recv-Q Send-Q Local Address           Foreign Address         State      
 tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN     
 tcp        0      0 0.0.0.0:6783            0.0.0.0:*               LISTEN     
+tcp        0      0 0.0.0.0:9153            0.0.0.0:*               LISTEN     
 tcp        0      0 127.0.0.1:10248         0.0.0.0:*               LISTEN     
 tcp        0      0 127.0.0.1:10249         0.0.0.0:*               LISTEN     
 tcp        0      0 127.0.0.1:10251         0.0.0.0:*               LISTEN     
 tcp        0      0 127.0.0.1:10252         0.0.0.0:*               LISTEN     
 tcp        0      0 127.0.0.1:6784          0.0.0.0:*               LISTEN     
 tcp        0      0 127.0.0.1:8080          0.0.0.0:*               LISTEN     
+tcp        0      0 192.168.0.3:53          0.0.0.0:*               LISTEN     
+tcp        0      0 192.168.0.3:8081        0.0.0.0:*               LISTEN     
+tcp        0      0 192.168.0.3:9154        0.0.0.0:*               LISTEN     
 tcp6       0      0 :::10250                :::*                    LISTEN     
 tcp6       0      0 :::10255                :::*                    LISTEN     
 tcp6       0      0 :::10256                :::*                    LISTEN     
@@ -20,4 +24,5 @@ tcp6       0      0 :::6781                 :::*                    LISTEN
 tcp6       0      0 :::6782                 :::*                    LISTEN     
 udp        0      0 0.0.0.0:6783            0.0.0.0:*                          
 udp        0      0 0.0.0.0:6784            0.0.0.0:*                          
+udp        0      0 192.168.0.3:53          0.0.0.0:*                          
 udp6       0      0 :::6784                 :::*                               
