@@ -9,6 +9,8 @@ ifneq ($(shell uname), Darwin)
   endif
 endif
 
+DOCKER_INTERACTIVE ?= -i
+
 CLI =
 ifndef IS_CONTAINERIZED
   CLI_MK_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -56,18 +58,19 @@ ifndef IS_CONTAINERIZED
     DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/host_vars:/workspace/host_vars
   endif
 
-  CMD = $(DOCKER) run --net=host --rm $(DOCKER_OPTIONS) $(KUBERNETES_TOOLS_IMAGE)
-  CLI = $(DOCKER) run --net=host --rm -ti $(DOCKER_OPTIONS) $(KUBERNETES_TOOLS_IMAGE)
-  E2E = $(DOCKER) run --net=host --rm -ti $(DOCKER_OPTIONS) $(KUBERNETES_E2E_IMAGE)
+  CLI = $(DOCKER) run --net=host --rm -t $(DOCKER_INTERACTIVE) $(DOCKER_OPTIONS) $(KUBERNETES_TOOLS_IMAGE)
+  E2E = $(DOCKER) run --net=host --rm -t $(DOCKER_INTERACTIVE) $(DOCKER_OPTIONS) $(KUBERNETES_E2E_IMAGE)
 endif
+
+CMD ?= bash
 
 .PHONY: cli
 cli: ##@development creates admin command line interface
-	$(CLI) bash
+	$(CLI) $(CMD)
 
 .PHONY: e2e-cli
 e2e-cli: ##@development creates end to end testing command line interface
-	$(E2E) bash
+	$(E2E) $(CMD)
 
 .PHONY: demo-cli
 demo-cli: ##@development creates user command line interface
