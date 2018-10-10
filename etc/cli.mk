@@ -37,25 +37,27 @@ ifndef IS_CONTAINERIZED
   # make status
   DOCKER_OPTIONS += -v $(shell realpath $(CLI_MK_DIR)):/kubernetes/etc
 
-
-
-  # customized config
-  CONFIGURATION_PATH = $(shell realpath $(CLI_MK_DIR)/..)
-  ifneq ("$(wildcard $(CLI_MK_DIR)/../../customized)","")
-    CONFIGURATION_PATH = $(shell realpath $(CLI_MK_DIR)/../../customized)
+  # ansible
+  ANSIBLE_PATH = $(shell realpath $(PWD))
+  ifneq ("$(wildcard $(CLI_MK_DIR)/../../../ansible)","")
+    ANSIBLE_PATH = $(shell realpath $(CLI_MK_DIR)/../../../ansible)
   endif
 
-  KUBECONFIG ?= /workspace/certificates/master/admin-kube-config
+  # configurations
+  KUBERNETES_CONFIG_PATH = $(shell realpath $(CLI_MK_DIR)/..)
+  ifneq ("$(wildcard $(CLI_MK_DIR)/../../../configurations)","")
+    KUBERNETES_CONFIG_PATH = $(shell realpath $(CLI_MK_DIR)/../../../configurations/kubernetes)
+  endif
+
+  KUBECONFIG ?= /certificates/master/admin-kube-config
   DOCKER_OPTIONS += -e KUBECONFIG=$(KUBECONFIG)
-  DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/certificates:/workspace/certificates
+  DOCKER_OPTIONS += -v $(KUBERNETES_CONFIG_PATH)/certificates:/certificates
 
   ifdef NEED_ANSIBLE
-    DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/kubernetes/addons/labeled-volumes:/workspace/addons/labeled-volumes
-    DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/ansible.cfg:/workspace/ansible.cfg
-    DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/files:/workspace/files
-    DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/inventory:/workspace/inventory
-    DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/group_vars:/workspace/group_vars
-    DOCKER_OPTIONS += -v $(CONFIGURATION_PATH)/host_vars:/workspace/host_vars
+    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/ansible.cfg:/workspace/ansible.cfg
+    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/inventory:/workspace/inventory
+    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/group_vars:/workspace/group_vars
+    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/host_vars:/workspace/host_vars
   endif
 
   CLI = $(DOCKER) run --net=host --rm -t $(DOCKER_INTERACTIVE) $(DOCKER_OPTIONS) $(KUBERNETES_TOOLS_IMAGE)

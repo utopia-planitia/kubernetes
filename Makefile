@@ -1,4 +1,7 @@
 
+DOCKER_OPTIONS += -v $(KUBERNETES_CONFIG_PATH)/certificates:/workspace/certificates
+DOCKER_OPTIONS += -v $(KUBERNETES_CONFIG_PATH)/addons/labeled-volumes:/workspace/addons/labeled-volumes
+
 include ./etc/help.mk
 include ./etc/cli.mk
 include ./etc/tests.mk
