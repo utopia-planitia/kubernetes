@@ -24,8 +24,7 @@ load test_helper
   done
   run kubectl logs `kubectl get pod -a --selector=job-name=kube-dns-kube-system-svc-cluster-local --output=jsonpath={.items..metadata.name}`
   [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 2 ]
-  [ "${lines[1]}" = "Address:	192.168.0.3#53" ]
+  [ "${lines[0]}" = "Address:	192.168.0.3#53" ]
 }
 
 @test "check kube-dns-kube-system-svc ip" {
@@ -34,8 +33,7 @@ load test_helper
   done
   run kubectl logs `kubectl get pod -a --selector=job-name=kube-dns-kube-system-svc --output=jsonpath={.items..metadata.name}`
   [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 2 ]
-  [ "${lines[1]}" = "Address:	192.168.0.3#53" ]
+  [ "${lines[0]}" = "Address:	192.168.0.3#53" ]
 }
 
 @test "check kube-dns-kube-system ip" {
@@ -44,8 +42,7 @@ load test_helper
   done
   run kubectl logs `kubectl get pod -a --selector=job-name=kube-dns-kube-system --output=jsonpath={.items..metadata.name}`
   [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 2 ]
-  [ "${lines[1]}" = "Address:	192.168.0.3#53" ]
+  [ "${lines[0]}" = "Address:	192.168.0.3#53" ]
 }
 
 @test "check kubernetes-default-svc-cluster-local ip" {
