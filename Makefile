@@ -51,7 +51,3 @@ local-volumes: ##@ansible create local volumes
 .PHONY: restart
 restart: ##@ansible restart kubelet & docker
 	$(CLI) ansible-playbook restart-services.yml $(ANSIBLE_OPTIONS)
-
-.PHONY: status
-status: ##@development show current system status
-	@$(CLI) ./etc/status.sh

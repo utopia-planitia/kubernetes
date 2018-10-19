@@ -77,3 +77,7 @@ e2e-cli: ##@development creates end to end testing command line interface
 .PHONY: demo-cli
 demo-cli: ##@development creates user command line interface
 	$(CLI) sh -c "KUBECONFIG=/workspace/certificates/user/demo-user-kube-config bash"
+
+.PHONY: status
+status: ##@development show current system status
+	@$(CLI) /kubernetes/etc/status.sh
