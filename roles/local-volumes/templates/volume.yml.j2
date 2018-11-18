@@ -6,14 +6,22 @@ metadata:
 {% for key, value in volume.1.labels.items() %}
     {{ key }}: {{ value }}
 {% endfor %}
-  annotations:
-    volume.alpha.kubernetes.io/node-affinity: '{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["{{ inventory_hostname }}"]}]}]}}'
 spec:
   capacity:
     storage: {{ size }}
+  # volumeMode field requires BlockVolume Alpha feature gate to be enabled.
+  #volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  hostPath:
-    path: {{ path }}
   persistentVolumeReclaimPolicy: Recycle
   storageClassName: local-storage
+  local:
+    path: {{ path }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - {{ inventory_hostname }}
