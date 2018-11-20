@@ -17,10 +17,6 @@ ifndef IS_CONTAINERIZED
   KUBERNETES_TOOLS_IMAGE ?= $(shell docker build -q $(CLI_MK_DIR)/../docker/dev-tools)
   KUBERNETES_E2E_IMAGE ?= $(shell docker build -q $(CLI_MK_DIR)/../docker/e2e-tests)
 
-  ifneq ("$(wildcard roles)","")
-    NEED_ANSIBLE ?= yes
-  endif
-
   DOCKER ?= docker
   DOCKER_OPTIONS += -v $(PWD):/workspace -w /workspace
 
@@ -34,13 +30,26 @@ ifndef IS_CONTAINERIZED
   endif
   DOCKER_OPTIONS += -v ~/.vagrant.d/:/root/.vagrant.d/
 
+  # digital ocean
+  DOCKER_OPTIONS += -e DO_API_TOKEN=$(DO_API_TOKEN)
+
   # make status
   DOCKER_OPTIONS += -v $(shell realpath $(CLI_MK_DIR)):/kubernetes/etc
 
   # ansible
-  ANSIBLE_PATH = $(shell realpath $(PWD))
-  ifneq ("$(wildcard $(CLI_MK_DIR)/../../../ansible)","")
-    ANSIBLE_PATH = $(shell realpath $(CLI_MK_DIR)/../../../ansible)
+  ifneq ("$(wildcard roles)","")
+    NEED_ANSIBLE ?= yes
+  endif
+
+  ifdef NEED_ANSIBLE
+    ifneq ("$(wildcard $(CLI_MK_DIR)/../../../ansible)","")
+      ANSIBLE_PATH = $(shell realpath $(CLI_MK_DIR)/../../../ansible)
+      DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/ansible.cfg:/workspace/ansible.cfg
+      DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/inventory:/workspace/inventory
+      $(shell touch inventory)
+      DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/group_vars:/workspace/group_vars
+      DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/host_vars:/workspace/host_vars
+    endif
   endif
 
   # configurations
@@ -52,13 +61,6 @@ ifndef IS_CONTAINERIZED
   KUBECONFIG ?= /certificates/master/admin-kube-config
   DOCKER_OPTIONS += -e KUBECONFIG=$(KUBECONFIG)
   DOCKER_OPTIONS += -v $(KUBERNETES_CONFIG_PATH)/certificates:/certificates
-
-  ifdef NEED_ANSIBLE
-    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/ansible.cfg:/workspace/ansible.cfg
-    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/inventory:/workspace/inventory
-    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/group_vars:/workspace/group_vars
-    DOCKER_OPTIONS += -v $(ANSIBLE_PATH)/host_vars:/workspace/host_vars
-  endif
 
   CLI = $(DOCKER) run --net=host --rm -t $(DOCKER_INTERACTIVE) $(DOCKER_OPTIONS) $(KUBERNETES_TOOLS_IMAGE)
   E2E = $(DOCKER) run --net=host --rm -t $(DOCKER_INTERACTIVE) $(DOCKER_OPTIONS) $(KUBERNETES_E2E_IMAGE)
