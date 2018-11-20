@@ -14,7 +14,6 @@ tcp6       0      0 :::10250                :::*                    LISTEN
 tcp6       0      0 :::10255                :::*                    LISTEN     
 tcp6       0      0 :::10256                :::*                    LISTEN     
 tcp6       0      0 :::22                   :::*                    LISTEN     
-tcp6       0      0 :::4194                 :::*                    LISTEN     
 tcp6       0      0 :::6781                 :::*                    LISTEN     
 tcp6       0      0 :::6782                 :::*                    LISTEN     
 udp        0      0 0.0.0.0:6783            0.0.0.0:*                          
