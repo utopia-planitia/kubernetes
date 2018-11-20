@@ -1,6 +1,6 @@
 ---
 
-kubernetes_version: v1.10.2
+kubernetes_version: v1.11.4
 etcd_version:       v3.2.18
 nginx_version:      1.13.3-alpine
 
