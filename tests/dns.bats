@@ -3,7 +3,7 @@
 load test_helper
 
 @test "deploy dns jobs" {
-  run kubectl apply -f tests/kube-dns
+  run kubectl apply -f tests/dns
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 8 ]
 }
@@ -86,7 +86,7 @@ load test_helper
 }
 
 @test "undeploy dns jobs" {
-  run kubectl delete -f tests/kube-dns
+  run kubectl delete -f tests/dns
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 8 ]
 }
