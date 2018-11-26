@@ -33,6 +33,7 @@ spec:
           --apiserver-count={{ groups['masters'] | length }}
           --authorization-mode={{ authorization_mode }}
           --anonymous-auth=false
+          --insecure-port=0
           --token-auth-file=/etc/kubernetes/token-auth-file
           --audit-log-format=json
           --audit-log-maxage=15
