@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: wttr
+spec:
+  template:
+    metadata:
+      name: wttr
+    spec:
+      containers:
+      - name: curl
+        image: tutum/curl:alpine
+        command:
+          - sh
+          - -c
+          - "curl --silent wttr.in/~Kilimanjaro | grep Morning"
+      restartPolicy: Never
