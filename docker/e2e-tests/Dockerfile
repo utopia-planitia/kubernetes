@@ -1,4 +1,4 @@
-FROM gcr.io/heptio-images/kube-conformance:v1.10.0
+FROM gcr.io/heptio-images/kube-conformance:v1.11.3
 
 RUN apt-get update && \
 	apt-get install -y \
