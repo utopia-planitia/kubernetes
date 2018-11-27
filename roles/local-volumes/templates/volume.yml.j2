@@ -13,8 +13,8 @@ spec:
   #volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Recycle
-  storageClassName: local-storage
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage-{{ volume.1.labels.dedicated }}
   local:
     path: {{ path }}
   nodeAffinity:
