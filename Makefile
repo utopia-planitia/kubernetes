@@ -35,6 +35,7 @@ addons: ##@ansible deploy addons
 	                     -f addons/weave-daemonset-k8s.yaml \
 	                     -f addons/registry-mirror.yaml \
 	                     -f addons/local-storage-class.yaml \
+	                     -f addons/local-storage-class-dedicated.yaml \
 	                     -f certificates/addons/
 	$(CLI) bash etc/wait-for-addons.sh
 	$(CLI) kubectl -n kube-system delete svc kube-dns --ignore-not-found=true

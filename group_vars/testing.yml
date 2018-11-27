@@ -28,7 +28,7 @@ local_volumes_all_nodes_labeled:
     volumes:
     - name: example-dedicated-cluster
       labels:
-        dedicated: application-name
+        dedicated: application-specific-cluster-wide
       size: 100M # optional
       inodes: 5000 # optional
       count: 1 # optional
@@ -50,7 +50,7 @@ local_volumes_node_specific_labeled:
     volumes:
     - name: example-dedicated-node
       labels:
-        dedicated: application-name
+        dedicated: application-specific-each-node
       size: 5M # optional
       inodes: 50 # optional
       count: 3 # optional
