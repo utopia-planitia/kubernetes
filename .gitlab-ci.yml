@@ -110,7 +110,7 @@ bats:
     - make bats
 
 cleanup e2e ns:
-  stage: destroy
+  stage: e2e parallel
   image: ${DEV_TOOLS_IMAGE}
   script:
     - make delete-e2e-namespaces
@@ -121,18 +121,14 @@ conformance:
   image: ${E2E_IMAGE}
   retry: 2
   script:
+    - make delete-e2e-namespaces
     - make conformance
-
-port-forward:
-  stage: e2e parallel
-  image: ${E2E_IMAGE}
-  retry: 2
-  script:
     - make port-forward
 
-serial:
+serial conformance:
   stage: e2e serial
   image: ${E2E_IMAGE}
   retry: 2
   script:
+    - make delete-e2e-namespaces
     - make serial
