@@ -13,5 +13,5 @@ spec:
         command:
           - sh
           - -c
-          - "ping -c 1 8.8.8.8"
+          - "sleep 2 && ping -c 1 8.8.8.8"
       restartPolicy: Never
