@@ -10,7 +10,7 @@ load test_helper
 
 @test "check ping to google-dns" {
   until [ $(kubectl get pod --selector=job-name=google-dns --no-headers | grep Completed | wc -l) -eq 1 ]; do
-    sleep 0.5
+    sleep 1
   done
   run kubectl logs `kubectl get pod --selector=job-name=google-dns --output=jsonpath={.items..metadata.name}`
   [ $status -eq 0 ]
@@ -22,4 +22,7 @@ load test_helper
   run kubectl delete -f tests/ping
   [ $status -eq 0 ]
   [ "${#lines[@]}" -eq 1 ]
+  until [ $(kubectl get pod --selector=job-name=google-dns --no-headers | wc -l) -eq 0 ]; do
+    sleep 1
+  done
 }
