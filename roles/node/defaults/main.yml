@@ -1,13 +1,14 @@
 ---
 cni_version: v0.6.0
+cni_plugin_version: v0.7.4
 
 cni_packages:
   - url: https://github.com/containernetworking/cni/releases/download/{{ cni_version }}/cni-amd64-{{ cni_version }}.tgz
     checksum: sha256:a7f84a742c8f3a95843b3cc636444742554a4853835649ec371a07c841daebab
     local_file: /opt/cni.tar.gz
     creates: /opt/cni/bin/cnitool
-  - url: https://github.com/containernetworking/plugins/releases/download/{{ cni_version }}/cni-plugins-amd64-{{ cni_version }}.tgz
-    checksum: sha256:f04339a21b8edf76d415e7f17b620e63b8f37a76b2f706671587ab6464411f2d
+  - url: https://github.com/containernetworking/plugins/releases/download/{{ cni_plugin_version }}/cni-plugins-amd64-{{ cni_plugin_version }}.tgz
+    checksum: sha256:5f30e4c9090cbb5314452f4c2bcce48907f003b1614a7fc9615ddedbde31cf00
     local_file: /opt/cni-plugins.tar.gz
     creates: /opt/cni/bin/portmap
 
