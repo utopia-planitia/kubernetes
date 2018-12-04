@@ -45,13 +45,13 @@ function retry {
   [ $status -eq 0 ]
 }
 
-@test "http ping receiver" {
+@test "http curl receiver" {
   run retry 12 4 timeout 1 kubectl exec transmit -- curl http://receive/ 
   [ $status -eq 0 ]
 }
 
 @test "check transfer time" {
-  run retry 3 4 timeout 3 kubectl exec transmit -- curl -T file http://receive/file 
+  run retry 3 4 timeout 4 kubectl exec transmit -- curl -T file http://receive/file
   [ $status -eq 0 ]
 }
 
