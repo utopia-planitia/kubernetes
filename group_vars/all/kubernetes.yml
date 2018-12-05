@@ -26,5 +26,4 @@ nodes_count: "{{ groups['all'] | length }}"
 feature_gates: ""
 
 HCLOUD_NODES_PREFIX: "utopia"
-HCLOUD_TOKEN: "QDo0ckxLW6anXAA5SLDDnSEIYgTUbzN52FzwwNw3cmPZjG8MSEcoVfcrP10AZo1F"
-#HCLOUD_TOKEN: "{{ lookup('env','HCLOUD_TOKEN') }}"
+HCLOUD_TOKEN: "{{ lookup('env','HCLOUD_TOKEN') }}"
