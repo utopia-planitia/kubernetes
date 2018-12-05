@@ -23,6 +23,6 @@ nodes_count: "{{ groups['all'] | length }}"
 
 feature_gates: ""
 
-
-HCLOUD_NODES_PREFIX: "konz-testet"
-HCLOUD_TOKEN: "DPy5sEeuDYuCfwaVer2Z7dvEVh2pnRLfHVcgM2a3Nxh61eioNPBYiA71wE0xpqEU"
+HCLOUD_NODES_PREFIX: "utopia"
+HCLOUD_TOKEN: "QDo0ckxLW6anXAA5SLDDnSEIYgTUbzN52FzwwNw3cmPZjG8MSEcoVfcrP10AZo1F"
+#HCLOUD_TOKEN: "{{ lookup('env','HCLOUD_TOKEN') }}"
