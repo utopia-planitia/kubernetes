@@ -1,4 +1,6 @@
 ---
+ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null
+ansible_ssh_common_args: -o StrictHostKeyChecking=no
 
 kubernetes_version: v1.12.3
 etcd_version:       v3.2.18
@@ -22,3 +24,7 @@ addons_cert_dir:   "{{ playbook_dir }}/certificates/addons"
 nodes_count: "{{ groups['all'] | length }}"
 
 feature_gates: ""
+
+HCLOUD_NODES_PREFIX: "utopia"
+HCLOUD_TOKEN: "QDo0ckxLW6anXAA5SLDDnSEIYgTUbzN52FzwwNw3cmPZjG8MSEcoVfcrP10AZo1F"
+#HCLOUD_TOKEN: "{{ lookup('env','HCLOUD_TOKEN') }}"

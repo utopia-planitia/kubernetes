@@ -1,0 +1,72 @@
+---
+
+ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+ansible_ssh_user: root
+
+kubelet_max_pods: 200
+
+cluster:
+  name: konztest
+  api_domain: konztest.tailrace.io
+  users:
+    - username: ci-pipeline
+      token: 4067b41e-2f77-428d-be12-b813f3895008
+      uid: 29771728-50f2-4039-a31d-3461e42f56ab
+      groups: system:masters
+    - username: konstantin.schikarski
+      token: 960b5141-fabb-4706-9fe2-8b7c56a29365
+      uid: 87e58996-0af6-4290-9a60-6834369255ea
+      groups: system:masters
+
+local_volumes_all_nodes_managed:
+  - xfs:
+      root: /data1
+      sub_directory: /indifferent-volumes
+    volumes:
+    - name: 100M
+      size: 100M
+      inodes: 50000
+      count: 10
+    - name: 500M
+      size: 500M
+      inodes: 50000
+      count: 5
+  - xfs:
+      root: /data2
+      sub_directory: /indifferent-volumes
+    volumes:
+    - name: 100M
+      size: 100M
+      inodes: 50000
+      count: 10
+    - name: 500M
+      size: 500M
+      inodes: 50000
+      count: 5
+
+local_volumes_all_nodes_labeled:
+  - xfs:
+      name: xfs-node
+      root: /data1
+      sub_directory: /dedicated-volumes
+    volumes:
+    - name: elasticsearch
+      labels:
+        dedicated: elasticsearch
+        disk: a
+      size: 25G
+      inodes: 100000
+  - xfs:
+      name: xfs-node
+      root: /data2
+      sub_directory: /dedicated-volumes
+    volumes:
+    - name: elasticsearch
+      labels:
+        dedicated: elasticsearch
+        disk: b
+      size: 25G
+      inodes: 100000
+
+
+service_node_port_range: "80-32767"

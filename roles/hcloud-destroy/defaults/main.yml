@@ -1,0 +1,13 @@
+---
+image: ubuntu-16.04
+server_type: cx51
+location: nbg1
+servers:
+  - name: node1
+    groups: hcloud,ubuntu-1604,testing,etcds,masters
+  - name: node2
+    groups: hcloud,ubuntu-1604,testing,etcds,masters
+  - name: node3
+    groups: hcloud,ubuntu-1604,testing,etcds
+  - name: node4
+    groups: hcloud,ubuntu-1604,testing
