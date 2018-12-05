@@ -31,6 +31,10 @@
 
 
 # ensure server is running (if the server already exists)
+
+- name: wait for environment
+  wait_for: timeout=15
+  
 - name: check for running servers
   hcloud_server:
    name:
