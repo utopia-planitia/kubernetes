@@ -26,6 +26,20 @@
     - protobuf-compiler
     - python-minimal
 
+- get_url: url=https://storage.googleapis.com/golang/go1.11.2.linux-amd64.tar.gz dest=/tmp/golang.tgz
+
+- file: path=/usr/local state=directory recurse=yes
+
+- unarchive: >
+    copy=no
+    src=/tmp/golang.tgz
+    dest=/usr/local
+- file: path=/tmp/golang.tgz state=absent
+
+- template: src=etc/golang.sh dest=/etc/profile.d/golang.sh owner=root group=root mode=0644
+
+- file: src=/usr/local/go/bin/go dest=/usr/local/bin/go owner=root group=root state=link
+
 - name: Make directories
   file:
     path: "{{ item }}"
@@ -46,7 +60,7 @@
   git:
     repo: https://github.com/kubernetes-incubator/cri-o
     dest: /root/src/github.com/kubernetes-incubator/cri-o
-    version: kube-1.6.x
+    version: release-1.12
 
 - name: clone CNI
   git:
@@ -70,25 +84,26 @@
           make install && \
           make install.systemd && \
           make install.config
+
 - name: install policy.json in Ubuntu
   shell: |
           cd /root/src/github.com/kubernetes-incubator/cri-o && \
           cp test/policy.json /etc/containers/policy.json
-  when: ansible_distribution == 'Ubuntu'
 
 - name: build CNI stuff
   shell: |
           cd /root/src/github.com/containernetworking/plugins && \
-          ./build.sh && \
+          ./build_linux.sh && \
           mkdir -p /opt/cni/bin && \
           cp bin/* /opt/cni/bin/
-- name: run CRI-O with systemd cgroup manager
-  replace:
-    regexp: 'cgroupfs'
-    replace: 'systemd'
-    name: /etc/crio/crio.conf
-    backup: yes
-  when: ansible_distribution in ['Fedora', 'RedHat', 'CentOS']
+
+# - name: run CRI-O with systemd cgroup manager
+#   replace:
+#     regexp: 'cgroupfs'
+#     replace: 'systemd'
+#     name: /etc/crio/crio.conf
+#     backup: yes
+#   when: ansible_distribution in ['Fedora', 'RedHat', 'CentOS']
 
 - name: run with overlay2
   replace:
@@ -112,7 +127,7 @@
       option: default_workload_trust
       value: '"untrusted"'
       path: /etc/crio/crio.conf
-  when: runtime == "cc-oci-runtime"
+#   when: runtime == "cc-oci-runtime"
 
 - name: enable and start CRI-O
   systemd:
