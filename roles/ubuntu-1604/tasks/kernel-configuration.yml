@@ -35,3 +35,13 @@
     path: /etc/pam.d/common-session
     line: 'session required pam_limits.so'
   notify: apply kernel configuration
+
+- name: kubelet kernel default values
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: '{{ item }}'
+  with_items:
+    - "vm.overcommit_memory = 1"
+    - "kernel.panic = 10"
+    - "kernel.panic_on_oops = 1"
+  notify: apply kernel configuration
