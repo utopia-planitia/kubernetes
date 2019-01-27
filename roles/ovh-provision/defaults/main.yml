@@ -1,13 +1,13 @@
 ---
-image: Ubuntu 16.04
+image: Ubuntu 18.04
 flavor: s1-8
 region_name: SBG3
 servers:
   - name: node1
-    groups: ovh,ubuntu-1604,testing,etcds,masters
+    groups: ovh,ubuntu-1804,testing,etcds,masters
   - name: node2
-    groups: ovh,ubuntu-1604,testing,etcds,masters
+    groups: ovh,ubuntu-1804,testing,etcds,masters
   - name: node3
-    groups: ovh,ubuntu-1604,testing,etcds
+    groups: ovh,ubuntu-1804,testing,etcds
   - name: node4
-    groups: ovh,ubuntu-1604,testing
+    groups: ovh,ubuntu-1804,testing

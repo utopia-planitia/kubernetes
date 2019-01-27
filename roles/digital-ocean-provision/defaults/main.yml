@@ -1,13 +1,13 @@
 ---
-image: ubuntu-16-04-x64
+image: ubuntu-18-04-x64
 flavor: 4gb
 region_name: fra1
 servers:
   - name: node1
-    groups: digital-ocean,ubuntu-1604,testing,etcds,masters
+    groups: digital-ocean,ubuntu-1804,testing,etcds,masters
   - name: node2
-    groups: digital-ocean,ubuntu-1604,testing,etcds,masters
+    groups: digital-ocean,ubuntu-1804,testing,etcds,masters
   - name: node3
-    groups: digital-ocean,ubuntu-1604,testing,etcds
+    groups: digital-ocean,ubuntu-1804,testing,etcds
   - name: node4
-    groups: digital-ocean,ubuntu-1604,testing
+    groups: digital-ocean,ubuntu-1804,testing

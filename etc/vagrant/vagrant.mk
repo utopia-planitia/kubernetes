@@ -1,4 +1,4 @@
-export VAGRANT_OS ?= bento-16.04
+export VAGRANT_OS ?= bento-18.04
 
 .PHONY: vagrant-update-box
 vagrant-update-box: ##@vagrant download current base box image
