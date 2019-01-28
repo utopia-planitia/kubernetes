@@ -11,8 +11,9 @@
         name: master-certificates
       delegate_to: localhost
       run_once: true
-    - name: create weave certificates
+- hosts: all
+  tasks:
+    - name: create wireguard keys
       import_role:
-        name: weave-certificates
+        name: wireguard-certificates
       delegate_to: localhost
-      run_once: true

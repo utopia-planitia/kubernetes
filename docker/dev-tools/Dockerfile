@@ -40,6 +40,14 @@ RUN curl -s -L -o /usr/local/bin/cfssl		https://pkg.cfssl.org/R1.2/cfssl_linux-a
 	curl -s -L -o /usr/local/bin/cfssljson	https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 && \
 	chmod +x /usr/local/bin/cfssljson
 
+# wireguard
+RUN add-apt-repository ppa:wireguard/wireguard && \
+    apt-get update && \
+	apt-get install -y \
+		wireguard=0.0.20190123-wg1~bionic && \
+	apt-get clean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 # kubectl
 ENV KUBERNETES_VERSION v1.13.2
 RUN curl -s -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl && \
