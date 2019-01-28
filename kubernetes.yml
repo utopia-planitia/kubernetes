@@ -17,6 +17,7 @@
     - { role: disable-swap }
     - { role: docker }
     - { role: crio }
+    - { role: wireguard }
     - { role: node }
     - { role: registry-mirror }
 
