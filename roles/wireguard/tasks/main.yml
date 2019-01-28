@@ -5,7 +5,7 @@
     repo: 'ppa:wireguard/wireguard'
     update_cache: yes
 
-- name: Configure wireguard repo (Debian)
+- name: Configure wireguard repo
   blockinfile:
     path: /etc/apt/preferences.d/limit-unstable
     create: yes
