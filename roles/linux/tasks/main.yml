@@ -1,0 +1,6 @@
+---
+
+- name: install python
+  import_tasks: python.yml
+- name: configure kernel
+  import_tasks: kernel-config.yml

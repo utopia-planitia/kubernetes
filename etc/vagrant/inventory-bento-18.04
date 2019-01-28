@@ -19,12 +19,6 @@ node2
 node3
 node4
 
-[ubuntu-1804]
-node1
-node2
-node3
-node4
-
 [testing]
 node1
 node2

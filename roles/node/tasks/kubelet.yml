@@ -1,6 +1,18 @@
 
 ---
 
+- name: kubelet kernel default values
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: '{{ item }}'
+  with_items:
+    - "vm.overcommit_memory = 1"
+    - "kernel.panic = 10"
+    - "kernel.panic_on_oops = 1"
+  notify: apply kernel configuration
+
+- meta: flush_handlers
+
 - name: create directories
   file:
     path: "{{ item }}"

@@ -19,10 +19,11 @@
     - bridge
     - br_netfilter
 
+- name: install docker
+  import_tasks: install.yml
+
 - name: configure docker
   template:
     src: daemon.json.j2
     dest: /etc/docker/daemon.json
   notify: restart docker
-
-- meta: flush_handlers
