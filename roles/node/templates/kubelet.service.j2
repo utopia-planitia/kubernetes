@@ -9,6 +9,9 @@ ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
   --authentication-token-webhook=true \
   --pod-manifest-path=/etc/kubernetes/manifests \
   --register-node=true \
+  {% if inventory_hostname_short in groups['masters'] -%}
+  --node-labels=master=true \
+  {% endif -%}
   --container-runtime docker \
   --image-pull-progress-deadline=2m \
   --allow-privileged=true \
