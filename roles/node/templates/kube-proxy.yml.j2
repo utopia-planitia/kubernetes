@@ -14,6 +14,8 @@ spec:
         privileged: true
       args:
         - /usr/local/bin/kube-proxy
+        - --feature-gates={{ feature_gates }}
+        - --hostname-override={{ wireguard_private_ip }}
         - --config=/etc/kube-proxy/config
         - --logtostderr=true
       env:

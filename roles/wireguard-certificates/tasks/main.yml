@@ -1,0 +1,31 @@
+---
+
+- name: create directory
+  file:
+    path: "host_vars/{{ inventory_hostname }}"
+    state: directory
+    recurse: true
+
+- name: generate private key
+  shell: wg genkey
+  register: wireguard_genkey
+  changed_when: false
+
+- name: extract wireguard_private_key
+  set_fact:
+    wireguard_private_key: "{{ wireguard_genkey.stdout }}"
+
+- name: generate public key
+  shell: "echo {{ wireguard_private_key }} | wg pubkey"
+  register: wireguard_pubkey
+  changed_when: false
+
+- name: extract wireguard_public_key
+  set_fact:
+    wireguard_public_key: "{{ wireguard_pubkey.stdout }}"
+
+- name: remember wireguard keys
+  template:
+    src: "wireguard.yml.j2"
+    dest: "host_vars/{{ inventory_hostname }}/wireguard.yml"
+    force: false

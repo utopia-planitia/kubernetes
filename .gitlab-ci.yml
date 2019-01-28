@@ -57,6 +57,7 @@ provision:
     paths:
       - certificates
       - inventory
+      - host_vars
 
 destroy:
   stage: destroy
