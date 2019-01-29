@@ -6,6 +6,7 @@
     "{{ hostvars[host]['ansible_host'] }}",
     "{{ hostvars[host]['inventory_hostname'] }}",
     "{{ hostvars[host]['inventory_hostname_short'] }}",
+    "{{ cluster.api }}",
     {% endfor %}
     "127.0.0.1",
     "10.16.0.1",
