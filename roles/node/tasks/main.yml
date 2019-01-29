@@ -8,5 +8,3 @@
   import_tasks: kube-proxy.yml
 - name: import cni definition
   import_tasks: cni.yml
-- name: import weave definition
-  import_tasks: weave.yml
