@@ -11,8 +11,3 @@
         name: master-certificates
       delegate_to: localhost
       run_once: true
-    - name: create weave certificates
-      import_role:
-        name: weave-certificates
-      delegate_to: localhost
-      run_once: true

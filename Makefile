@@ -32,7 +32,6 @@ kubernetes: ##@ansible deploy kubernetes
 .PHONY: addons
 addons: ##@ansible deploy addons
 	$(CLI) kubectl apply -f addons/core-dns.yaml \
-	                     -f addons/weave-daemonset-k8s.yaml \
 	                     -f addons/registry-mirror.yaml \
 	                     -f addons/local-storage-class.yaml \
 	                     -f addons/local-storage-class-dedicated.yaml \
