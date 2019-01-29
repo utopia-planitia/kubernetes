@@ -38,12 +38,12 @@
     dest: /etc/kubernetes/audit-policy.yaml
 
 - name: checksum of etcd certificates
-  local_action: shell cd {{ etcd_cert_dir }}; md5sum ca.pem server.pem server-key.pem member.pem member-key.pem | md5sum | head -c 32
+  local_action: shell cd {{ etcd_cert_dir }}; md5sum etcd-ca.pem etcd.pem etcd-key.pem | md5sum | head -c 32
   register: etcd_cert_hashsum
   changed_when: false
 
 - name: checksum of master certificates
-  local_action: shell cd {{ master_cert_dir }}; md5sum ca.pem server.pem server-key.pem member.pem member-key.pem | md5sum | head -c 32
+  local_action: shell cd {{ master_cert_dir }}; md5sum kubernetes-ca.pem kubernetes-client-ca.pem master.pem master-key.pem | md5sum | head -c 32
   register: master_cert_hashsum
   changed_when: false
 
