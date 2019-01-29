@@ -42,19 +42,6 @@ $4 == "0.0.0.0" && $5 == "10254" { next }
 # insecure : raw http & no password
 $4 == "0.0.0.0" && $5 == "18080" { next }
 
-# 6783 weave internode port
-# shared secret
-$5 == "6783" { next }
-# 6784 weave management port
-# insecure : raw http & no password
-$4 == "127.0.0.1" && $5 == "6784" { next }
-# 6782 weave metrics
-# insecure : raw http & no password
-$5 == "6782" { next }
-# 6781 network policy controller, metrics?
-# insecure : raw http & no password
-$5 == "6781" { next }
-
 # 8081 coredns health
 # insecure : raw http & no password
 $4 == dns_ip && $5 == "8081" { next }

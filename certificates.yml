@@ -17,3 +17,4 @@
       import_role:
         name: wireguard-certificates
       delegate_to: localhost
+

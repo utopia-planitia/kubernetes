@@ -1,8 +1,4 @@
 
-.PHONY: update-weave
-update-weave: ##@development update weave
-	$(CLI) bash ./etc/update-weave.sh
-
 .PHONY: update-metrics-server
 update-metrics-server: ##@update update weave
 	mkdir -p addons/metrics-server
