@@ -36,6 +36,7 @@ e2e-tests image:
 lint:
   stage: provision
   image: ${DEV_TOOLS_IMAGE}
+  allow_failure: true
   script:
     - ansible-lint *.yml roles
 
