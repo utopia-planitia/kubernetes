@@ -54,8 +54,8 @@ ifndef IS_CONTAINERIZED
 
   # configurations
   KUBERNETES_CONFIG_PATH = $(shell realpath $(CLI_MK_DIR)/..)
-  ifneq ("$(wildcard $(CLI_MK_DIR)/../../../configurations)","")
-    KUBERNETES_CONFIG_PATH = $(shell realpath $(CLI_MK_DIR)/../../../configurations/kubernetes)
+  ifneq ("$(wildcard $(CLI_MK_DIR)/../../../ansible)","")
+    KUBERNETES_CONFIG_PATH = $(shell realpath $(CLI_MK_DIR)/../../../)/configurations/kubernetes
   endif
 
   KUBECONFIG ?= /certificates/master/admin-kube-config
