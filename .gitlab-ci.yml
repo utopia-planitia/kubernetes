@@ -84,7 +84,6 @@ deploy:
     - make deploy
   artifacts:
     paths:
-      - addons/labeled-volumes
       - certificates/users
 
 redeploy:
