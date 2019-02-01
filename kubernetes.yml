@@ -7,13 +7,6 @@
 - hosts: all
   roles:
     - { role: linux }
-
-- hosts: testing
-  roles:
-    - { role: xfs-fake-filesystem }
-
-- hosts: all
-  roles:
     - { role: disable-swap }
     - { role: docker }
     - { role: node }
