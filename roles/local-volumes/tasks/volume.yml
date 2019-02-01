@@ -1,6 +1,0 @@
-
-- name: create quota
-  include_tasks: "quota.yml"
-  with_sequence: "start=1 end={{ volume.1.count | default(1) | int }} format=%03i"
-  loop_control:
-    loop_var: volume_count

@@ -84,7 +84,6 @@ deploy:
     - make deploy
   artifacts:
     paths:
-      - addons/labeled-volumes
       - certificates/users
 
 redeploy:
@@ -97,7 +96,7 @@ redeploy:
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa.pub
     - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/${CI_PROVISION}/id_rsa.pub
     - make deploy | tee deploy.log
-    - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 8
+    - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 4
 
 bats:
   stage: tests
