@@ -1,7 +1,13 @@
 [Unit]
 Description=Kubelet
+{% if inventory_hostname_short in groups['docker'] -%}
 After=docker.service
 Requires=docker.service
+{% endif -%}
+{% if inventory_hostname_short in groups['crio'] -%}
+After=crio.service
+Requires=crio.service
+{% endif -%}
 
 [Service]
 ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
@@ -9,10 +15,15 @@ ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
   --authentication-token-webhook=true \
   --pod-manifest-path=/etc/kubernetes/manifests \
   --register-node=true \
-  {% if inventory_hostname_short in groups['masters'] -%}
+  {% if inventory_hostname_short in groups['docker'] -%}
   --node-labels=master=true \
   {% endif -%}
-  --container-runtime docker \
+  {% if inventory_hostname_short in groups['crio'] -%}
+  --container-runtime=remote \
+  --container-runtime-endpoint=unix:///var/run/crio/crio.sock \
+  --runtime-request-timeout=10m \
+  --cgroup-driver=systemd \
+  {% endif -%}
   --image-pull-progress-deadline=2m \
   --allow-privileged=true \
   --cluster-dns=192.168.0.3 \

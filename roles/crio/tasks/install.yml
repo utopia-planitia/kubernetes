@@ -20,4 +20,12 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - containernetworking-plugins
+    - cri-o-1.13
+    - podman
+    - iproute2
+  notify: restart crio
+
+- name: install crictl
+  command: podman run --rm -v /usr/local/bin:/go/bin golang:1.11.5 go get -v -u github.com/kubernetes-incubator/cri-tools/cmd/crictl
+  args:
+    creates: /usr/local/bin/crictl

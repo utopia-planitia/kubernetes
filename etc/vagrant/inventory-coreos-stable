@@ -13,19 +13,25 @@ node1
 node2
 node3
 
+[crio]
+node1
+node2
+node3
+node4
+
 [vagrant]
 node1
 node2
 node3
 node4
 
-[coreos]
+[testing]
 node1
 node2
 node3
 node4
 
-[testing]
+[coreos]
 node1
 node2
 node3

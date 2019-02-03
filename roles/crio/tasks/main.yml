@@ -1,0 +1,41 @@
+---
+
+- name: load kernel modules into runtime
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - overlay
+    - br_netfilter
+
+- name: load kernel modules at bootup
+  lineinfile:
+    path: /etc/modules
+    regexp: "{{ item }}"
+    line: "{{ item }}"
+  with_items:
+    - overlay
+    - br_netfilter
+
+- name: install crio
+  import_tasks: install.yml
+
+- name: configure crio
+  template:
+    src: registries.conf
+    dest: /etc/containers/registries.conf
+  notify: restart crio
+
+- meta: flush_handlers
+
+- name: start crio
+  systemd:
+    name: crio
+    state: started
+    enabled: yes
+
+- name: set CONTAINER_RUNTIME_ENDPOINT for crictl
+  lineinfile:
+    path: /root/.profile
+    regexp: "CONTAINER_RUNTIME_ENDPOINT"
+    line: "CONTAINER_RUNTIME_ENDPOINT=unix:///var/run/crio/crio.sock"

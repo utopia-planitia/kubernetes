@@ -4,10 +4,10 @@ flavor: 4gb
 region_name: fra1
 servers:
   - name: node1
-    groups: digital-ocean,testing,etcds,masters
+    groups: digital-ocean,crio,testing,etcds,masters
   - name: node2
-    groups: digital-ocean,testing,etcds,masters
+    groups: digital-ocean,crio,testing,etcds,masters
   - name: node3
-    groups: digital-ocean,testing,etcds
+    groups: digital-ocean,crio,testing,etcds
   - name: node4
-    groups: digital-ocean,testing
+    groups: digital-ocean,crio,testing
