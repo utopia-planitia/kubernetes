@@ -1,7 +1,13 @@
 [Unit]
 Description=Kubelet
+{% if inventory_hostname_short in groups['docker'] -%}
 After=docker.service
 Requires=docker.service
+{% endif -%}
+{% if inventory_hostname_short in groups['crio'] -%}
+After=crio.service
+Requires=crio.service
+{% endif -%}
 
 [Service]
 ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
@@ -14,7 +20,15 @@ ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
   {% else %}
   --node-labels=node-role.kubernetes.io/worker=worker \
   {% endif -%}
+  {% if inventory_hostname_short in groups['docker'] -%}
   --container-runtime docker \
+  {% endif -%}
+  {% if inventory_hostname_short in groups['crio'] -%}
+  --container-runtime=remote \
+  --container-runtime-endpoint=unix:///var/run/crio/crio.sock \
+  --runtime-request-timeout=10m \
+  --cgroup-driver=systemd \
+  {% endif -%}
   --image-pull-progress-deadline=2m \
   --allow-privileged=true \
   --cluster-dns=10.16.0.3 \

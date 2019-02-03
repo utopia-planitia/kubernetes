@@ -13,6 +13,14 @@ node1
 node2
 node3
 
+[docker]
+
+[crio]
+node1
+node2
+node3
+node4
+
 [vagrant]
 node1
 node2

@@ -16,3 +16,7 @@
 
 - name: apply kernel configuration
   command: sysctl -p
+
+- name: update repositories
+  apt:
+    update_cache: yes

@@ -3,8 +3,18 @@
 {{ host }} ansible_host={{ hostvars[host]['ansible_host'] }}
 {% endfor %}
 
+[docker]
+{% for host in groups['docker'] %}
+{{ host }} ansible_host={{ hostvars[host]['ansible_host'] }}
+{% endfor %}
+
+[crio]
+{% for host in groups['crio'] %}
+{{ host }} ansible_host={{ hostvars[host]['ansible_host'] }}
+{% endfor %}
+
 {% for group in groups %}
-{% if group not in ['ungrouped', 'all'] %}
+{% if group not in ['ungrouped', 'all', 'docker', 'crio'] %}
 [{{ group }}] 
 {% for host in groups[group] %}
 {{ host }}
