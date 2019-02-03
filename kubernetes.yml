@@ -9,6 +9,7 @@
     - { role: linux }
     - { role: disable-swap }
     - { role: docker }
+    - { role: crio }
     - { role: node }
     - { role: registry-mirror }
 
