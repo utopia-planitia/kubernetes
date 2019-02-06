@@ -1,56 +1,38 @@
 ---
-- name: Install wireguard ppa
+- name: add ppa
   apt_repository:
-    filename: unstable-wireguard
+    filename: wireguard
     repo: 'ppa:wireguard/wireguard'
     update_cache: yes
 
-- name: Configure wireguard repo
-  blockinfile:
-    path: /etc/apt/preferences.d/limit-unstable
-    create: yes
-    block: |-
-      Package: *
-      Pin: release a=unstable
-      Pin-Priority: 150
-
-- name: Install dependencies
-  apt:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - linux-headers-{{ ansible_kernel }}
-    - software-properties-common
-
-- name: Enable net.ipv4.ip_forward
-  sysctl:
-    name: net.ipv4.ip_forward
-    value: 1
-    reload: yes
-    state: present
-
-  - name: Install wireguard
+- name: install package
   apt:
     name: wireguard
     state: present
+# ensure fixed version
 
+# do not recreate key with every ansible play
 - name: Generate private keys
   shell: wg genkey
   register: wireguard_genkey
   changed_when: false
 
-- set_fact:
-    private_key: "{{ wireguard_genkey.stdout }}"
+- name: remember wireguard_private_key
+  set_fact:
+    wireguard_private_key: "{{ wireguard_genkey.stdout }}"
 
 - name: Generate public keys
-  shell: "echo {{ private_key }} | wg pubkey"
+  shell: "echo {{ wireguard_private_key }} | wg pubkey"
   register: wireguard_pubkey
   changed_when: false
 
-- set_fact:
-    public_key: "{{ wireguard_pubkey.stdout }}"
+- name: remember wireguard_public_key
+  set_fact:
+    wireguard_public_key: "{{ wireguard_pubkey.stdout }}"
 
-- set_fact: private_ip="10.0.1.{{ groups['wireguard'].index(inventory_hostname) + 1 }}"
+- name: remember wireguard_private_ip
+  set_fact:
+    wireguard_private_ip: "10.0.1.{{ groups['all'].index(inventory_hostname) + 1 }}"
 
 - name: Create wireguard directory
   file:
@@ -64,8 +46,9 @@
     owner: root
     group: root
     mode: 600
+# TODO notify wg0 restart
 
-- name: Starting wireguard
+- name: starting wireguard
   systemd:
     name: "wg-quick@wg0"
     enabled: yes
