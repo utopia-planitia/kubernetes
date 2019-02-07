@@ -4,7 +4,5 @@
   import_tasks: etc-hosts.yml
 - name: import kubelet definition
   import_tasks: kubelet.yml
-- name: import kube-proxy definition
-  import_tasks: kube-proxy.yml
 - name: import cni definition
   import_tasks: cni.yml
