@@ -45,22 +45,6 @@
     chdir: "{{ master_cert_dir }}"
     creates: admin-kube-config
 
-- name: set up kube-proxy certificate
-  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes {{ master_config_dir }}/kube-proxy.json | cfssljson -bare kube-proxy
-  args:
-    chdir: "{{ master_cert_dir }}"
-    creates: "kube-proxy-key.pem"
-
-- name: set up kube-proxy file
-  shell: |
-    kubectl --kubeconfig=kube-proxy-config config set-cluster default --server=https://127.0.0.1:6443 --embed-certs=true --certificate-authority=ca.pem &&
-    kubectl --kubeconfig=kube-proxy-config config set-credentials default --embed-certs=true --client-certificate=admin.pem --client-key=admin-key.pem &&
-    kubectl --kubeconfig=kube-proxy-config config set-context default --cluster=default --user=default &&
-    kubectl --kubeconfig=kube-proxy-config config use-context default
-  args:
-    chdir: "{{ master_cert_dir }}"
-    creates: kube-proxy-config
-
 - name: set up nodes certificate
   shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes node-{{ item }}.json | cfssljson -bare node-{{ item }}
   args:
