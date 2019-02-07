@@ -4,7 +4,6 @@ DOCKER_OPTIONS += -v $(KUBERNETES_CONFIG_PATH)/certificates:/workspace/certifica
 include ./etc/help.mk
 include ./etc/cli.mk
 include ./etc/tests.mk
-include ./etc/update.mk
 include ./etc/ovh.mk
 include ./etc/digital-ocean.mk
 include ./etc/vagrant/vagrant.mk
