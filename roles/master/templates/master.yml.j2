@@ -77,6 +77,8 @@ spec:
         - --address=127.0.0.1
         - --port=10252
         - --feature-gates={{ feature_gates }}
+        - --allocate-node-cidrs=true
+        - --cluster-cidr=10.1.0.0/16
       env:
         - name: CONFIG_HASH
           value: {{ master_config_hash }}
