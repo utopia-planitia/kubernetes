@@ -15,8 +15,11 @@ ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
   --authentication-token-webhook=true \
   --pod-manifest-path=/etc/kubernetes/manifests \
   --register-node=true \
-  {% if inventory_hostname_short in groups['docker'] -%}
+  {% if inventory_hostname_short in groups['masters'] -%}
   --node-labels=master=true \
+  {% endif -%}
+  {% if inventory_hostname_short in groups['docker'] -%}
+  --container-runtime docker \
   {% endif -%}
   {% if inventory_hostname_short in groups['crio'] -%}
   --container-runtime=remote \
