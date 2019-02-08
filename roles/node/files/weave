@@ -3,7 +3,7 @@ set -e
 
 [ -n "$WEAVE_DEBUG" ] && set -x
 
-SCRIPT_VERSION="2.4.1"
+SCRIPT_VERSION="2.5.1"
 IMAGE_VERSION=latest
 [ "$SCRIPT_VERSION" = "unreleased" ] || IMAGE_VERSION=$SCRIPT_VERSION
 IMAGE_VERSION=${WEAVE_VERSION:-$IMAGE_VERSION}
@@ -69,7 +69,7 @@ weave attach        [--without-dns] [--rewrite-hosts] [--no-multicast-route]
                       [<addr> ...] <container_id>
       detach        [<addr> ...] <container_id>
 
-weave expose        [<addr> ...] [-h <fqdn>]
+weave expose        [<addr> ...] [-h <fqdn>] [--without-masquerade]
       hide          [<addr> ...]
 
 weave dns-add       [<ip_address> ...] <container_id> [-h <fqdn>] |
@@ -430,9 +430,10 @@ EOF
 }
 
 expose_ip() {
+    [ -z $WITHOUT_MASQUERADE ] || skipNAT="?skipNAT=true"
     ipam_cidrs allocate_no_check_alive weave:expose $CIDR_ARGS
     for CIDR in $ALL_CIDRS ; do
-        call_weave "POST" "/expose/$CIDR"
+        call_weave "POST" "/expose/$CIDR$skipNAT"
 
         [ -z "$FQDN" ] || when_weave_running put_dns_fqdn_no_check_alive weave:expose $FQDN $CIDR
     done
@@ -729,9 +730,20 @@ upgrade_cni_plugin() {
 create_cni_config() {
     cat >"$1" <<EOF
 {
+    "cniVersion": "0.3.0",
     "name": "weave",
-    "type": "weave-net",
-    "hairpinMode": $2
+    "plugins": [
+        {
+            "name": "weave",
+            "type": "weave-net",
+            "hairpinMode": $2
+        },
+        {
+            "type": "portmap",
+            "capabilities": {"portMappings": true},
+            "snat": true
+        }
+    ]
 }
 EOF
 }
@@ -742,8 +754,13 @@ setup_cni() {
     if install_cni_plugin $CNI_PLUGIN_DIR ; then
         upgrade_cni_plugin $CNI_PLUGIN_DIR
     fi
-    if [ -d $HOST_ROOT/etc/cni/net.d -a ! -f $HOST_ROOT/etc/cni/net.d/10-weave.conf ] ; then
-        create_cni_config $HOST_ROOT/etc/cni/net.d/10-weave.conf $HAIRPIN_MODE
+
+    # Weave will use .conflist for versions > 2.4.0. So in case of upgrade of old
+    # clusters with Weave version <= 2.4.0 remove existing 10-weave.conf
+    rm -f $HOST_ROOT/etc/cni/net.d/10-weave.conf
+
+    if [ -d $HOST_ROOT/etc/cni/net.d -a ! -f $HOST_ROOT/etc/cni/net.d/10-weave.conflist ] ; then
+        create_cni_config $HOST_ROOT/etc/cni/net.d/10-weave.conflist $HAIRPIN_MODE
     fi
 }
 
@@ -1475,14 +1492,25 @@ case "$COMMAND" in
         dig @$DOCKER_BRIDGE_IP +short $1
         ;;
     expose)
+        WITHOUT_MASQUERADE=
+        FQDN=
         collect_cidr_args "$@"
         shift $CIDR_ARG_COUNT
-        if [ $# -eq 0 ] ; then
-            FQDN=""
-        else
-            [ $# -eq 2 -a "$1" = "-h" ] || usage
-            FQDN="$2"
-        fi
+        while [ $# -gt 0 ]; do
+            case "$1" in
+                -h)
+                    [ -z $FQDN ] && FQDN=$2 && shift || usage
+                    ;;
+                --without-masquerade)
+                    WITHOUT_MASQUERADE=1
+                    ;;
+                *)
+                    break
+                    ;;
+            esac
+            shift
+        done
+        [ $# -eq 0 ] || usage
         expose_ip
         show_addrs $ALL_CIDRS
         ;;
