@@ -16,7 +16,9 @@ ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
   --pod-manifest-path=/etc/kubernetes/manifests \
   --register-node=true \
   {% if inventory_hostname_short in groups['masters'] -%}
-  --node-labels=master=true \
+  --node-labels=node-role.kubernetes.io/worker=worker,node-role.kubernetes.io/master=master \
+  {% else %}
+  --node-labels=node-role.kubernetes.io/worker=worker \
   {% endif -%}
   {% if inventory_hostname_short in groups['docker'] -%}
   --container-runtime docker \
