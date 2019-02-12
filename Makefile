@@ -32,6 +32,7 @@ addons: ##@ansible deploy addons
 	$(CLI) kubectl apply -f addons/core-dns.yaml \
 	                     -f addons/weave-daemonset-k8s.yaml \
 	                     -f addons/registry-mirror.yaml \
+	                     -f addons/metrics-server/ \
 	                     -f certificates/addons/
 	$(CLI) bash etc/wait-for-addons.sh
 	$(CLI) kubectl -n kube-system delete svc kube-dns --ignore-not-found=true

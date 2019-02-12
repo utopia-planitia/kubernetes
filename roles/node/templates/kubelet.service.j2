@@ -25,7 +25,9 @@ ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
   {% endif -%}
   {% if inventory_hostname_short in groups['crio'] -%}
   --container-runtime=remote \
-  --container-runtime-endpoint=unix:///var/run/crio/crio.sock \
+  {# without unix:// https://github.com/kubernetes/kubernetes/issues/71712#issuecomment-453971242
+     1.14 should contain the fix #}
+  --container-runtime-endpoint=/var/run/crio/crio.sock \
   --runtime-request-timeout=10m \
   --cgroup-driver=systemd \
   {% endif -%}
