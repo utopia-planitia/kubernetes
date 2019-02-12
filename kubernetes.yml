@@ -12,9 +12,18 @@
   roles:
     - { role: linux }
     - { role: disable-swap }
+
+- hosts: docker
+  roles:
     - { role: docker }
-    - { role: wireguard }
+
+- hosts: crio
+  roles:
     - { role: crio }
+
+- hosts: all
+  roles:
+    - { role: wireguard }
     - { role: node }
     - { role: registry-mirror }
 
