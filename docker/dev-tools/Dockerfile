@@ -49,7 +49,7 @@ RUN add-apt-repository ppa:wireguard/wireguard && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # kubectl
-ENV KUBERNETES_VERSION v1.13.2
+ENV KUBERNETES_VERSION v1.13.3
 RUN curl -s -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl && \
 	chmod +x /usr/local/bin/kubectl && \
 	echo "source <(kubectl completion bash)" >> ~/.bashrc
