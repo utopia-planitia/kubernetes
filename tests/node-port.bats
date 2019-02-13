@@ -24,27 +24,6 @@ load test_helper
   [ $status -eq 0 ]
 }
 
-@test "verify kubernetes version node2" {
-  IP=`grep -o '2 ansible_host=[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' inventory | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
-  PORT=`kubectl get svc -n nginx-test -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'`
-  run curl --fail http://${IP}:${PORT}/
-  [ $status -eq 0 ]
-}
-
-@test "verify kubernetes version node3" {
-  IP=`grep -o '3 ansible_host=[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' inventory | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
-  PORT=`kubectl get svc -n nginx-test -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'`
-  run curl --fail http://${IP}:${PORT}/
-  [ $status -eq 0 ]
-}
-
-@test "verify kubernetes version node4" {
-  IP=`grep -o '4 ansible_host=[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' inventory | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
-  PORT=`kubectl get svc -n nginx-test -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'`
-  run curl --fail http://${IP}:${PORT}/
-  [ $status -eq 0 ]
-}
-
 @test "undeploy nginx with node port service" {
   run kubectl delete -f tests/node-port
   [ $status -eq 0 ]
