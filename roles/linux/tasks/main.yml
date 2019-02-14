@@ -4,3 +4,5 @@
   import_tasks: python.yml
 - name: configure kernel
   import_tasks: kernel-config.yml
+- name: setup dns
+  import_tasks: disable-systemd-resolved.yml
