@@ -1,0 +1,5 @@
+
+{% for dnsserver in dns.servers %}
+nameserver {{ dnsserver }}
+{% endfor %}
+options edns0
