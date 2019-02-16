@@ -1,10 +1,4 @@
 ---
-- name: install apt-transport-https
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - apt-transport-https
 
 - name: add projectatomic PPA repo
   apt_repository:

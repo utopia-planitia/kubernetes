@@ -1,0 +1,9 @@
+---
+
+- name: install ppa management
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - software-properties-common

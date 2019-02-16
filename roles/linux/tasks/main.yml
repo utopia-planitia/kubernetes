@@ -6,3 +6,5 @@
   import_tasks: kernel-config.yml
 - name: setup dns
   import_tasks: disable-systemd-resolved.yml
+- name: enable use of ppa
+  import_tasks: enable-ppa.yml
