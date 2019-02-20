@@ -3,12 +3,16 @@ kind: ServiceAccount
 metadata:
   name: coredns
   namespace: kube-system
+  labels:
+      kubernetes.io/cluster-service: "true"
+      addonmanager.kubernetes.io/mode: Reconcile
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
     kubernetes.io/bootstrapping: rbac-defaults
+    addonmanager.kubernetes.io/mode: Reconcile
   name: system:coredns
 rules:
 - apiGroups:
@@ -21,14 +25,21 @@ rules:
   verbs:
   - list
   - watch
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - get
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   annotations:
     rbac.authorization.kubernetes.io/autoupdate: "true"
   labels:
     kubernetes.io/bootstrapping: rbac-defaults
+    addonmanager.kubernetes.io/mode: EnsureExists
   name: system:coredns
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -44,53 +55,24 @@ kind: ConfigMap
 metadata:
   name: coredns
   namespace: kube-system
+  labels:
+      addonmanager.kubernetes.io/mode: EnsureExists
 data:
   Corefile: |
     .:53 {
         errors
-        bind 192.168.0.3
-        health 192.168.0.3:8081
+        health
         kubernetes cluster.local in-addr.arpa ip6.arpa {
-          pods insecure
-          upstream
-          fallthrough in-addr.arpa ip6.arpa
+            pods insecure
+            upstream
+            fallthrough in-addr.arpa ip6.arpa
         }
-        prometheus 192.168.0.3:9154
-        proxy . /etc/resolv.conf
+        prometheus :9153
+        forward . /etc/resolv.conf
         cache 30
         loop
         reload
         loadbalance
-    }
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: coredns-nginx
-  namespace: kube-system
-data:
-  nginx.conf: |
-    user  nginx;
-    worker_processes  1;
-
-    error_log  /var/log/nginx/error.log warn;
-    pid        /var/run/nginx.pid;
-
-    events {
-        worker_connections  1024;
-    }
-
-    stream {
-        server {
-            listen     9153;
-            proxy_pass 192.168.0.3:9154;
-            allow 10.0.0.0/8;
-            allow 172.16.0.0/12;
-            allow 192.168.0.0/16;
-            allow 127.0.0.0/8;
-            allow 169.254.0.0/16;
-            deny all;
-        }
     }
 ---
 apiVersion: apps/v1
@@ -100,7 +82,14 @@ metadata:
   namespace: kube-system
   labels:
     k8s-app: kube-dns
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+    kubernetes.io/name: "CoreDNS"
 spec:
+  # replicas: not specified here:
+  # 1. In order to make Addon Manager do not reconcile this replicas parameter.
+  # 2. Default is 1.
+  # 3. Will be tuned in real time if DNS horizontal auto-scaling is turned on.
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
@@ -112,26 +101,19 @@ spec:
     metadata:
       labels:
         k8s-app: kube-dns
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
     spec:
+      priorityClassName: system-cluster-critical
       serviceAccountName: coredns
       tolerations:
-        - key: node-role.kubernetes.io/master
-          effect: NoSchedule
         - key: "CriticalAddonsOnly"
           operator: "Exists"
-      initContainers:
-      - name: create-network-interface
-        image: alpine:3.7
-        command: [ "ifconfig", "lo:0", "192.168.0.3", "up" ]
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            add:
-            - all
-          readOnlyRootFilesystem: true
+      nodeSelector:
+        beta.kubernetes.io/os: linux
       containers:
       - name: coredns
-        image: coredns/coredns:1.2.2
+        image: k8s.gcr.io/coredns:1.3.1
         imagePullPolicy: IfNotPresent
         resources:
           limits:
@@ -151,6 +133,23 @@ spec:
         - containerPort: 53
           name: dns-tcp
           protocol: TCP
+        - containerPort: 9153
+          name: metrics
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -159,41 +158,6 @@ spec:
             drop:
             - all
           readOnlyRootFilesystem: true
-        livenessProbe:
-          httpGet:
-            path: /health
-            host: 192.168.0.3
-            port: 8081
-            scheme: HTTP
-          initialDelaySeconds: 60
-          timeoutSeconds: 5
-          successThreshold: 1
-          failureThreshold: 5
-      # This is needed until coredns does support ACL, allow, deny or filewalling.
-      - name: forwarder
-        image: nginx:1.13.3-alpine
-        resources:
-          requests:
-            cpu: 100m
-            memory: 50Mi
-          limits:
-            cpu: 100m
-            memory: 50Mi
-        volumeMounts:
-          - name: config
-            mountPath: /etc/nginx/
-        ports:
-        - containerPort: 9153
-          name: metrics
-          protocol: TCP
-        livenessProbe:
-          tcpSocket:
-            port: 9153
-          initialDelaySeconds: 60
-          timeoutSeconds: 5
-          successThreshold: 1
-          failureThreshold: 5
-      hostNetwork: true
       dnsPolicy: Default
       volumes:
         - name: config-volume
@@ -202,17 +166,11 @@ spec:
             items:
             - key: Corefile
               path: Corefile
-        - name: config
-          configMap:
-            name: coredns-nginx
-            items:
-            - key: nginx.conf
-              path: nginx.conf
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: core-dns
+  name: kube-dns
   namespace: kube-system
   annotations:
     prometheus.io/port: "9153"
@@ -220,14 +178,19 @@ metadata:
   labels:
     k8s-app: kube-dns
     kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
     kubernetes.io/name: "CoreDNS"
 spec:
   selector:
     k8s-app: kube-dns
+  clusterIP: 10.16.0.3
   ports:
   - name: dns
     port: 53
     protocol: UDP
   - name: dns-tcp
     port: 53
+    protocol: TCP
+  - name: metrics
+    port: 9153
     protocol: TCP
