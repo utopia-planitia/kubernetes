@@ -34,7 +34,6 @@ addons: ##@ansible deploy addons
 	                     -f addons/registry-mirror.yaml \
 	                     -f addons/metrics-server/
 	$(CLI) bash etc/wait-for-addons.sh
-	$(CLI) kubectl -n kube-system delete svc kube-dns --ignore-not-found=true
 
 .PHONY: restart
 restart: ##@ansible restart kubelet & docker

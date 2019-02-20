@@ -3,11 +3,6 @@
 
 # until [ $(./network-test.sh | wc -l) -ge 17 ]; do date; time ./update-snapshots.sh; done; ./network-test.sh
 
-BEGIN {
-# tcp        0      0 192.168.0.3 57868       192.168.0.3 8081        TIME_WAIT   -
-dns_ip="192.168.0.3"
-}
-
 ## icinga ntp in sync check
 #($1 == "udp" || $1 == "udp6") && \
 #$4 == "0.0.0.0" && $5 >= 32769 && $5 <= 65535 && \
@@ -54,19 +49,6 @@ $5 == "6782" { next }
 # 6781 network policy controller, metrics?
 # insecure : raw http & no password
 $5 == "6781" { next }
-
-# 8081 coredns health
-# insecure : raw http & no password
-$4 == dns_ip && $5 == "8081" { next }
-#   53 coredns dns
-# insecure : raw dns
-$4 == dns_ip && $5 == "53" { next }
-# 9154 coredns metrics
-# insecure : raw http & no password
-$4 == dns_ip && $5 == "9154" { next }
-# 9153 coredns metrics access controlled
-# insecure : raw http & no password
-$4 == "0.0.0.0" && $5 == "9153" { next }
 
 ## apiserver
 ## mTLS
