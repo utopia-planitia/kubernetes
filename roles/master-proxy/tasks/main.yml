@@ -7,10 +7,16 @@
     recurse: true
 
 - name: create master-proxy config
-  template: src=nginx.conf.j2 dest=/etc/master-proxy/nginx.conf
+  template:
+    src: nginx.conf.j2
+    dest: /etc/master-proxy/nginx.conf
 
 - name: checksum of master certificates
-  shell: md5sum /etc/master-proxy/nginx.conf | head -c 32
+  shell: |
+    set -euo pipefail
+    md5sum /etc/master-proxy/nginx.conf | head -c 32
+  args:
+    executable: /bin/bash
   register: master_proxy_config_hashsum
   changed_when: false
 

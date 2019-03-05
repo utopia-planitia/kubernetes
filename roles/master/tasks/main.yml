@@ -38,28 +38,62 @@
     dest: /etc/kubernetes/audit-policy.yaml
 
 - name: checksum of etcd certificates
-  local_action: shell cd {{ etcd_cert_dir }}; md5sum etcd-ca.pem etcd.pem etcd-key.pem | md5sum | head -c 32
+  shell: |
+    set -euo pipefail
+    cd /etc/kubernetes/ssl/
+    md5sum etcd-ca.pem etcd.pem etcd-key.pem | md5sum | head -c 32
+  args:
+    executable: /bin/bash
   register: etcd_cert_hashsum
   changed_when: false
 
 - name: checksum of master certificates
-  local_action: shell cd {{ master_cert_dir }}; md5sum kubernetes-ca.pem kubernetes-client-ca.pem master.pem master-key.pem | md5sum | head -c 32
+  shell: |
+    set -euo pipefail
+    cd /etc/kubernetes/ssl/
+    md5sum kubernetes-ca.pem kubernetes-client-ca.pem master.pem master-key.pem | md5sum | head -c 32
+  args:
+    executable: /bin/bash
   register: master_cert_hashsum
   changed_when: false
 
 - name: checksum of token-auth-file
-  action: shell md5sum /etc/kubernetes/token-auth-file | head -c 32
+  shell: |
+    set -euo pipefail
+    md5sum /etc/kubernetes/token-auth-file | head -c 32
+  args:
+    executable: /bin/bash
   register: token_auth_file_hashsum
   changed_when: false
 
 - name: checksum of audit-policy
-  action: shell md5sum /etc/kubernetes/audit-policy.yaml | head -c 32
+  shell: |
+    set -euo pipefail
+    md5sum /etc/kubernetes/audit-policy.yaml | head -c 32
+  args:
+    executable: /bin/bash
   register: audit_policy_file_hashsum
   changed_when: false
 
 - name: "set master_config_hash variable"
   set_fact:
-    master_config_hash: "{{ master_cert_hashsum.stdout }}-{{ etcd_cert_hashsum.stdout }}-{{ token_auth_file_hashsum.stdout }}-{{ audit_policy_file_hashsum.stdout }}"
+    master_cert_hash: "{{ master_cert_hashsum.stdout }}"
+
+- name: "set etcd_cert_hashsum variable"
+  set_fact:
+    etcd_cert_hash: "{{ etcd_cert_hashsum.stdout }}"
+
+- name: "set token_auth_file_hashsum variable"
+  set_fact:
+    token_auth_file_hash: "{{ token_auth_file_hashsum.stdout }}"
+
+- name: "set audit_policy_file_hashsum variable"
+  set_fact:
+    audit_policy_file_hash: "{{ audit_policy_file_hashsum.stdout }}"
+
+- name: "set master_config_hash variable"
+  set_fact:
+    master_config_hash: "{{ master_cert_hash }}-{{ etcd_cert_hash }}-{{ token_auth_file_hash }}-{{ audit_policy_file_hash }}"
 
 - name: install master
   template:

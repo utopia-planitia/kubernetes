@@ -21,12 +21,20 @@
     dest: /etc/kube-proxy/config
 
 - name: checksum of kube proxy certificates
-  shell: md5sum /etc/kube-proxy/kubeconfig | head -c 32
+  shell: |
+    set -euo pipefail
+    md5sum /etc/kube-proxy/kubeconfig | head -c 32
+  args:
+    executable: /bin/bash
   register: kube_proxy_certificates_hashsum
   changed_when: false
 
 - name: checksum of kube proxy config
-  shell: md5sum /etc/kube-proxy/config | head -c 32
+  shell: |
+    set -euo pipefail
+    md5sum /etc/kube-proxy/config | head -c 32
+  args:
+    executable: /bin/bash
   register: kube_proxy_config_hashsum
   changed_when: false
 
