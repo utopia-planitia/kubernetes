@@ -19,7 +19,12 @@
   no_log: true
 
 - name: checksum of certificates
-  local_action: shell cd {{ etcd_cert_dir }}; md5sum ca.pem server.pem server-key.pem member.pem member-key.pem | md5sum | head -c 32
+  shell:  |
+    set -euo pipefail
+    cd /etc/etcd/ssl/
+    md5sum ca.pem server.pem server-key.pem member.pem member-key.pem | md5sum | head -c 32
+  args:
+    executable: /bin/bash
   register: etcd_cert_hashsum
   changed_when: false
 

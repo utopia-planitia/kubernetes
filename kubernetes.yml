@@ -2,7 +2,11 @@
 - hosts: all
   tasks:
     - name: wait for ssh to be available
-      local_action: wait_for port=22 host="{{ ansible_host }}" search_regex=OpenSSH
+      wait_for:
+        port: 22
+        host: "{{ ansible_host }}"
+        search_regex: OpenSSH
+      delegate_to: localhost
 
 - hosts: all
   roles:

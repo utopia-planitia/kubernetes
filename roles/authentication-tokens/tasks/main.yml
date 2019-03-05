@@ -7,11 +7,15 @@
 
 - name: set up user config files
   shell: |
-    kubectl --kubeconfig={{ item.username }}-kube-config config set-cluster {{ cluster.name }} --server=https://{{ cluster.api }}:6443 --embed-certs=true --certificate-authority={{ master_cert_dir }}/ca.pem &&
-    kubectl --kubeconfig={{ item.username }}-kube-config config set-credentials {{ item.username }} --token={{ item.token }} &&
-    kubectl --kubeconfig={{ item.username }}-kube-config config set-context {{ cluster.name }} --cluster={{ cluster.name }} --user={{ item.username }} --namespace=default &&
+    set -euo pipefail
+    kubectl --kubeconfig={{ item.username }}-kube-config config set-cluster {{ cluster.name }} \
+    --server=https://{{ cluster.api }}:6443 --embed-certs=true --certificate-authority={{ master_cert_dir }}/ca.pem
+    kubectl --kubeconfig={{ item.username }}-kube-config config set-credentials {{ item.username }} --token={{ item.token }}
+    kubectl --kubeconfig={{ item.username }}-kube-config config set-context {{ cluster.name }} \
+    --cluster={{ cluster.name }} --user={{ item.username }} --namespace=default
     kubectl --kubeconfig={{ item.username }}-kube-config config use-context {{ cluster.name }}
   args:
     chdir: "{{ users_cert_dir }}"
     creates: "{{ item.username }}-kube-config"
+    executable: /bin/bash
   with_items: "{{ cluster.users }}"

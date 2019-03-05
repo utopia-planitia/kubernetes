@@ -18,69 +18,101 @@
   with_items: "{{ groups['all'] }}"
 
 - name: set up a Apiserver Certificate Authority
-  shell: cfssl gencert -initca {{ master_config_dir }}/ca.json | cfssljson -bare ca
+  shell: |
+    set -euo pipefail
+    cfssl gencert -initca {{ master_config_dir }}/ca.json | cfssljson -bare ca
   args:
     chdir: "{{ master_cert_dir }}"
     creates: "ca-key.pem"
+    executable: /bin/bash
 
 - name: set up a Client Certificate Authority
-  shell: cfssl gencert -initca {{ master_config_dir }}/ca.json | cfssljson -bare client-ca
+  shell: |
+    set -euo pipefail
+    cfssl gencert -initca {{ master_config_dir }}/ca.json | cfssljson -bare client-ca
   args:
     chdir: "{{ master_cert_dir }}"
     creates: "client-ca-key.pem"
+    executable: /bin/bash
 
 - name: set up admin certificate
-  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes {{ master_config_dir }}/admin.json | cfssljson -bare admin
+  shell: |
+    set -euo pipefail
+    cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json \
+    -profile=kubernetes {{ master_config_dir }}/admin.json | cfssljson -bare admin
   args:
     chdir: "{{ master_cert_dir }}"
     creates: "admin-key.pem"
+    executable: /bin/bash
 
 - name: set up admin config file
   shell: |
-    kubectl --kubeconfig=admin-kube-config config set-cluster default --server=https://{{ hostvars[groups['masters'][0]]['ansible_host'] }}:6443 --embed-certs=true --certificate-authority=ca.pem &&
-    kubectl --kubeconfig=admin-kube-config config set-credentials default --embed-certs=true --client-certificate=admin.pem --client-key=admin-key.pem &&
-    kubectl --kubeconfig=admin-kube-config config set-context default --cluster=default --user=default --namespace=default &&
+    set -euo pipefail
+    kubectl --kubeconfig=admin-kube-config config set-cluster default \
+    --server=https://{{ hostvars[groups['masters'][0]]['ansible_host'] }}:6443 --embed-certs=true \
+    --certificate-authority=ca.pem
+    kubectl --kubeconfig=admin-kube-config config set-credentials default --embed-certs=true \
+    --client-certificate=admin.pem --client-key=admin-key.pem
+    kubectl --kubeconfig=admin-kube-config config set-context default --cluster=default --user=default --namespace=default
     kubectl --kubeconfig=admin-kube-config config use-context default
   args:
     chdir: "{{ master_cert_dir }}"
     creates: admin-kube-config
+    executable: /bin/bash
 
 - name: set up kube-proxy certificate
-  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes {{ master_config_dir }}/kube-proxy.json | cfssljson -bare kube-proxy
+  shell: |
+    set -euo pipefail
+    cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json \
+    -profile=kubernetes {{ master_config_dir }}/kube-proxy.json | cfssljson -bare kube-proxy
   args:
     chdir: "{{ master_cert_dir }}"
     creates: "kube-proxy-key.pem"
+    executable: /bin/bash
 
 - name: set up kube-proxy file
   shell: |
-    kubectl --kubeconfig=kube-proxy-config config set-cluster default --server=https://127.0.0.1:6443 --embed-certs=true --certificate-authority=ca.pem &&
-    kubectl --kubeconfig=kube-proxy-config config set-credentials default --embed-certs=true --client-certificate=admin.pem --client-key=admin-key.pem &&
-    kubectl --kubeconfig=kube-proxy-config config set-context default --cluster=default --user=default &&
+    set -euo pipefail
+    kubectl --kubeconfig=kube-proxy-config config set-cluster default --server=https://127.0.0.1:6443 --embed-certs=true --certificate-authority=ca.pem
+    kubectl --kubeconfig=kube-proxy-config config set-credentials default --embed-certs=true --client-certificate=admin.pem --client-key=admin-key.pem
+    kubectl --kubeconfig=kube-proxy-config config set-context default --cluster=default --user=default
     kubectl --kubeconfig=kube-proxy-config config use-context default
   args:
     chdir: "{{ master_cert_dir }}"
     creates: kube-proxy-config
+    executable: /bin/bash
 
 - name: set up nodes certificate
-  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes node-{{ item }}.json | cfssljson -bare node-{{ item }}
+  shell: |
+    set -euo pipefail
+    cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json \
+    -profile=kubernetes node-{{ item }}.json | cfssljson -bare node-{{ item }}
   args:
     chdir: "{{ master_cert_dir }}"
     creates: "node-{{ item }}-key.pem"
+    executable: /bin/bash
   with_items: "{{ groups['all'] }}"
 
 - name: set up nodes config file
   shell: |
-    kubectl --kubeconfig=node-{{ item }}-kube-config config set-cluster default --server=https://127.0.0.1:6443 --embed-certs=true --certificate-authority=ca.pem &&
-    kubectl --kubeconfig=node-{{ item }}-kube-config config set-credentials default --embed-certs=true --client-certificate=node-{{ item }}.pem --client-key=node-{{ item }}-key.pem &&
-    kubectl --kubeconfig=node-{{ item }}-kube-config config set-context default --cluster=default --user=default &&
+    set -euo pipefail
+    kubectl --kubeconfig=node-{{ item }}-kube-config config set-cluster default --server=https://127.0.0.1:6443 \
+    --embed-certs=true --certificate-authority=ca.pem
+    kubectl --kubeconfig=node-{{ item }}-kube-config config set-credentials default --embed-certs=true \
+    --client-certificate=node-{{ item }}.pem --client-key=node-{{ item }}-key.pem
+    kubectl --kubeconfig=node-{{ item }}-kube-config config set-context default --cluster=default --user=default
     kubectl --kubeconfig=node-{{ item }}-kube-config config use-context default
   args:
     chdir: "{{ master_cert_dir }}"
     creates: "node-{{ item }}-kube-config"
+    executable: /bin/bash
   with_items: "{{ groups['all'] }}"
 
 - name: set up master certificate
-  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes master.json | cfssljson -bare master
+  shell: |
+    set -euo pipefail
+    cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json -profile=kubernetes master.json | cfssljson -bare master
   args:
     chdir: "{{ master_cert_dir }}"
     creates: "master-key.pem"
+    executable: /bin/bash
