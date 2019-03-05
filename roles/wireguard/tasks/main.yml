@@ -1,14 +1,21 @@
 ---
-- name: add ppa
-  apt_repository:
-    repo: 'ppa:wireguard/wireguard'
-    state: present
-    filename: wireguard
 
-- name: install package
+- name: copy packages
+  copy:
+    src: "{{ item }}"
+    dest: "/tmp/{{ item }}"
+  with_items:
+    - wireguard-dkms_0.0.20190227-wg1~bionic_all.deb
+    - wireguard-tools_0.0.20190227-wg1~bionic_amd64.deb
+    - wireguard_0.0.20190227-wg1~bionic_all.deb
+
+- name: install packages
   apt:
-    name: wireguard=0.0.20190123-wg1~bionic
-    state: present
+    deb: "/tmp/{{ item }}"
+  with_items:
+    - wireguard-tools_0.0.20190227-wg1~bionic_amd64.deb
+    - wireguard-dkms_0.0.20190227-wg1~bionic_all.deb
+    - wireguard_0.0.20190227-wg1~bionic_all.deb
   notify: restart wg-quick@wg0
 
 - name: set private ip

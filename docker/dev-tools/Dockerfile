@@ -16,9 +16,11 @@ RUN apt-get update && \
 		make \
 		bash-completion \
 		apache2-utils \
-		bats && \
+		bats \
+		libmnl0 \
+		dkms && \
 	apt-get clean && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 CMD ["bash"]
 
 # ansible
@@ -41,12 +43,10 @@ RUN curl -s -L -o /usr/local/bin/cfssl		https://pkg.cfssl.org/R1.2/cfssl_linux-a
 	chmod +x /usr/local/bin/cfssljson
 
 # wireguard
-RUN add-apt-repository ppa:wireguard/wireguard && \
-    apt-get update && \
-	apt-get install -y \
-		wireguard=0.0.20190123-wg1~bionic && \
-	apt-get clean && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+COPY roles/wireguard/files /tmp/wireguard
+RUN dpkg -i /tmp/wireguard/wireguard-tools_0.0.20190227-wg1~bionic_amd64.deb
+RUN dpkg -i /tmp/wireguard/wireguard-dkms_0.0.20190227-wg1~bionic_all.deb
+RUN dpkg -i /tmp/wireguard/wireguard_0.0.20190227-wg1~bionic_all.deb
 
 # kubectl
 ENV KUBERNETES_VERSION v1.13.3

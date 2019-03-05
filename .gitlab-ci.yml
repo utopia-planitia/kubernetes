@@ -23,7 +23,7 @@ dev-tools image:
   stage: prepare
   image: ${DOCKER_IMAGE}
   script:
-    - docker build -t ${DEV_TOOLS_IMAGE} docker/dev-tools
+    - docker build -t ${DEV_TOOLS_IMAGE} -f docker/dev-tools/Dockerfile .
     - docker push ${DEV_TOOLS_IMAGE}
 
 e2e-tests image:
