@@ -14,7 +14,7 @@ DOCKER_INTERACTIVE ?= -i
 CLI =
 ifndef IS_CONTAINERIZED
   CLI_MK_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-  KUBERNETES_TOOLS_IMAGE ?= $(shell docker build -q $(CLI_MK_DIR)/../docker/dev-tools)
+  KUBERNETES_TOOLS_IMAGE ?= $(shell docker build -q -f $(CLI_MK_DIR)/../docker/dev-tools/Dockerfile $(CLI_MK_DIR)/..)
   KUBERNETES_E2E_IMAGE ?= $(shell docker build -q $(CLI_MK_DIR)/../docker/e2e-tests)
 
   DOCKER ?= docker
