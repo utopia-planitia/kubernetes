@@ -21,17 +21,41 @@ variables:
 
 dev-tools image:
   stage: prepare
-  image: ${DOCKER_IMAGE}
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
-    - docker build -t ${DEV_TOOLS_IMAGE} -f docker/dev-tools/Dockerfile .
-    - docker push ${DEV_TOOLS_IMAGE}
+    - /kaniko/executor
+      --cache
+      --insecure
+      --insecure-pull
+      --insecure-registry ${DOCKER_REGISTRY_INTERNAL}
+      --reproducible
+      --skip-tls-verify
+      --skip-tls-verify-pull
+      --skip-tls-verify-registry ${DOCKER_REGISTRY_INTERNAL}
+      --context ${CI_PROJECT_DIR}
+      --dockerfile ${CI_PROJECT_DIR}/docker/dev-tools/Dockerfile
+      --destination ${DEV_TOOLS_IMAGE}
 
 e2e-tests image:
   stage: prepare
-  image: ${DOCKER_IMAGE}
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
-    - docker build -t ${E2E_IMAGE} docker/e2e-tests
-    - docker push ${E2E_IMAGE}
+    - /kaniko/executor
+      --cache
+      --insecure
+      --insecure-pull
+      --insecure-registry ${DOCKER_REGISTRY_INTERNAL}
+      --reproducible
+      --skip-tls-verify
+      --skip-tls-verify-pull
+      --skip-tls-verify-registry ${DOCKER_REGISTRY_INTERNAL}
+      --context ${CI_PROJECT_DIR}/docker/e2e-tests
+      --dockerfile ${CI_PROJECT_DIR}/docker/e2e-tests/Dockerfile
+      --destination ${DEV_TOOLS_IMAGE}
 
 lint:
   stage: provision
