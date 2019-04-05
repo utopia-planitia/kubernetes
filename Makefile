@@ -31,8 +31,7 @@ kubernetes: ##@ansible deploy kubernetes
 addons: ##@ansible deploy addons
 	$(CLI) kubectl apply -f addons/core-dns.yaml \
 	                     -f addons/weave-daemonset-k8s.yaml \
-	                     -f addons/registry-mirror.yaml \
-	                     -f addons/metrics-server/
+	                     -f addons/registry-mirror.yaml
 	$(CLI) bash etc/wait-for-addons.sh
 
 .PHONY: restart
