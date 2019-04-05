@@ -1,5 +1,7 @@
 FROM gcr.io/heptio-images/kube-conformance:v1.13.0
 
+RUN echo "deb http://deb.debian.org/debian jessie main\ndeb http://security.debian.org jessie/updates main" > /etc/apt/sources.list
+
 RUN apt-get update && \
 	apt-get install -y \
 		make && \
