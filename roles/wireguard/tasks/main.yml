@@ -1,22 +1,22 @@
 ---
 
+- name: create cache directory
+  file:
+    path: /var/cache/wireguard-deb
+    state: directory
+
 - name: copy packages
   copy:
     src: "{{ item }}"
-    dest: "/tmp/{{ item }}"
+    dest: "/var/cache/wireguard-deb/{{ item }}"
   with_items:
     - wireguard-dkms_0.0.20190227-wg1~bionic_all.deb
     - wireguard-tools_0.0.20190227-wg1~bionic_amd64.deb
     - wireguard_0.0.20190227-wg1~bionic_all.deb
+  notify:
+    - install packages
 
-- name: install packages
-  apt:
-    deb: "/tmp/{{ item }}"
-  with_items:
-    - wireguard-tools_0.0.20190227-wg1~bionic_amd64.deb
-    - wireguard-dkms_0.0.20190227-wg1~bionic_all.deb
-    - wireguard_0.0.20190227-wg1~bionic_all.deb
-  notify: restart wg-quick@wg0
+- meta: flush_handlers
 
 - name: set private ip
   set_fact:

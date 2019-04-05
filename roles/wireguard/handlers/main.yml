@@ -1,4 +1,12 @@
 
+- name: install packages
+  apt:
+    deb: "/var/cache/wireguard-deb/{{ item }}"
+  with_items:
+    - wireguard-tools_0.0.20190227-wg1~bionic_amd64.deb
+    - wireguard-dkms_0.0.20190227-wg1~bionic_all.deb
+    - wireguard_0.0.20190227-wg1~bionic_all.deb
+
 - name: restart wg-quick@wg0
   systemd:
     name: wg-quick@wg0
