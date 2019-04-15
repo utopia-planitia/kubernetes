@@ -1,5 +1,5 @@
 ---
-- name: create instances
+- name: destroy instances
   hosts: localhost
   roles:
     - { role: ovh-destroy }

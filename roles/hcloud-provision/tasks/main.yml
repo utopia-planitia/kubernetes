@@ -1,0 +1,34 @@
+---
+
+- name: set ssh-key and token
+  hcloud_ssh_key:
+    state: list
+    token : "{{ lookup('env','HCLOUD_TOKEN') }}"
+  register: 'hcloud_ssh_keys'
+
+- name: create servers
+  hcloud_server:
+    name:
+    - "{{ HCLOUD_NODES_PREFIX }}-{{ item.name }}"
+    image: "{{ image }}"
+    server_type: "{{ server_type }}"
+    location: "{{ location }}"
+    ssh_keys: "{{ hcloud_ssh_keys.ssh_keys }}"
+    token : "{{ lookup('env','HCLOUD_TOKEN') }}"
+  with_items: "{{ servers }}"
+  register: hcloud_details
+
+- name: remove old inventory file
+  copy:
+    dest: ./inventory
+    content: ""
+
+- name: load empty inventory
+  meta: refresh_inventory
+
+- name: add hosts to inventory
+  add_host:
+    name: "{{ HCLOUD_NODES_PREFIX }}-{{ item.item.name }}"
+    groups: "{{ item.item.groups }}"
+    ansible_host: "{{ item.servers[0].public_ipv4 }}"
+  with_items: "{{ hcloud_details.results }}"

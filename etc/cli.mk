@@ -33,6 +33,9 @@ ifndef IS_CONTAINERIZED
   # digital ocean
   DOCKER_OPTIONS += -e DO_API_TOKEN=$(DO_API_TOKEN)
 
+  # hetzner cloud
+  DOCKER_OPTIONS += -e HCLOUD_TOKEN=$(HCLOUD_TOKEN)
+
   # make status
   DOCKER_OPTIONS += -v $(shell realpath $(CLI_MK_DIR)):/kubernetes/etc
 

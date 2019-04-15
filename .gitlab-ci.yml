@@ -18,6 +18,8 @@ variables:
   OVH_KEYPAIR_NAME:           utopia-planitia-ci-runner
   DIGITAL_OCEAN_NODES_PREFIX: ci-${CI_PIPELINE_ID}
   DIGITAL_OCEAN_KEYPAIR_NAME: utopia-planitia-ci-runner
+  HCLOUD_NODES_PREFIX:        ci-${CI_PIPELINE_ID}
+  HCLOUD_KEYPAIR_NAME:        utopia-planitia-ci-runner
 
 dev-tools image:
   stage: prepare

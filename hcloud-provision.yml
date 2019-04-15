@@ -1,0 +1,6 @@
+---
+- name: create instances
+  hosts: localhost
+  roles:
+    - { role: hcloud-provision }
+    - { role: rewrite-inventory }

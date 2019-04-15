@@ -1,0 +1,12 @@
+---
+- name: remove servers
+  hcloud_server:
+    name:
+    - "{{ item }}"
+    state: absent
+    token : "{{ lookup('env','HCLOUD_TOKEN') }}"
+  with_items:
+    - "{{ HCLOUD_NODES_PREFIX }}-node1"
+    - "{{ HCLOUD_NODES_PREFIX }}-node2"
+    - "{{ HCLOUD_NODES_PREFIX }}-node3"
+    - "{{ HCLOUD_NODES_PREFIX }}-node4"

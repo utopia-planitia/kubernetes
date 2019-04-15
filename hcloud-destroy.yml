@@ -1,0 +1,5 @@
+---
+- name: destroy instances
+  hosts: localhost
+  roles:
+    - { role: hcloud-destroy }
