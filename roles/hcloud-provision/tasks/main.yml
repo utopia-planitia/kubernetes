@@ -3,7 +3,7 @@
 - name: set ssh-key and token
   hcloud_ssh_key:
     name: ci-key
-    public_key: ~/.ssh/hcloud/id_rsa.pub
+    public_key: "~/.ssh/hcloud/id_rsa.pub"
     state: present
     token : "{{ lookup('env','HCLOUD_TOKEN') }}"
   register: 'hcloud_ssh_keys'
