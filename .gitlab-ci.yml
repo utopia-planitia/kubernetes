@@ -50,7 +50,7 @@ provision:
     - mkdir -p ~/.ssh/hcloud
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/hcloud/id_rsa
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/hcloud/id_rsa.pub
-    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/hcloud/id_rsa.pub
+    - chmod 400 ~/.ssh/hcloud/id_rsa ~/.ssh/hcloud/id_rsa.pub
     - touch inventory
     - make hcloud-provision
     - make certificates
@@ -83,7 +83,7 @@ deploy:
     - mkdir -p ~/.ssh/hcloud
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/hcloud/id_rsa
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/hcloud/id_rsa.pub
-    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/hcloud/id_rsa.pub
+    - chmod 400 ~/.ssh/hcloud/id_rsa ~/.ssh/hcloud/id_rsa.pub
     - make deploy
   artifacts:
     paths:
@@ -97,7 +97,7 @@ redeploy:
     - mkdir -p ~/.ssh/hcloud
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/hcloud/id_rsa
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/hcloud/id_rsa.pub
-    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/hcloud/id_rsa.pub
+    - chmod 400 ~/.ssh/hcloud/id_rsa ~/.ssh/hcloud/id_rsa.pub
     - make deploy | tee deploy.log
     - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 4
 
@@ -109,7 +109,7 @@ bats:
     - mkdir -p ~/.ssh/hcloud
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/hcloud/id_rsa
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/hcloud/id_rsa.pub
-    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/hcloud/id_rsa.pub
+    - chmod 400 ~/.ssh/hcloud/id_rsa ~/.ssh/hcloud/id_rsa.pub
     - make bats
 
 cleanup e2e ns:
