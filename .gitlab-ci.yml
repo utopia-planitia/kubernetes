@@ -47,12 +47,12 @@ provision:
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
-    - mkdir -p ~/.ssh/${CI_PROVISION}
-    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa
-    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa.pub
-    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/${CI_PROVISION}/id_rsa.pub
+    - mkdir -p ~/.ssh/hcloud
+    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/hcloud/id_rsa
+    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/hcloud/id_rsa.pub
+    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/hcloud/id_rsa.pub
     - touch inventory
-    - make ${CI_PROVISION}-provision
+    - make hcloud-provision
     - make certificates
     - cat inventory
   artifacts:
@@ -66,13 +66,13 @@ destroy:
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
-    - make ${CI_PROVISION}-destroy
+    - make hcloud-destroy
 
 destroy now:
   stage: provision
   image: ${DEV_TOOLS_IMAGE}
   script:
-    - make ${CI_PROVISION}-destroy
+    - make hcloud-destroy
   when: manual
 
 deploy:
@@ -80,10 +80,10 @@ deploy:
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
-    - mkdir -p ~/.ssh/${CI_PROVISION}
-    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa
-    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa.pub
-    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/${CI_PROVISION}/id_rsa.pub
+    - mkdir -p ~/.ssh/hcloud
+    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/hcloud/id_rsa
+    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/hcloud/id_rsa.pub
+    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/hcloud/id_rsa.pub
     - make deploy
   artifacts:
     paths:
@@ -94,10 +94,10 @@ redeploy:
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
-    - mkdir -p ~/.ssh/${CI_PROVISION}
-    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa
-    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa.pub
-    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/${CI_PROVISION}/id_rsa.pub
+    - mkdir -p ~/.ssh/hcloud
+    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/hcloud/id_rsa
+    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/hcloud/id_rsa.pub
+    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/hcloud/id_rsa.pub
     - make deploy | tee deploy.log
     - grep "changed=0    unreachable=0    failed=0" deploy.log | wc -l | grep 4
 
@@ -106,10 +106,10 @@ bats:
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
-    - mkdir -p ~/.ssh/${CI_PROVISION}
-    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa
-    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa.pub
-    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/${CI_PROVISION}/id_rsa.pub
+    - mkdir -p ~/.ssh/hcloud
+    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/hcloud/id_rsa
+    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/hcloud/id_rsa.pub
+    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/hcloud/id_rsa.pub
     - make bats
 
 cleanup e2e ns:
