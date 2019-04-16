@@ -80,6 +80,7 @@ deploy:
   image: ${DEV_TOOLS_IMAGE}
   retry: 2
   script:
+    - env
     - mkdir -p ~/.ssh/hcloud
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/hcloud/id_rsa
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/hcloud/id_rsa.pub
