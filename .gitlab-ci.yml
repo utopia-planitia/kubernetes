@@ -13,7 +13,7 @@ variables:
   KUBECONFIG:                 ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
   E2E_PARALLELIZATION:        25
   OVH_REGION_NAME:            SBG3
-  CI_PROVISION:               ovh
+  CI_PROVISION:               hcloud
   OVH_NODES_PREFIX:           ci-${CI_PIPELINE_ID}
   OVH_KEYPAIR_NAME:           utopia-planitia-ci-runner
   DIGITAL_OCEAN_NODES_PREFIX: ci-${CI_PIPELINE_ID}
