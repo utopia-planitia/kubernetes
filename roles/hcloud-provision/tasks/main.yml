@@ -2,7 +2,8 @@
 
 - name: set ssh-key and token
   hcloud_ssh_key:
-    state: list
+    name: gitlab-ssh
+    public_key: "{ SSH_KEY_PUBLIC }" 
     token : "{{ lookup('env','HCLOUD_TOKEN') }}"
   register: 'hcloud_ssh_keys'
 
@@ -13,7 +14,7 @@
     image: "{{ image }}"
     server_type: "{{ server_type }}"
     location: "{{ location }}"
-    ssh_keys: "{{ ssh_keys }}"
+    ssh_keys: "{{ hcloud_ssh_keys.ssh_keys }}"
     token : "{{ lookup('env','HCLOUD_TOKEN') }}"
   with_items: "{{ servers }}"
   register: hcloud_details
