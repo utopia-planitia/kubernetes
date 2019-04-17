@@ -11,3 +11,4 @@ servers:
     groups: hcloud,testing,etcds
   - name: node4
     groups: hcloud,testing
+ssh_keys: gitlab-ssh

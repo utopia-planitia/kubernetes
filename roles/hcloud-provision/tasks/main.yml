@@ -13,8 +13,7 @@
     image: "{{ image }}"
     server_type: "{{ server_type }}"
     location: "{{ location }}"
-    ssh_keys:
-      - gitlab-ssh
+    ssh_keys: "{{ ssh_keys }}"
     token : "{{ lookup('env','HCLOUD_TOKEN') }}"
   with_items: "{{ servers }}"
   register: hcloud_details
