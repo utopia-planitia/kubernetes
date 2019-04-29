@@ -21,6 +21,7 @@ certificates: ##@ansible delete and recreate cluster secrets
 deploy: ##@ansible setup cluster
 	$(MAKE) kubernetes
 	$(MAKE) addons
+	$(CLI) helm init --upgrade
 
 .PHONY: kubernetes
 kubernetes: ##@ansible deploy kubernetes

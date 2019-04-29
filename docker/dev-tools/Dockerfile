@@ -53,3 +53,19 @@ ENV KUBERNETES_VERSION v1.13.5
 RUN curl -s -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl && \
 	chmod +x /usr/local/bin/kubectl && \
 	echo "source <(kubectl completion bash)" >> ~/.bashrc
+
+# helm
+RUN curl -L --fail -o helm.tar.gz https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz && \
+    tar zxv -C /tmp -f helm.tar.gz && \
+    rm -f helm.tar.gz && \
+	mv /tmp/linux-amd64/helm /usr/local/bin/ && \
+	mv /tmp/linux-amd64/tiller /usr/local/bin/ && \
+	rm -rf /tmp/linux-amd64
+
+# helm plugins
+RUN helm init --client-only
+RUN helm plugin install https://github.com/databus23/helm-diff --version 2.11.0+3
+
+# helmfile
+RUN curl -L --fail https://github.com/roboll/helmfile/releases/download/v0.59.0/helmfile_linux_amd64 -o /usr/local/bin/helmfile && \
+	chmod +x /usr/local/bin/helmfile
