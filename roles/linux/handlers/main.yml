@@ -1,4 +1,0 @@
----
-
-- name: apply kernel configuration
-  command: sysctl -p

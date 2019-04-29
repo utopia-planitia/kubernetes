@@ -1,15 +1,16 @@
 
 ---
 
+
 - name: kubelet kernel default values
-  lineinfile:
-    path: /etc/sysctl.conf
-    line: '{{ item }}'
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
   with_items:
-    - "vm.overcommit_memory = 1"
-    - "kernel.panic = 10"
-    - "kernel.panic_on_oops = 1"
-  notify: apply kernel configuration
+    - { name: "vm.overcommit_memory", value: "1" }
+    - { name: "kernel.panic", value: "10" }
+    - { name: "kernel.panic_on_oops", value: "1" }
 
 - meta: flush_handlers
 
