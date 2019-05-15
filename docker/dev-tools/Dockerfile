@@ -54,6 +54,23 @@ RUN curl -s -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernet
 	chmod +x /usr/local/bin/kubectl && \
 	echo "source <(kubectl completion bash)" >> ~/.bashrc
 
+# krew
+RUN ( \
+  set -x; cd "$(mktemp -d)" && \
+  curl -fsSLO "https://storage.googleapis.com/krew/v0.2.1/krew.{tar.gz,yaml}" && \
+  tar zxvf krew.tar.gz && \
+  ./krew-"$(uname | tr '[:upper:]' '[:lower:]')_amd64" install --manifest=krew.yaml --archive=krew.tar.gz \
+)
+ENV PATH="/root/.krew/bin:$PATH"
+RUN kubectl krew install get-all
+
+# kubectx & kubens
+RUN git clone https://github.com/ahmetb/kubectx /opt/kubectx && \
+	cd /opt/kubectx && git checkout v0.6.3 && \
+	mv /opt/kubectx/kubectx /usr/local/bin/kubectx && \
+	mv /opt/kubectx/kubens /usr/local/bin/kubens && \
+	rm -r /opt/kubectx
+
 # helm
 RUN curl -L --fail -o helm.tar.gz https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz && \
     tar zxv -C /tmp -f helm.tar.gz && \
