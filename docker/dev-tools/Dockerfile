@@ -16,6 +16,8 @@ RUN apt-get update && \
 		make \
 		bash-completion \
 		apache2-utils \
+		jq \
+		bsdmainutils \
 		bats \
 		libmnl0 \
 		dkms && \
