@@ -25,6 +25,8 @@
     - { local: 'client-ca.pem', remote: 'kubernetes-client-ca.pem' }
     - { local: 'master.pem', remote: 'master.pem' }
     - { local: 'master-key.pem', remote: 'master-key.pem' }
+    - { local: 'kube-scheduler-kube-config', remote: 'kube-scheduler-kube-config' }
+    - { local: 'kube-controller-manager-kube-config', remote: 'kube-controller-manager-kube-config' }
   no_log: true
 
 - name: install token-auth-file
@@ -99,10 +101,6 @@
   template:
     src: master.yml.j2
     dest: /etc/kubernetes/manifests/master.yml
-
-- name: wait for insecure apiserver to be available
-  wait_for:
-    port: 8080
 
 - name: wait for secure apiserver to be available
   wait_for:

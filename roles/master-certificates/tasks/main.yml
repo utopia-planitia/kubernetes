@@ -116,3 +116,51 @@
     chdir: "{{ master_cert_dir }}"
     creates: "master-key.pem"
     executable: /bin/bash
+
+- name: set up controller certificate
+  shell: |
+    set -euo pipefail
+    cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json \
+    -profile=kubernetes {{ master_config_dir }}/controller.json | cfssljson -bare kube-controller-manager
+  args:
+    chdir: "{{ master_cert_dir }}"
+    creates: "kube-controller-manager-key.pem"
+    executable: /bin/bash
+
+- name: set up kube-controller-manager file
+  shell: |
+    set -euo pipefail
+    kubectl --kubeconfig=kube-controller-manager-kube-config config set-cluster default --server=https://127.0.0.1:6443 \
+    --embed-certs=true --certificate-authority=ca.pem
+    kubectl --kubeconfig=kube-controller-manager-kube-config config set-credentials default --embed-certs=true \
+    --client-certificate=kube-controller-manager.pem --client-key=kube-controller-manager-key.pem
+    kubectl --kubeconfig=kube-controller-manager-kube-config config set-context default --cluster=default --user=default
+    kubectl --kubeconfig=kube-controller-manager-kube-config config use-context default
+  args:
+    chdir: "{{ master_cert_dir }}"
+    creates: kube-controller-manager-config
+    executable: /bin/bash
+
+- name: set up scheduler certificate
+  shell: |
+    set -euo pipefail
+    cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ master_config_dir }}/config.json \
+    -profile=kubernetes {{ master_config_dir }}/scheduler.json | cfssljson -bare kube-scheduler
+  args:
+    chdir: "{{ master_cert_dir }}"
+    creates: "kube-scheduler-key.pem"
+    executable: /bin/bash
+
+- name: set up kube-scheduler file
+  shell: |
+    set -euo pipefail
+    kubectl --kubeconfig=kube-scheduler-kube-config config set-cluster default --server=https://127.0.0.1:6443 \
+    --embed-certs=true --certificate-authority=ca.pem
+    kubectl --kubeconfig=kube-scheduler-kube-config config set-credentials default --embed-certs=true \
+    --client-certificate=kube-scheduler.pem --client-key=kube-scheduler-key.pem
+    kubectl --kubeconfig=kube-scheduler-kube-config config set-context default --cluster=default --user=default
+    kubectl --kubeconfig=kube-scheduler-kube-config config use-context default
+  args:
+    chdir: "{{ master_cert_dir }}"
+    creates: kube-scheduler-config
+    executable: /bin/bash

@@ -50,14 +50,16 @@ spec:
         - --max-mutating-requests-inflight={{ apiserver_max_mutating_requests_inflight | int }}
         - --feature-gates={{ feature_gates }}
         - --service-node-port-range={{ service_node_port_range }}
+        - --insecure-port=0
       env:
         - name: CONFIG_HASH
           value: {{ master_config_hash }}
+      readinessProbe:
+        tcpSocket:
+          port: 6443
       livenessProbe:
-        httpGet:
-          path: /healthz
-          port: 8080
-          host: 127.0.0.1
+        tcpSocket:
+          port: 6443
       resources:
         requests:
           cpu: {{ apiserver_requests_cpu }}
@@ -74,7 +76,7 @@ spec:
       image: {{ controller_manager_image }}
       args:
         - kube-controller-manager
-        - --master=http://127.0.0.1:8080
+        - --kubeconfig=/etc/kubernetes/ssl/kube-controller-manager-kube-config
         - --service-account-private-key-file=/etc/kubernetes/ssl/master-key.pem
         - --root-ca-file=/etc/kubernetes/ssl/kubernetes-ca.pem
         - --leader-elect=true
@@ -103,7 +105,7 @@ spec:
       image: {{ scheduler_image }}
       args:
         - kube-scheduler
-        - --master=http://127.0.0.1:8080
+        - --kubeconfig=/etc/kubernetes/ssl/kube-scheduler-kube-config
         - --leader-elect=true
         - --address=127.0.0.1
         - --port=10251
@@ -125,6 +127,9 @@ spec:
         limits:
           cpu: {{ scheduler_limits_cpu }}
           memory: {{ scheduler_limits_memory }}
+      volumeMounts:
+        - name: config
+          mountPath: /etc/kubernetes
   volumes:
     - name: config
       hostPath:
