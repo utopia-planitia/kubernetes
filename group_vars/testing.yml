@@ -1,7 +1,7 @@
 
 authorization_mode: AlwaysAllow
 
-apiserver_limit_target_ram_mb: "{{ 350 + (nodes_count|int * kubelet_max_pods * 2) }}"
+apiserver_cache: "{{ (nodes_count|int * kubelet_max_pods * 1.1) }}"
 
 cluster:
   name: kubernetes-development

@@ -117,10 +117,11 @@ spec:
         imagePullPolicy: IfNotPresent
         resources:
           limits:
-            memory: 170Mi
+            cpu: 20m
+            memory: 40Mi
           requests:
-            cpu: 100m
-            memory: 70Mi
+            cpu: 20m
+            memory: 40Mi
         args: [ "-conf", "/etc/coredns/Corefile" ]
         volumeMounts:
         - name: config-volume

@@ -1,6 +1,6 @@
 ---
-etcd_requests_cpu:    100m
-etcd_requests_memory: "{{ 120 + (nodes_count|int * kubelet_max_pods * 2) }}Mi"
-etcd_limits_cpu:      1000m
+etcd_requests_cpu:    "{{ 120 + (nodes_count|int * kubelet_max_pods|int * 0.4)|int }}m"
+etcd_requests_memory: "{{ 120 + (nodes_count|int * kubelet_max_pods|int * 1.8)|int }}Mi"
+etcd_limits_cpu:      "{{ etcd_requests_cpu }}"
 etcd_limits_memory:   "{{ etcd_requests_memory }}"
 etcd_snapshot_count:  2000

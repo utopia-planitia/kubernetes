@@ -11,6 +11,9 @@ spec:
     hostnames:
     - "etcd{{ hostvars[host]['etcd_id'] }}"
 {% endfor %}
+  - ip: "127.0.0.1"
+    hostnames:
+    - "localhost"
   containers:
     - name: apiserver
       image: {{ apiserver_image }}
@@ -41,7 +44,7 @@ spec:
         - --audit-log-maxsize=100
         - --audit-log-path=/var/log/kubernetes/audit.log
         - --audit-policy-file=/etc/kubernetes/audit-policy.yaml
-        - --target-ram-mb={{ apiserver_limit_target_ram_mb | int }}
+        - --target-ram-mb={{ apiserver_cache | int }}
         - --max-requests-inflight={{ apiserver_max_requests_inflight | int }}
         - --max-mutating-requests-inflight={{ apiserver_max_mutating_requests_inflight | int }}
         - --feature-gates={{ feature_gates }}

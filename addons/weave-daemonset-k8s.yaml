@@ -185,8 +185,12 @@ items:
                   path: /status
                   port: 6784
               resources:
+                limits:
+                  cpu: 50m
+                  memory: 300Mi
                 requests:
-                  cpu: 10m
+                  cpu: 50m
+                  memory: 300Mi
               securityContext:
                 privileged: true
               volumeMounts:
@@ -213,8 +217,12 @@ items:
                       fieldPath: spec.nodeName
               image: 'docker.io/weaveworks/weave-npc:2.5.1'
               resources:
+                limits:
+                  cpu: 50m
+                  memory: 300Mi
                 requests:
-                  cpu: 10m
+                  cpu: 50m
+                  memory: 300Mi
               securityContext:
                 privileged: true
               volumeMounts:

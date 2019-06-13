@@ -18,11 +18,11 @@ spec:
           port: 6443
       resources:
         requests:
-          cpu: 100m
-          memory: 50Mi
+          cpu: 15m
+          memory: 30Mi
         limits:
-          cpu: 1000m
-          memory: 50Mi
+          cpu: 15m
+          memory: 30Mi
       volumeMounts:
         - name: config
           mountPath: /etc/nginx/
