@@ -8,8 +8,11 @@ stages:
   - destroy
 
 variables:
+  KANIKO_IMAGE:               gcr.io/kaniko-project/executor:debug-v0.10.0
   DEV_TOOLS_IMAGE:            ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/dev-tools:${CI_COMMIT_SHA}
+  DEV_TOOLS_IMAGE_EXTERNAL:   ${DOCKER_REGISTRY_EXTERNAL}/${CI_PROJECT_PATH_SLUG}/dev-tools:${CI_COMMIT_SHA}
   E2E_IMAGE:                  ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/e2e-tests:${CI_COMMIT_SHA}
+  E2E_IMAGE_EXTERNAL:         ${DOCKER_REGISTRY_EXTERNAL}/${CI_PROJECT_PATH_SLUG}/e2e-tests
   KUBECONFIG:                 ${CI_PROJECT_DIR}/certificates/master/admin-kube-config
   E2E_PARALLELIZATION:        25
   OVH_REGION_NAME:            SBG3
@@ -21,17 +24,19 @@ variables:
 
 dev-tools image:
   stage: prepare
-  image: ${DOCKER_IMAGE}
+  image:
+    name: ${KANIKO_IMAGE}
+    entrypoint: [""]
   script:
-    - docker build -t ${DEV_TOOLS_IMAGE} -f docker/dev-tools/Dockerfile .
-    - docker push ${DEV_TOOLS_IMAGE}
+    - echo "{\"auths\":{\"$DOCKER_REGISTRY_EXTERNAL\":{\"username\":\"$DOCKER_REGISTRY_EXTERNAL_USERNAME\",\"password\":\"$DOCKER_REGISTRY_EXTERNAL_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --cache --reproducible --context $CI_PROJECT_DIR --dockerfile docker/dev-tools/Dockerfile --destination ${DEV_TOOLS_IMAGE_EXTERNAL}
 
 e2e-tests image:
   stage: prepare
-  image: ${DOCKER_IMAGE}
+  image: ${KANIKO_IMAGE}
   script:
-    - docker build -t ${E2E_IMAGE} docker/e2e-tests
-    - docker push ${E2E_IMAGE}
+    - echo "{\"auths\":{\"$DOCKER_REGISTRY_EXTERNAL\":{\"username\":\"$DOCKER_REGISTRY_EXTERNAL_USERNAME\",\"password\":\"$DOCKER_REGISTRY_EXTERNAL_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --cache --reproducible --context $CI_PROJECT_DIR/docker/e2e-tests --dockerfile docker/e2e-tests/Dockerfile --destination ${E2E_IMAGE_EXTERNAL}
 
 lint:
   stage: provision

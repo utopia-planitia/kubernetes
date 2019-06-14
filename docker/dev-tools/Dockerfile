@@ -45,7 +45,7 @@ RUN curl -s -L -o /usr/local/bin/cfssl		https://pkg.cfssl.org/R1.2/cfssl_linux-a
 	chmod +x /usr/local/bin/cfssljson
 
 # wireguard
-COPY roles/wireguard/files /tmp/wireguard
+COPY roles/wireguard/files/ /tmp/wireguard/
 RUN dpkg -i /tmp/wireguard/wireguard-tools_0.0.20190227-wg1~bionic_amd64.deb
 RUN dpkg -i /tmp/wireguard/wireguard-dkms_0.0.20190227-wg1~bionic_all.deb
 RUN dpkg -i /tmp/wireguard/wireguard_0.0.20190227-wg1~bionic_all.deb
