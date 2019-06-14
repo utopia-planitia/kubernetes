@@ -72,7 +72,7 @@ RUN git clone https://github.com/ahmetb/kubectx /opt/kubectx && \
 	rm -r /opt/kubectx
 
 # helm
-RUN curl -L --fail -o helm.tar.gz https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz && \
+RUN curl -L --fail -o helm.tar.gz https://storage.googleapis.com/kubernetes-helm/helm-v2.14.1-linux-amd64.tar.gz && \
     tar zxv -C /tmp -f helm.tar.gz && \
     rm -f helm.tar.gz && \
 	mv /tmp/linux-amd64/helm /usr/local/bin/ && \
@@ -81,8 +81,8 @@ RUN curl -L --fail -o helm.tar.gz https://storage.googleapis.com/kubernetes-helm
 
 # helm plugins
 RUN helm init --client-only
-RUN helm plugin install https://github.com/databus23/helm-diff --version 2.11.0+3
+RUN helm plugin install https://github.com/databus23/helm-diff --version 2.11.0+5
 
 # helmfile
-RUN curl -L --fail https://github.com/roboll/helmfile/releases/download/v0.59.0/helmfile_linux_amd64 -o /usr/local/bin/helmfile && \
+RUN curl -L --fail https://github.com/roboll/helmfile/releases/download/v0.77.0/helmfile_linux_amd64 -o /usr/local/bin/helmfile && \
 	chmod +x /usr/local/bin/helmfile
