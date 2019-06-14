@@ -11,6 +11,7 @@ spec:
     hostnames:
     - "etcd{{ hostvars[host]['etcd_id'] }}"
 {% endfor %}
+  priorityClassName: system-node-critical
   containers:
     - name: etcd
       image: {{ etcd_image }}

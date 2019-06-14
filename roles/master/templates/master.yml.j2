@@ -4,6 +4,7 @@ metadata:
   name: master
   namespace: kube-system
 spec:
+  priorityClassName: system-node-critical
   hostNetwork: true
   hostAliases:
 {% for host in groups['etcds'] %}
