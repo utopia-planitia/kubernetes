@@ -2,7 +2,7 @@
 number_of_pods:                           "{{ nodes_count|int * kubelet_max_pods|int }}"
 apiserver_max_requests_inflight:          "{{ number_of_pods|float * 1.4 }}"
 apiserver_max_mutating_requests_inflight: "{{ number_of_pods|float * 0.9 }}"
-apiserver_cache:                          "{{ number_of_pods|float * 1.1 }}" # https://applatix.com/making-kubernetes-production-ready-part-2/
+apiserver_cache:                          "{{ number_of_pods|float * 1.1 + 100 }}" # https://applatix.com/making-kubernetes-production-ready-part-2/
 
 scheduler_api_qps:   "{{ apiserver_max_requests_inflight|int * 0.4 }}"
 scheduler_api_burst: "{{ apiserver_max_requests_inflight|int * 0.6 }}"

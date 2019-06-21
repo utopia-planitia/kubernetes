@@ -1,8 +1,6 @@
 
 authorization_mode: AlwaysAllow
 
-apiserver_cache: "{{ (nodes_count|int * kubelet_max_pods * 1.1) }}"
-
 cluster:
   name: kubernetes-development
   api: k8s.domain.tld
@@ -11,3 +9,10 @@ cluster:
       token: 11f050eb-d658-47a0-ab74-7a830d6aaa1c
       uid: ffce35b8-3901-4c95-aa45-27401de67418
       groups: system:masters
+
+apiserver_limits_cpu:               "2"
+apiserver_limits_memory:            "12Gi"
+controller_manager_limits_cpu:      "1"
+controller_manager_limits_memory:   "12Gi"
+scheduler_limits_cpu:               "1"
+scheduler_limits_memory:            "12Gi"
