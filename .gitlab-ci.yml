@@ -56,27 +56,28 @@ lint:
 node1:
   <<: *node
   variables:
-    PROVISION_NODE: node1
+    ANSIBLE_OPTIONS: -e PROVISION_NODE=node1
 
 node2:
   <<: *node
   variables:
-    PROVISION_NODE: node2
+    ANSIBLE_OPTIONS: -e PROVISION_NODE=node2
 
 node3:
   <<: *node
   variables:
-    PROVISION_NODE: node3
+    ANSIBLE_OPTIONS: -e PROVISION_NODE=node3
 
 node4:
   <<: *node
   variables:
-    PROVISION_NODE: node4
+    ANSIBLE_OPTIONS: -e PROVISION_NODE=node4
 
 
 destroy now:
   stage: pre-provision
   image: ${DEV_TOOLS_IMAGE}
+  retry: 2
   script:
     - make ${CI_PROVISION}-destroy
   when: manual
@@ -84,7 +85,6 @@ destroy now:
 provision:
   stage: provision
   image: ${DEV_TOOLS_IMAGE}
-  retry: 2
   script:
     - mkdir -p ~/.ssh/${CI_PROVISION}
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa
