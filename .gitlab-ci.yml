@@ -56,22 +56,22 @@ lint:
 node1:
   <<: *node
   variables:
-    ANSIBLE_OPTIONS: --limit=node1
+    PROVISION_NODE: node1
 
 node2:
   <<: *node
   variables:
-    ANSIBLE_OPTIONS: --limit=node2
+    PROVISION_NODE: node2
 
 node3:
   <<: *node
   variables:
-    ANSIBLE_OPTIONS: --limit=node3
+    PROVISION_NODE: node3
 
 node4:
   <<: *node
   variables:
-    ANSIBLE_OPTIONS: --limit=node4
+    PROVISION_NODE: node4
 
 
 destroy now:
