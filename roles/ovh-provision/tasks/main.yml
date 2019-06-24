@@ -38,9 +38,10 @@
 
 - name: add hosts to inventory
   add_host:
-    name: "{{ OVH_NODES_PREFIX }}-{{ item.item.name }}"
+    name: "{{ item.item.name }}"
     groups: "{{ item.item.groups }}"
     ansible_host: "{{ item.openstack.accessIPv4 }}"
   with_items: "{{ os_hosts.results }}"
   when:
     - item.openstack is defined
+    - item.item.name == PROVISION_NODE | default(item.item.name)

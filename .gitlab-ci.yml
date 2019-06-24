@@ -44,32 +44,38 @@ lint:
 .node:
   stage: pre-provision
   image: ${DEV_TOOLS_IMAGE}
-  retry: 2
-  script:
+  before_script:
     - mkdir -p ~/.ssh/${CI_PROVISION}
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa
     - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa.pub
     - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/${CI_PROVISION}/id_rsa.pub
     - touch inventory
-    - make ${CI_PROVISION}-provision
+  script:
+    - make ${CI_PROVISION}-destroy
+    - until make ${CI_PROVISION}-provision; do echo "retry setup"; sleep 5; done
+    - make benchmark-nodes
 
 node1:
   extends: .node
+  retry: 2
   variables:
     ANSIBLE_OPTIONS: -e PROVISION_NODE=node1
 
 node2:
   extends: .node
+  retry: 2
   variables:
     ANSIBLE_OPTIONS: -e PROVISION_NODE=node2
 
 node3:
   extends: .node
+  retry: 2
   variables:
     ANSIBLE_OPTIONS: -e PROVISION_NODE=node3
 
 node4:
   extends: .node
+  retry: 2
   variables:
     ANSIBLE_OPTIONS: -e PROVISION_NODE=node4
 
