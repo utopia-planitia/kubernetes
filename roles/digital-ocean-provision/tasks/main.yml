@@ -17,6 +17,7 @@
     command: ssh
     name: "{{ DIGITAL_OCEAN_KEYPAIR_NAME }}"
     ssh_pub_key: "{{ lookup('file', '/root/.ssh/digital-ocean/id_rsa.pub') }}"
+    unique_name: yes
   register: ssh_key_at_digital_ocean
 
 - name: launch instances
@@ -31,6 +32,7 @@
     unique_name: yes
   register: droplet_details
   with_items: "{{ servers }}"
+  when: item.name == PROVISION_NODE | default(item.name)
 
 - name: remove old inventory file
   copy:
@@ -46,3 +48,4 @@
     groups: "{{ item.item.groups }}"
     ansible_host: "{{ item.droplet.ip_address }}"
   with_items: "{{ droplet_details.results }}"
+  when: item.item.name == PROVISION_NODE | default(item.item.name)

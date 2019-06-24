@@ -26,7 +26,7 @@
     flavor: "{{ flavor }}"
   with_items: "{{ servers }}"
   register: "os_hosts"
-  when: item.name == OVH_NODE | default(item.name)
+  when: item.name == PROVISION_NODE | default(item.name)
 
 - name: remove old inventory file
   copy:

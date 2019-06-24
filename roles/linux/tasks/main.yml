@@ -2,6 +2,8 @@
 
 - name: install python
   import_tasks: python.yml
+- name: set hostname
+  import_tasks: hostname.yml
 - name: configure kernel
   import_tasks: kernel-config.yml
 - name: setup dns

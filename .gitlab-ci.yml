@@ -1,5 +1,6 @@
 stages:
   - prepare
+  - pre-provision
   - provision
   - build
   - tests
@@ -34,16 +35,55 @@ e2e-tests image:
     - docker push ${E2E_IMAGE}
 
 lint:
-  stage: provision
+  stage: pre-provision
   image: ${DEV_TOOLS_IMAGE}
   allow_failure: true
   script:
     - ansible-lint *.yml roles
 
+.node:
+  stage: pre-provision
+  image: ${DEV_TOOLS_IMAGE}
+  retry: 2
+  script:
+    - mkdir -p ~/.ssh/${CI_PROVISION}
+    - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa
+    - echo ${SSH_KEY_PUBLIC}  | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa.pub
+    - chmod 400 ~/.ssh/${CI_PROVISION}/id_rsa ~/.ssh/${CI_PROVISION}/id_rsa.pub
+    - touch inventory
+    - make ${CI_PROVISION}-provision
+
+node1:
+  extends: .node
+  variables:
+    ANSIBLE_OPTIONS: -e PROVISION_NODE=node1
+
+node2:
+  extends: .node
+  variables:
+    ANSIBLE_OPTIONS: -e PROVISION_NODE=node2
+
+node3:
+  extends: .node
+  variables:
+    ANSIBLE_OPTIONS: -e PROVISION_NODE=node3
+
+node4:
+  extends: .node
+  variables:
+    ANSIBLE_OPTIONS: -e PROVISION_NODE=node4
+
+destroy now:
+  stage: pre-provision
+  image: ${DEV_TOOLS_IMAGE}
+  retry: 2
+  script:
+    - make ${CI_PROVISION}-destroy
+  when: manual
+
 provision:
   stage: provision
   image: ${DEV_TOOLS_IMAGE}
-  retry: 2
   script:
     - mkdir -p ~/.ssh/${CI_PROVISION}
     - echo ${SSH_KEY_PRIVATE} | base64 -d > ~/.ssh/${CI_PROVISION}/id_rsa
@@ -65,13 +105,6 @@ destroy:
   retry: 2
   script:
     - make ${CI_PROVISION}-destroy
-
-destroy now:
-  stage: provision
-  image: ${DEV_TOOLS_IMAGE}
-  script:
-    - make ${CI_PROVISION}-destroy
-  when: manual
 
 deploy:
   stage: build
