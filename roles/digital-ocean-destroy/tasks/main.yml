@@ -9,11 +9,12 @@
 - name: remove instances
   digital_ocean:
     command: droplet
-    name: "{{ item }}"
+    name: "{{ DIGITAL_OCEAN_NODES_PREFIX }}-{{ item }}"
     state: absent
     unique_name: yes
   with_items:
-    - "{{ DIGITAL_OCEAN_NODES_PREFIX }}-node1"
-    - "{{ DIGITAL_OCEAN_NODES_PREFIX }}-node2"
-    - "{{ DIGITAL_OCEAN_NODES_PREFIX }}-node3"
-    - "{{ DIGITAL_OCEAN_NODES_PREFIX }}-node4"
+    - "node1"
+    - "node2"
+    - "node3"
+    - "node4"
+  when: item == PROVISION_NODE | default(item)

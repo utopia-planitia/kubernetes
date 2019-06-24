@@ -1,0 +1,16 @@
+---
+- hosts: all
+  roles:
+    - { role: linux }
+    - { role: prepare-benchmarks }
+  tasks:
+    - name: benchmark cpu
+      raw: timeout 10 sysbench --threads=2 --events=10000 cpu run
+    - name: benchmark threads
+      raw: timeout 10 sysbench --events=10000 threads run
+    - name: benchmark disk
+      raw: timeout 6 dd if=/dev/zero of=testfile bs=1G count=1 oflag=dsync
+    - name: benchmark memory
+      raw: timeout 10 mbw -n 50 255
+    - name: benchmark network
+      raw: timeout 3 curl -o /dev/null -s -L http://speedtest-fra1.digitalocean.com/100mb.test

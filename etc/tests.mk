@@ -29,3 +29,7 @@ serial: ##@development run serial test
 .PHONY: delete-e2e-namespaces
 delete-e2e-namespaces: ##@development remove namespaces created by failed e2e tests
 	$(CLI) ./etc/delete-e2e-namespaces.sh
+
+PHONY: benchmark-nodes
+benchmark-nodes: ##@development ensure test vms provide enough performance
+	$(CLI) ansible-playbook prepare-benchmarks.yml ${ANSIBLE_OPTIONS}

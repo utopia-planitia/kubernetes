@@ -1,0 +1,10 @@
+---
+
+- name: install packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - mbw
+    - sysbench
+    - curl

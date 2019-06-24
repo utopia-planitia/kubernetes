@@ -7,10 +7,11 @@
 
 - name: remove instances
   os_server:
-    name: "{{ item }}"
+    name: "{{ OVH_NODES_PREFIX }}-{{ item }}"
     state: absent
   with_items:
-    - "{{ OVH_NODES_PREFIX }}-node1"
-    - "{{ OVH_NODES_PREFIX }}-node2"
-    - "{{ OVH_NODES_PREFIX }}-node3"
-    - "{{ OVH_NODES_PREFIX }}-node4"
+    - "node1"
+    - "node2"
+    - "node3"
+    - "node4"
+  when: item == PROVISION_NODE | default(item)
