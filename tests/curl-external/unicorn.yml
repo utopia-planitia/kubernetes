@@ -1,11 +1,11 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: wttr
+  name: unicorn
 spec:
   template:
     metadata:
-      name: wttr
+      name: unicorn
     spec:
       containers:
       - name: curl
@@ -13,5 +13,5 @@ spec:
         command:
           - sh
           - -c
-          - "curl --silent wttr.in/~Kilimanjaro | grep Morning"
+          - "curl --silent http://artscene.textfiles.com/asciiart/unicorn | grep 'O   O'"
       restartPolicy: Never
