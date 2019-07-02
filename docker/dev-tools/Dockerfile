@@ -88,3 +88,7 @@ RUN helm plugin install https://github.com/databus23/helm-diff --version 2.11.0+
 # helmfile
 RUN curl -L --fail https://github.com/roboll/helmfile/releases/download/v0.77.0/helmfile_linux_amd64 -o /usr/local/bin/helmfile && \
 	chmod +x /usr/local/bin/helmfile
+
+# kustomize
+RUN curl -L --fail https://github.com/kubernetes-sigs/kustomize/releases/download/v2.1.0/kustomize_2.1.0_linux_amd64 -o /usr/local/bin/kustomize && \
+	chmod +x /usr/local/bin/kustomize
