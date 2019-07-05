@@ -3,32 +3,22 @@
 load test_helper
 
 @test "deploy nginx with node port service" {
-  run kubectl apply -f tests/node-port
+  kubectl apply -f tests/node-port
+  sleep 1
+  run kubectl -n test-node-port wait pods -l app=nginx --for=condition=ready
   [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 3 ]
+  sleep 3 # allow network time to setup routing
 }
 
 @test "use node port" {
   IP=`grep -o '1 ansible_host=[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' inventory | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
   PORT=`kubectl get svc -n test-node-port -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'`
-  until [ $(kubectl -n test-node-port -l app=nginx get pod --no-headers | grep Running | wc -l) == 1 ]; do
-    sleep 1
-  done
-  until [ $(kubectl -n test-node-port -l app=nginx get ep --no-headers | wc -l) == 1 ]; do
-    sleep 1
-  done
-  until [ $(curl http://${IP}:${PORT}/ | grep "Welcome to nginx!" | wc -l ) == 2 ]; do
-    sleep 1
-  done
-  run curl --fail http://${IP}:${PORT}/
+  run curl --silent --fail --connect-timeout 5 --max-time 5 http://${IP}:${PORT}/
   [ $status -eq 0 ]
 }
 
 @test "undeploy nginx with node port service" {
-  run kubectl delete -f tests/node-port
+  kubectl delete -f tests/node-port
+  run sh -c "kubectl -n test-node-port wait pods -l app=nginx --for=delete || kubectl delete -f tests/node-port --ignore-not-found=true"
   [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 3 ]
-  until [ $(kubectl get ns --no-headers | grep test-node-port | wc -l) == 0 ]; do
-    sleep 1
-  done
 }
