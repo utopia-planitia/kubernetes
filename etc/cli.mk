@@ -21,17 +21,15 @@ ifndef IS_CONTAINERIZED
   DOCKER_OPTIONS += -v $(PWD):/workspace -w /workspace
 
   # ssh
-  ifneq ($(shell uname), Darwin)
-    DOCKER_OPTIONS += $(shell [ ! -z "$(SSH_AUTH_SOCK)" ] && echo -v $(SSH_AUTH_SOCK):$(SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$(SSH_AUTH_SOCK))
-    DOCKER_OPTIONS += -v ~/.ssh/ovh:/root/.ssh/ovh
-    DOCKER_OPTIONS += -v ~/.ssh/digital-ocean:/root/.ssh/digital-ocean
-  else
-    DOCKER_OPTIONS += -v ~/.ssh:/root/.ssh
-  endif
+  DOCKER_OPTIONS += $(shell [ ! -z "$(SSH_AUTH_SOCK)" ] && echo -v $(SSH_AUTH_SOCK):$(SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$(SSH_AUTH_SOCK))
   DOCKER_OPTIONS += -v ~/.vagrant.d/:/root/.vagrant.d/
 
   # digital ocean
   DOCKER_OPTIONS += -e DO_API_TOKEN=$(DO_API_TOKEN)
+  DOCKER_OPTIONS += -v ~/.ssh/digital-ocean:/root/.ssh/digital-ocean
+
+  # ovh
+  DOCKER_OPTIONS += -v ~/.ssh/ovh:/root/.ssh/ovh
 
   # make status
   DOCKER_OPTIONS += -v $(shell realpath $(CLI_MK_DIR)):/kubernetes/etc
