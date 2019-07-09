@@ -19,8 +19,8 @@ certificates: ##@ansible delete and recreate cluster secrets
 
 .PHONY: deploy
 deploy: ##@ansible setup cluster
-	$(MAKE) kubernetes
-	$(MAKE) addons
+	make kubernetes
+	make addons
 
 .PHONY: kubernetes
 kubernetes: ##@ansible deploy kubernetes

@@ -5,10 +5,10 @@ lint: ##@ansible lint ansible config
 
 .PHONY: tests
 tests: ##@development run all tests
-	$(MAKE) bats
-	$(MAKE) conformance
-	$(MAKE) port-forward
-	$(MAKE) serial
+	make bats
+	make conformance
+	make port-forward
+	make serial
 
 .PHONY: bats
 bats: ##@development run bats tests
