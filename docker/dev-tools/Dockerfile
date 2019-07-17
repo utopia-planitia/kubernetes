@@ -1,3 +1,8 @@
+# reg build
+FROM golang:1.12.6-alpine3.10 AS reg
+RUN apk --no-cache add git
+RUN GOOS=linux GARCH=amd64 CGO_ENABLED=0 go get github.com/genuinetools/reg
+
 FROM ubuntu:18.04
 
 # tools
@@ -16,7 +21,6 @@ RUN apt-get update && \
 		make \
 		bash-completion \
 		apache2-utils \
-		jq \
 		bsdmainutils \
 		bats \
 		libmnl0 \
@@ -92,3 +96,17 @@ RUN curl -L --fail https://github.com/roboll/helmfile/releases/download/v0.77.0/
 # kustomize
 RUN curl -L --fail https://github.com/kubernetes-sigs/kustomize/releases/download/v2.1.0/kustomize_2.1.0_linux_amd64 -o /usr/local/bin/kustomize && \
 	chmod +x /usr/local/bin/kustomize
+
+# yq
+RUN pip install yq
+
+# jq
+RUN curl -L --silent --fail -o /usr/local/bin/jq \
+    https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
+    chmod +x /usr/local/bin/jq
+
+# reg
+COPY --from=reg /go/bin/reg /usr/local/bin/reg
+
+# lab
+RUN curl -L --silent --fail https://raw.githubusercontent.com/zaquestion/lab/master/install.sh | bash

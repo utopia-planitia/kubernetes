@@ -31,6 +31,9 @@ ifndef IS_CONTAINERIZED
   # ovh
   DOCKER_OPTIONS += -v ~/.ssh/ovh:/root/.ssh/ovh
 
+  # gitlab utopia planitia access
+  DOCKER_OPTIONS += -e CI_JOB_TOKEN=$(CI_JOB_TOKEN)
+  DOCKER_OPTIONS += -e LAB_CORE_TOKEN=$(CI_JOB_TOKEN)
   # make status
   DOCKER_OPTIONS += -v $(shell realpath $(CLI_MK_DIR)):/kubernetes/etc
 
