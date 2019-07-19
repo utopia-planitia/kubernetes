@@ -23,10 +23,10 @@ ifndef IS_CONTAINERIZED
   # ssh
   DOCKER_OPTIONS += $(shell [ ! -z "$(SSH_AUTH_SOCK)" ] && echo -v $(SSH_AUTH_SOCK):$(SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$(SSH_AUTH_SOCK))
   DOCKER_OPTIONS += -v ~/.vagrant.d/:/root/.vagrant.d/
+  DOCKER_OPTIONS += -v ~/.ssh/:/root/.ssh/
 
   # digital ocean
   DOCKER_OPTIONS += -e DO_API_TOKEN=$(DO_API_TOKEN)
-  DOCKER_OPTIONS += -v ~/.ssh/digital-ocean:/root/.ssh/digital-ocean
 
   # ovh
   DOCKER_OPTIONS += -v ~/.ssh/ovh:/root/.ssh/ovh
