@@ -31,8 +31,7 @@ ifndef IS_CONTAINERIZED
   DOCKER_OPTIONS += -e DO_API_TOKEN=$(DO_API_TOKEN)
 
   # gitlab utopia planitia access
-  DOCKER_OPTIONS += -e CI_JOB_TOKEN=$(CI_JOB_TOKEN)
-  DOCKER_OPTIONS += -e LAB_CORE_TOKEN=$(CI_JOB_TOKEN)
+  DOCKER_OPTIONS += -e LAB_CORE_TOKEN=$(LAB_CORE_TOKEN)
   # make status
   DOCKER_OPTIONS += -v $(shell realpath $(CLI_MK_DIR)):/kubernetes/etc
 
