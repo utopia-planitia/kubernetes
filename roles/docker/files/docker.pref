@@ -1,3 +1,0 @@
-Package: docker-ce
-Pin: version 18.06.*
-Pin-Priority: 1001

@@ -10,10 +10,9 @@
 
 - hosts: all
   roles:
-    - { role: linux }
-    - { role: disable-swap }
-    - { role: docker }
-    - { role: wireguard }
+#    - { role: linux }
+##    - { role: docker }
+    - { role: wireguard } # replace by https://github.com/cmulk/wireguard-docker
     - { role: node }
     - { role: registry-mirror }
 
