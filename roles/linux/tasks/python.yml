@@ -1,5 +1,0 @@
----
-- name: install python
-  raw: ( test -e /usr/bin/python && echo "/usr/bin/python found" ) || ( apt -y update && apt install -y python )
-  register: install_python_result
-  changed_when: "'/usr/bin/python found' not in install_python_result.stdout"
