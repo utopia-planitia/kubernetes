@@ -75,8 +75,3 @@
   template:
     src: kubelet-logrotate.j2
     dest: /etc/logrotate.d/kubelet
-
-- name: install socat
-  package:
-    name: "socat"
-    state: present

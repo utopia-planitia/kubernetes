@@ -11,9 +11,3 @@
         name: master-certificates
       delegate_to: localhost
       run_once: true
-- hosts: all
-  tasks:
-    - name: create wireguard keys
-      import_role:
-        name: wireguard-certificates
-      delegate_to: localhost
