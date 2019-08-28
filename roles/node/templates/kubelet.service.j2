@@ -4,15 +4,15 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
+ExecStart=/bin/sh -c '/local/bin/kubelet \
   --anonymous-auth=false \
   --authentication-token-webhook=true \
   --pod-manifest-path=/etc/kubernetes/manifests \
   --register-node=true \
   {% if inventory_hostname_short in groups['masters'] -%}
-  --node-labels=node-role.kubernetes.io/worker=worker,node-role.kubernetes.io/master=master \
+  --node-labels=node.kubernetes.io/worker=worker,node.kubernetes.io/master=master \
   {% else %}
-  --node-labels=node-role.kubernetes.io/worker=worker \
+  --node-labels=node.kubernetes.io/worker=worker \
   {% endif -%}
   --container-runtime docker \
   --image-pull-progress-deadline=2m \
@@ -37,6 +37,8 @@ ExecStart=/bin/sh -c '/usr/local/bin/kubelet \
   --read-only-port=0 \
   --protect-kernel-defaults=true \
   --cgroup-driver=systemd \
+  --runtime-cgroups=/systemd/system.slice \
+  --kubelet-cgroups=/systemd/system.slice \
   --volume-plugin-dir=/var/lib/kubelet/volumeplugins \
   2>&1 | tee -a /var/log/kubelet.log '
 Restart=on-failure
