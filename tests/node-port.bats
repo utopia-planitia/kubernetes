@@ -7,13 +7,12 @@ load test_helper
   sleep 1
   run kubectl -n test-node-port wait pods -l app=nginx --for=condition=ready
   [ $status -eq 0 ]
-  sleep 3 # allow network time to setup routing
 }
 
 @test "use node port" {
   IP=`grep -o '1 ansible_host=[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' inventory | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
   PORT=`kubectl get svc -n test-node-port -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'`
-  run curl --silent --fail --connect-timeout 5 --max-time 5 http://${IP}:${PORT}/
+  run curl -v --connect-timeout 5 --max-time 5 --retry 12 --retry-delay 0 --retry-max-time 60 --retry-connrefused http://${IP}:${PORT}/
   [ $status -eq 0 ]
 }
 
