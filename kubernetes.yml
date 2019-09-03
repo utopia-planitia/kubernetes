@@ -10,8 +10,6 @@
 
 - hosts: all
   roles:
-    - { role: linux }
-#    - { role: docker }
     - { role: node }
     - { role: registry-mirror }
 

@@ -36,9 +36,6 @@ ExecStart=/bin/sh -c '/local/bin/kubelet \
   --feature-gates={{ feature_gates }} \
   --read-only-port=0 \
   --protect-kernel-defaults=true \
-  --cgroup-driver=systemd \
-  --runtime-cgroups=/systemd/system.slice \
-  --kubelet-cgroups=/systemd/system.slice \
   --volume-plugin-dir=/var/lib/kubelet/volumeplugins \
   2>&1 | tee -a /var/log/kubelet.log '
 Restart=on-failure

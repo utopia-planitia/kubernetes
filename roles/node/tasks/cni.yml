@@ -14,6 +14,7 @@
     url: "{{ item.url }}"
     dest: "{{ item.local_file }}"
     checksum: "{{ item.checksum }}"
+    validate_certs: no
   with_items: "{{ cni_packages }}"
 
 - name: cni unpack

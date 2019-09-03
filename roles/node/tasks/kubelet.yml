@@ -22,7 +22,7 @@
   with_items:
     - /etc/kubernetes/manifests/
     - /etc/kubelet/
-    - /usr/local/bin/
+    - /local/bin/
 
 - name: copy kubelet certificates
   copy:
@@ -40,15 +40,16 @@
 - name: download kubelet binary
   get_url:
     url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubelet"
-    dest: "/usr/local/bin/kubelet-{{ kubernetes_version }}"
+    dest: "/local/bin/kubelet-{{ kubernetes_version }}"
     mode: 0771
+    validate_certs: no
 
 - name: select kubelet version
   file:
     state: link
     force: yes
-    path: /usr/local/bin/kubelet
-    src: "/usr/local/bin/kubelet-{{ kubernetes_version }}"
+    path: /local/bin/kubelet
+    src: "/local/bin/kubelet-{{ kubernetes_version }}"
   notify:
     - restart kubelet
 
