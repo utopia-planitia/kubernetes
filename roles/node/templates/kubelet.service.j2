@@ -4,7 +4,7 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-ExecStart=/bin/sh -c '/local/bin/kubelet \
+ExecStart=/bin/sh -c '/opt/bin/kubelet \
   --anonymous-auth=false \
   --authentication-token-webhook=true \
   --pod-manifest-path=/etc/kubernetes/manifests \
@@ -25,7 +25,7 @@ ExecStart=/bin/sh -c '/local/bin/kubelet \
   --tls-cert-file=/etc/kubelet/kubelet.pem \
   --tls-private-key-file=/etc/kubelet/kubelet-key.pem \
   --network-plugin=cni \
-  --node-ip={{ ansible_host }} \
+  --node-ip={{ wireguard_private_ip }} \
   --max-open-files={{ kubelet_max_open_files | int }} \
   --max-pods={{ kubelet_max_pods | int }} \
   --kube-reserved={{ kubelet_kube_reserved }} \

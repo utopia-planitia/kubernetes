@@ -48,6 +48,12 @@ RUN curl -s -L -o /usr/local/bin/cfssl		https://pkg.cfssl.org/R1.2/cfssl_linux-a
 	curl -s -L -o /usr/local/bin/cfssljson	https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 && \
 	chmod +x /usr/local/bin/cfssljson
 
+# wireguard
+COPY roles/wireguard/files /tmp/wireguard
+RUN dpkg -i /tmp/wireguard/wireguard-tools_0.0.20190227-wg1~bionic_amd64.deb
+RUN dpkg -i /tmp/wireguard/wireguard-dkms_0.0.20190227-wg1~bionic_all.deb
+RUN dpkg -i /tmp/wireguard/wireguard_0.0.20190227-wg1~bionic_all.deb
+
 # kubectl
 ENV KUBERNETES_VERSION v1.13.5
 RUN curl -s -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl && \

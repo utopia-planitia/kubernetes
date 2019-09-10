@@ -1,17 +1,6 @@
 
 ---
 
-
-- name: kubelet kernel default values
-  sysctl:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    state: present
-  with_items:
-    - { name: "vm.overcommit_memory", value: "1" }
-    - { name: "kernel.panic", value: "10" }
-    - { name: "kernel.panic_on_oops", value: "1" }
-
 - meta: flush_handlers
 
 - name: create directories
@@ -22,7 +11,7 @@
   with_items:
     - /etc/kubernetes/manifests/
     - /etc/kubelet/
-    - /local/bin/
+    - /opt/bin/
 
 - name: copy kubelet certificates
   copy:
@@ -40,7 +29,7 @@
 - name: download kubelet binary
   get_url:
     url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubelet"
-    dest: "/local/bin/kubelet-{{ kubernetes_version }}"
+    dest: "/opt/bin/kubelet-{{ kubernetes_version }}"
     mode: 0771
     validate_certs: no
 
@@ -48,8 +37,8 @@
   file:
     state: link
     force: yes
-    path: /local/bin/kubelet
-    src: "/local/bin/kubelet-{{ kubernetes_version }}"
+    path: /opt/bin/kubelet
+    src: "/opt/bin/kubelet-{{ kubernetes_version }}"
   notify:
     - restart kubelet
 

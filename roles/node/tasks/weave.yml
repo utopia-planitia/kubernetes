@@ -7,10 +7,10 @@
     recurse: true
   with_items:
     - /etc/cni/net.d/
-    - /usr/local/bin/
+    - /opt/bin/
 
 - name: weave binary
   copy:
     src: weave
-    dest: /usr/local/bin/weave
+    dest: /opt/bin/weave
     mode: 0755
