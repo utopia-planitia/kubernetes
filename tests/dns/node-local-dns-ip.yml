@@ -1,11 +1,11 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: kube-dns-kube-system-svc
+  name: node-local-dns-ip
 spec:
   template:
     metadata:
-      name: kube-dns-kube-system-svc
+      name: node-local-dns-ip
     spec:
       containers:
       - name: dns
@@ -13,5 +13,5 @@ spec:
         command:
           - sh
           - -c
-          - "nslookup kube-dns.kube-system.svc | grep Address"
+          - "nslookup google.de | grep Address"
       restartPolicy: Never

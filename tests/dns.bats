@@ -5,7 +5,6 @@ load test_helper
 @test "deploy dns jobs" {
   run kubectl apply -f tests/dns
   [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 8 ]
 }
 
 @test "check google-public-dns-a-google-com ip" {
@@ -18,31 +17,13 @@ load test_helper
   [ "${lines[1]}" = "Address: 8.8.8.8" ]
 }
 
-@test "check kube-dns-kube-system-svc-cluster-local ip" {
-  until [ $(kubectl get pod -a --selector=job-name=kube-dns-kube-system-svc-cluster-local --no-headers | grep Completed | wc -l) -eq 1 ]; do
+@test "check node-local-dns ip" {
+  until [ $(kubectl get pod -a --selector=job-name=node-local-dns-ip --no-headers | grep Completed | wc -l) -eq 1 ]; do
     sleep 0.5
   done
-  run kubectl logs `kubectl get pod -a --selector=job-name=kube-dns-kube-system-svc-cluster-local --output=jsonpath={.items..metadata.name}`
+  run kubectl logs `kubectl get pod -a --selector=job-name=node-local-dns-ip --output=jsonpath={.items..metadata.name}`
   [ $status -eq 0 ]
-  [ "${lines[0]}" = "Address:	10.16.0.3#53" ]
-}
-
-@test "check kube-dns-kube-system-svc ip" {
-  until [ $(kubectl get pod -a --selector=job-name=kube-dns-kube-system-svc --no-headers | grep Completed | wc -l) -eq 1 ]; do
-    sleep 0.5
-  done
-  run kubectl logs `kubectl get pod -a --selector=job-name=kube-dns-kube-system-svc --output=jsonpath={.items..metadata.name}`
-  [ $status -eq 0 ]
-  [ "${lines[0]}" = "Address:	10.16.0.3#53" ]
-}
-
-@test "check kube-dns-kube-system ip" {
-  until [ $(kubectl get pod -a --selector=job-name=kube-dns-kube-system --no-headers | grep Completed | wc -l) -eq 1 ]; do
-    sleep 0.5
-  done
-  run kubectl logs `kubectl get pod -a --selector=job-name=kube-dns-kube-system --output=jsonpath={.items..metadata.name}`
-  [ $status -eq 0 ]
-  [ "${lines[0]}" = "Address:	10.16.0.3#53" ]
+  [ "${lines[0]}" = "Address:	169.254.20.10#53" ]
 }
 
 @test "check kubernetes-default-svc-cluster-local ip" {
@@ -88,5 +69,4 @@ load test_helper
 @test "undeploy dns jobs" {
   run kubectl delete -f tests/dns
   [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 8 ]
 }
