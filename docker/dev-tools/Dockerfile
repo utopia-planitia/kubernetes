@@ -110,3 +110,7 @@ COPY --from=reg /go/bin/reg /usr/local/bin/reg
 
 # lab
 RUN curl -L --silent --fail https://raw.githubusercontent.com/zaquestion/lab/master/install.sh | bash
+
+# letsencrypt stage ca
+ADD https://letsencrypt.org/certs/fakelerootx1.pem /usr/local/share/ca-certificates/fakelerootx1.crt
+RUN update-ca-certificates
