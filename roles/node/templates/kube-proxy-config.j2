@@ -1,6 +1,6 @@
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 clusterCIDR: "10.48.0.0/12"
-hostnameOverride: "{{ ansible_host }}"
+hostnameOverride: "{{ inventory_hostname }}"
 clientConnection:
   kubeconfig: "/etc/kube-proxy/kubeconfig"

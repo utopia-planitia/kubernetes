@@ -1,7 +1,7 @@
 ---
 
-kubernetes_version: v1.13.5
-etcd_version:       v3.2.24
+kubernetes_version: v1.16.0
+etcd_version:       v3.3.15
 nginx_version:      1.13.3-alpine
 
 apiserver_image: "gcr.io/google_containers/kube-apiserver:{{ kubernetes_version }}"
