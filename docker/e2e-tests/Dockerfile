@@ -1,4 +1,4 @@
-FROM gcr.io/heptio-images/kube-conformance:v1.13.0
+FROM gcr.io/google-containers/conformance:v1.15.4
 
 RUN echo "deb http://deb.debian.org/debian jessie main\ndeb http://security.debian.org jessie/updates main" > /etc/apt/sources.list
 
