@@ -1,10 +1,15 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    name: registry-mirror
   name: registry-mirror
   namespace: kube-system
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      name: registry-mirror
   strategy:
     type: Recreate
   template:
@@ -12,17 +17,9 @@ spec:
       labels:
         name: registry-mirror
     spec:
-      priorityClassName: system-cluster-critical
       containers:
       - name: mirror
         image: registry:2.6.2
-        resources:
-          limits:
-            cpu: 1000m
-            memory: 400Mi
-          requests:
-            cpu: 100m
-            memory: 400Mi
         env:
         - name: REGISTRY_HTTP_ADDR
           value: :5000
@@ -34,6 +31,14 @@ spec:
         - containerPort: 5000
           name: mirror
           protocol: TCP
+        resources:
+          limits:
+            cpu: "1"
+            memory: 400Mi
+          requests:
+            cpu: 100m
+            memory: 400Mi
+      priorityClassName: system-cluster-critical
 ---
 apiVersion: v1
 kind: Service
