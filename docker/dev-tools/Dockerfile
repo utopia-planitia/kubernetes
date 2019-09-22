@@ -55,7 +55,7 @@ RUN dpkg -i /tmp/wireguard/wireguard-dkms_0.0.20190227-wg1~bionic_all.deb
 RUN dpkg -i /tmp/wireguard/wireguard_0.0.20190227-wg1~bionic_all.deb
 
 # kubectl
-ENV KUBERNETES_VERSION v1.16.0
+ENV KUBERNETES_VERSION v1.15.4
 RUN curl -s -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl && \
 	chmod +x /usr/local/bin/kubectl && \
 	echo "source <(kubectl completion bash)" >> ~/.bashrc
