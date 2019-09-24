@@ -6,57 +6,26 @@
     state: directory
     recurse: true
 
-- name: Set up a Certificate Authority
+- name: set up a etcd certificate authority
   shell: |
     set -euo pipefail
     cfssl gencert -initca {{ etcd_config_dir }}/ca.json | cfssljson -bare ca
   args:
     chdir: "{{ etcd_cert_dir }}"
-    creates: "{{ item }}"
+    creates: "ca-key.pem"
     executable: /bin/bash
-  with_items:
-    - ca-key.pem
-    - ca.csr
-    - ca.pem
 
-- name: Create the Client certificate
+- name: create etcd certificate
   shell: |
     set -euo pipefail
     cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ etcd_config_dir }}/config.json \
-    -profile=client {{ etcd_config_dir }}/client.json | cfssljson -bare client
+    -profile={{ item }} {{ etcd_config_dir }}/{{ item }}.json | cfssljson -bare {{ item }}
   args:
     chdir: "{{ etcd_cert_dir }}"
-    creates: "{{ item }}"
+    creates: "{{ item }}-key.pem"
     executable: /bin/bash
   with_items:
-    - client-key.pem
-    - client.csr
-    - client.pem
-
-- name: Create the Member certificate
-  shell:  |
-    set -euo pipefail
-    cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ etcd_config_dir }}/config.json \
-    -profile=member {{ etcd_config_dir }}/member.json | cfssljson -bare member
-  args:
-    chdir: "{{ etcd_cert_dir }}"
-    creates: "{{ item }}"
-    executable: /bin/bash
-  with_items:
-    - member-key.pem
-    - member.csr
-    - member.pem
-
-- name: Create the Server certificate
-  shell:  |
-    set -euo pipefail
-    cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ etcd_config_dir }}/config.json \
-    -profile=server {{ etcd_config_dir }}/server.json | cfssljson -bare server
-  args:
-    chdir: "{{ etcd_cert_dir }}"
-    creates: "{{ item }}"
-    executable: /bin/bash
-  with_items:
-    - server-key.pem
-    - server.csr
-    - server.pem
+    - kube-apiserver-etcd-client
+    - kube-etcd-healthcheck-client
+    - kube-etcd-peer
+    - kube-etcd

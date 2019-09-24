@@ -1,7 +1,0 @@
-{
-    "CN": "etcd client",
-    "key": {
-      "algo": "rsa",
-      "size": 2048
-    }
-}

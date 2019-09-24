@@ -12,10 +12,12 @@
     dest: "/etc/etcd/ssl/{{ item }}"
   with_items:
     - ca.pem
-    - server.pem
-    - server-key.pem
-    - member.pem
-    - member-key.pem
+    - kube-etcd.pem
+    - kube-etcd-key.pem
+    - kube-etcd-peer.pem
+    - kube-etcd-peer-key.pem
+    - kube-etcd-healthcheck-client.pem
+    - kube-etcd-healthcheck-client-key.pem
   no_log: true
 
 - name: checksum of certificates

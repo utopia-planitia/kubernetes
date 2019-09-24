@@ -35,17 +35,17 @@ spec:
         - name: ETCD_INITIAL_CLUSTER
           value: etcd1=https://etcd1:2380,etcd2=https://etcd2:2380,etcd3=https://etcd3:2380
         - name: ETCD_CERT_FILE
-          value: /etc/etcd/ssl/server.pem
+          value: /etc/etcd/ssl/kube-etcd.pem
         - name: ETCD_KEY_FILE
-          value: /etc/etcd/ssl/server-key.pem
+          value: /etc/etcd/ssl/kube-etcd-key.pem
         - name: ETCD_CLIENT_CERT_AUTH
           value: "true"
         - name: ETCD_TRUSTED_CA_FILE
           value: /etc/etcd/ssl/ca.pem
         - name: ETCD_PEER_CERT_FILE
-          value: /etc/etcd/ssl/member.pem
+          value: /etc/etcd/ssl/kube-etcd-peer.pem
         - name: ETCD_PEER_KEY_FILE
-          value: /etc/etcd/ssl/member-key.pem
+          value: /etc/etcd/ssl/kube-etcd-peer-key.pem
         - name: ETCD_PEER_CLIENT_CERT_AUTH
           value: "true"
         - name: ETCD_PEER_TRUSTED_CA_FILE
@@ -55,16 +55,21 @@ spec:
         - name: ETCDCTL_ENDPOINTS
           value: https://127.0.0.1:2379
         - name: ETCDCTL_CERT
-          value: /etc/etcd/ssl/member.pem
+          value: /etc/etcd/ssl/kube-etcd-healthcheck-client.pem
         - name: ETCDCTL_KEY
-          value: /etc/etcd/ssl/member-key.pem
+          value: /etc/etcd/ssl/kube-etcd-healthcheck-client-key.pem
         - name: ETCDCTL_CACERT
           value: /etc/etcd/ssl/ca.pem
         - name: ETCD_SNAPSHOT_COUNT
           value: "{{ etcd_snapshot_count | int }}"
       livenessProbe:
-        tcpSocket:
-          port: 2380
+        exec:
+          command:
+          - etcdctl endpoint health
+      readinessProbe:
+        exec:
+          command:
+          - etcdctl endpoint health
       resources:
         requests:
           cpu: {{ etcd_requests_cpu }}

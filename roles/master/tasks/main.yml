@@ -12,8 +12,8 @@
     dest: "/etc/kubernetes/ssl/{{ item.remote }}"
   with_items:
     - { local: 'ca.pem', remote: 'etcd-ca.pem' }
-    - { local: 'client.pem', remote: 'etcd.pem' }
-    - { local: 'client-key.pem', remote: 'etcd-key.pem' }
+    - { local: 'kube-apiserver-etcd-client.pem', remote: 'etcd.pem' }
+    - { local: 'kube-apiserver-etcd-client-key.pem', remote: 'etcd-key.pem' }
   no_log: true
 
 - name: copy kubernetes certificates
