@@ -1,0 +1,53 @@
+digraph {
+
+subgraph cluster_master {   // perrepo
+    label="Kubernetes";     // perrepo
+    color=grey;             // perrepo
+    
+    kubelet       [fontcolor=white, color=blue, style=filled, label="Kubelet"]
+    kubeproxy     [fontcolor=white, color=blue, style=filled, label="Kube Proxy"]
+    masterproxy   [fontcolor=white, color=blue, style=filled, label="Master proxy"]
+    dnscache      [fontcolor=white, color=blue, style=filled, label="Node Local DNS Cache"]
+    internaldns   [fontcolor=white, color=blue, style=filled, label="Core DNS"]
+    etcd          [fontcolor=white, color=blue, style=filled, label="Etcd"]
+    weave         [fontcolor=white, color=blue, style=filled, label="Weave"]
+    cni           [fontcolor=white, color=blue, style=filled, label="Container Network Interface"]
+    storage_class [fontcolor=white, color=blue, style=filled, label="Storageclass"]
+
+    subgraph cluster_master {   // perrepo
+        label="Master";         // perrepo
+        color=grey;             // perrepo
+
+        apiserver   [fontcolor=white, color=blue, style=filled, label="Apiserver"]
+        controller  [fontcolor=white, color=blue, style=filled, label="Controller Manager"]
+        scheduler   [fontcolor=white, color=blue, style=filled, label="Scheduler"]
+    }   // perrepo
+
+}   // perrepo
+
+upstream_dns [color=red, label="public DNS server"]
+
+etcd -> etcd                [label="forms a paxos cluster"]
+apiserver -> etcd           [label="stores state in"]
+apiserver -> nodeports      [label="listens on Nodeport 6443"]
+controller -> apiserver     [label="consolidates\ndesired state\nvs\nactual state "]
+scheduler -> apiserver      [label="caculates node\nwith matching\nresource request"]
+kubelet -> apiserver        [label="requests desired state"]
+kubelet -> masterproxy      [label="requests desired state"]
+masterproxy -> apiserver    [label="loadbalances\nTCP traffic"]
+systemd -> kubelet          [label="starts"]
+container -> dnscache       [label="resolves domain names via"]
+kubelet -> docker           [label="starts and stops\ncontainers via"]
+kubelet -> cni              [label="requests networking\nfor pod"]
+cni -> weave                [label="setups up networking\nfor pods"]
+kubeproxy -> apiserver      [label="requests service\nIPs and its pod\nendpoints"]
+kubeproxy -> iptables       [label="configures to\nredirect service\ntraffic to pods"]
+weave -> apiserver          [label="discovers peers via"]
+weave -> weave              [label="creates overlay\nnetwork between nodes"]
+internaldns -> apiserver    [label="reads service IPs\nand endpoints"]
+internaldns -> upstream_dns [label="resolves external hostnames"]
+dnscache -> internaldns     [label="uses TCP for DNS"]
+etcd -> kernel              [label="stores files on disk"]
+apiserver -> storage_class  [label="keeps track of"]
+
+}
