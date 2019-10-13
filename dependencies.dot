@@ -1,0 +1,38 @@
+digraph {
+
+node [shape=box];
+
+apiserver   [label="Apiserver"]
+controller  [label="Controller Manager"]
+scheduler   [label="Scheduler"]
+kubelet     [label="Kubelet"]
+kubeproxy   [label="Kube Proxy"]
+masterproxy [label="Master proxy"]
+dnscache    [label="Node Local DNS Cache"]
+dns         [label="Core DNS"]
+etcd        [label="Etcd"]
+weave       [label="Weave"]
+
+subgraph cluster_master {
+    label="Master";
+    color=grey;
+
+    apiserver
+    controller
+    scheduler
+
+    { rank=same controller scheduler }
+}
+
+etcd -> etcd
+apiserver -> etcd
+controller -> apiserver
+scheduler -> apiserver
+kubelet -> apiserver
+kubeproxy -> apiserver
+weave -> apiserver
+weave -> weave
+dns -> apiserver
+dnscache -> dns
+
+}
