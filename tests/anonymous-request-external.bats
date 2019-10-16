@@ -2,36 +2,6 @@
 
 load test_helper
 
-@test "deploy anonymous-request jobs" {
-  run kubectl apply -f tests/anonymous-request/jobs.yml
-  [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 2 ]
-}
-
-@test "check anonymous request to apiserver (pod network)" {
-  until [ $(kubectl get pod --selector=job-name=anonymous-request-pod --no-headers | grep Completed | wc -l) -eq 1 ]; do
-    sleep 0.5
-  done
-  run diff tests/anonymous-request/request.golden <(kubectl logs `kubectl get pod --selector=job-name=anonymous-request-pod --output=jsonpath={.items..metadata.name}`)
-  [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
-}
-
-@test "check anonymous request to apiserver (host network)" {
-  until [ $(kubectl get pod --selector=job-name=anonymous-request-host --no-headers | grep Completed | wc -l) -eq 1 ]; do
-    sleep 0.5
-  done
-  run diff tests/anonymous-request/request.golden <(kubectl logs `kubectl get pod --selector=job-name=anonymous-request-host --output=jsonpath={.items..metadata.name}`)
-  [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
-}
-
-@test "undeploy anonymous-request jobs" {
-  run kubectl delete -f tests/anonymous-request/jobs.yml
-  [ $status -eq 0 ]
-  [ "${#lines[@]}" -eq 2 ]
-}
-
 @test "check anonymous request to apiserver on node1" {
   IP=`grep -o '1 ansible_host=[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' inventory | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
   run diff tests/anonymous-request/request.golden <(curl  --silent --insecure https://${IP}:6443/)
