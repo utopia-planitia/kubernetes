@@ -19,6 +19,7 @@ spec:
         - --hostname-override={{ wireguard_private_ip }}
         - --config=/etc/kube-proxy/config
         - --proxy-mode=ipvs
+        - --ipvs-scheduler=sed
         - --logtostderr=true
       env:
         - name: CONFIG_HASH
