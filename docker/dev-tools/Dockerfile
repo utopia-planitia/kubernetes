@@ -24,6 +24,7 @@ RUN apt-get update && \
 		bsdmainutils \
 		bats \
 		libmnl0 \
+		bc \
 		dkms && \
 	apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
