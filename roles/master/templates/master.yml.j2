@@ -26,6 +26,8 @@ spec:
         - --etcd-certfile=/etc/kubernetes/ssl/etcd.pem
         - --etcd-keyfile=/etc/kubernetes/ssl/etcd-key.pem
         - --client-ca-file=/etc/kubernetes/ssl/kubernetes-ca.pem
+        - --proxy-client-cert-file=/etc/kubernetes/ssl/proxy-client.pem
+        - --proxy-client-key-file=/etc/kubernetes/ssl/proxy-client-key.pem
         - --requestheader-client-ca-file=/etc/kubernetes/ssl/kubernetes-client-ca.pem
         - --tls-cert-file=/etc/kubernetes/ssl/master.pem
         - --tls-private-key-file=/etc/kubernetes/ssl/master-key.pem
@@ -76,7 +78,11 @@ spec:
         - kube-controller-manager
         - --master=http://127.0.0.1:8080
         - --service-account-private-key-file=/etc/kubernetes/ssl/master-key.pem
+        - --requestheader-client-ca-file=/etc/kubernetes/ssl/kubernetes-client-ca.pem
+        - --cluster-signing-key-file=/etc/kubernetes/ssl/kubernetes-ca-key.pem
+        - --client-ca-file=/etc/kubernetes/ssl/kubernetes-ca.pem
         - --root-ca-file=/etc/kubernetes/ssl/kubernetes-ca.pem
+        - --cluster-signing-cert-file=/etc/kubernetes/ssl/kubernetes-ca.pem
         - --leader-elect=true
         - --address=127.0.0.1
         - --port=10252

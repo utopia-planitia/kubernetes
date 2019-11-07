@@ -35,6 +35,16 @@
     creates: "client-ca-key.pem"
     executable: /bin/bash
 
+- name: set up proxy client certificate
+  shell: |
+    set -euo pipefail
+    cfssl gencert -ca=client-ca.pem -ca-key=client-ca-key.pem -config={{ master_config_dir }}/config.json \
+    -profile=kubernetes {{ master_config_dir }}/proxy-client.json | cfssljson -bare proxy-client
+  args:
+    chdir: "{{ master_cert_dir }}"
+    creates: "proxy-client-key.pem"
+    executable: /bin/bash
+
 - name: set up admin certificate
   shell: |
     set -euo pipefail
