@@ -16,7 +16,7 @@ spec:
       args:
         - /usr/local/bin/kube-proxy
         - --feature-gates={{ feature_gates }}
-        - --hostname-override={{ wireguard_private_ip }}
+        - --hostname-override={{ ansible_host }}
         - --config=/etc/kube-proxy/config
         - --proxy-mode=ipvs
         - --ipvs-scheduler=sed

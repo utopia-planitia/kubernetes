@@ -10,7 +10,6 @@
 
 - hosts: all
   roles:
-    - { role: wireguard }
     - { role: node }
     - { role: registry-mirror }
 
