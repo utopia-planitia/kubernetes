@@ -7,13 +7,19 @@
         daemon_reload: yes
         state: "{{ state | default('restarted') }}"
         enabled: yes
+      become: yes
+      become_user: root
     - name: restart kubelet
       systemd:
         name: "kubelet"
         daemon_reload: yes
         state: "{{ state | default('restarted') }}"
         enabled: yes
+      become: yes
+      become_user: root
     - name: remove all containers
       shell: docker stop $(docker ps -a -q) && docker rm -f $(docker ps -a -q)
       tags:
         - skip_ansible_lint
+      become: yes
+      become_user: root

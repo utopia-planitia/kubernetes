@@ -10,8 +10,12 @@
 
 - hosts: all
   roles:
-    - { role: node }
-    - { role: registry-mirror }
+    - role: node
+      become: yes
+      become_user: root
+    - role: registry-mirror
+      become: yes
+      become_user: root
 
 - hosts: etcds
   pre_tasks:
@@ -20,7 +24,9 @@
       with_indexed_items: "{{ groups['etcds'] }}"
       when: item.1 == inventory_hostname
   roles:
-    - { role: etcd }
+    - role: etcd
+      become: yes
+      become_user: root
 
 - hosts: masters
   tasks:
@@ -30,8 +36,12 @@
       delegate_to: localhost
       run_once: true
   roles:
-    - { role: master }
+    - role: master
+      become: yes
+      become_user: root
 
 - hosts: all:!masters
   roles:
-    - { role: master-proxy }
+    - role: master-proxy
+      become: yes
+      become_user: root
