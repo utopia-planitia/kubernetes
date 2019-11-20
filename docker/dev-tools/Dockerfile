@@ -50,7 +50,7 @@ RUN curl -s -L -o /usr/local/bin/cfssl		https://pkg.cfssl.org/R1.2/cfssl_linux-a
 	chmod +x /usr/local/bin/cfssljson
 
 # kubectl
-ENV KUBERNETES_VERSION v1.13.5
+ENV KUBERNETES_VERSION v1.13.12
 RUN curl -s -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl && \
 	chmod +x /usr/local/bin/kubectl && \
 	echo "source <(kubectl completion bash)" >> ~/.bashrc
@@ -58,34 +58,35 @@ RUN curl -s -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernet
 # krew
 RUN ( \
   set -x; cd "$(mktemp -d)" && \
-  curl -fsSLO "https://storage.googleapis.com/krew/v0.2.1/krew.{tar.gz,yaml}" && \
+  curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/download/v0.3.2/krew.{tar.gz,yaml}" && \
   tar zxvf krew.tar.gz && \
-  ./krew-"$(uname | tr '[:upper:]' '[:lower:]')_amd64" install --manifest=krew.yaml --archive=krew.tar.gz \
-)
+  ./krew-"$(uname | tr '[:upper:]' '[:lower:]')_amd64" install  --manifest=krew.yaml --archive=krew.tar.gz \
+  )
 ENV PATH="/root/.krew/bin:$PATH"
 RUN kubectl krew install get-all
 
 # kubectx & kubens
 RUN git clone https://github.com/ahmetb/kubectx /opt/kubectx && \
-	cd /opt/kubectx && git checkout v0.6.3 && \
+	cd /opt/kubectx && git checkout v0.7.1 && \
 	mv /opt/kubectx/kubectx /usr/local/bin/kubectx && \
 	mv /opt/kubectx/kubens /usr/local/bin/kubens && \
 	rm -r /opt/kubectx
 
 # helm
-RUN curl -L --fail -o helm.tar.gz https://storage.googleapis.com/kubernetes-helm/helm-v2.14.1-linux-amd64.tar.gz && \
+RUN curl -L --fail -o helm.tar.gz https://storage.googleapis.com/kubernetes-helm/helm-v2.16.1-linux-amd64.tar.gz && \
     tar zxv -C /tmp -f helm.tar.gz && \
     rm -f helm.tar.gz && \
 	mv /tmp/linux-amd64/helm /usr/local/bin/ && \
 	mv /tmp/linux-amd64/tiller /usr/local/bin/ && \
 	rm -rf /tmp/linux-amd64
+RUN helm init --client-only
 
 # helm plugins
-RUN helm init --client-only
 RUN helm plugin install https://github.com/databus23/helm-diff --version 2.11.0+5
+RUN helm plugin install https://github.com/aslafy-z/helm-git.git --version 0.4.2
 
 # helmfile
-RUN curl -L --fail https://github.com/roboll/helmfile/releases/download/v0.77.0/helmfile_linux_amd64 -o /usr/local/bin/helmfile && \
+RUN curl -L --fail https://github.com/roboll/helmfile/releases/download/v0.90.8/helmfile_linux_amd64 -o /usr/local/bin/helmfile && \
 	chmod +x /usr/local/bin/helmfile
 
 # kustomize
