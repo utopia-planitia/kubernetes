@@ -82,6 +82,8 @@ spec:
         - --leader-elect=true
         - --address=127.0.0.1
         - --port=10252
+        - --cluster-cidr=10.10.0.0/16
+        - --allocate-node-cidrs=true
         - --feature-gates={{ feature_gates }}
       env:
         - name: CONFIG_HASH

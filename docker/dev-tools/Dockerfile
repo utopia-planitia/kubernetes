@@ -19,6 +19,7 @@ RUN apt-get update && \
 		openssh-client \
 		sshpass \
 		make \
+		xxd \
 		bash-completion \
 		apache2-utils \
 		bsdmainutils \
