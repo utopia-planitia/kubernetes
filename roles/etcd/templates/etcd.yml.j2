@@ -7,7 +7,7 @@ spec:
   hostNetwork: true
   hostAliases:
 {% for host in groups['etcds'] %}
-  - ip: "{{ hostvars[host]['ansible_host'] }}"
+  - ip: "{{ hostvars[host]['network']['internalIP'] }}"
     hostnames:
     - "etcd{{ hostvars[host]['etcd_id'] }}"
 {% endfor %}

@@ -1,9 +1,7 @@
 {
   "CN": "system:node:{{ item }}",
   "hosts": [
-    "{{ hostvars[item]['ansible_host'] }}",
-    "{{ hostvars[item]['inventory_hostname'] }}",
-    "{{ hostvars[item]['inventory_hostname_short'] }}",
+    "{{ hostvars[item]['network']['internalIP'] }}",
     "127.0.0.1",
     "localhost"
   ],

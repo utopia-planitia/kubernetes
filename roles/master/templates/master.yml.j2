@@ -8,7 +8,7 @@ spec:
   hostNetwork: true
   hostAliases:
 {% for host in groups['etcds'] %}
-  - ip: "{{ hostvars[host]['ansible_host'] }}"
+  - ip: "{{ hostvars[host]['network']['internalIP'] }}"
     hostnames:
     - "etcd{{ hostvars[host]['etcd_id'] }}"
 {% endfor %}
@@ -21,6 +21,7 @@ spec:
       args:
         - kube-apiserver
         - --advertise-address={{ ansible_host }}
+        - --kubelet-preferred-address-types=InternalIP
         - --etcd-servers=https://etcd1:2379,https://etcd2:2379,https://etcd3:2379
         - --etcd-cafile=/etc/kubernetes/ssl/etcd-ca.pem
         - --etcd-certfile=/etc/kubernetes/ssl/etcd.pem

@@ -4,8 +4,7 @@
     {% for host in groups['all'] %}
     "{{ host }}",
     "{{ hostvars[host]['ansible_host'] }}",
-    "{{ hostvars[host]['inventory_hostname'] }}",
-    "{{ hostvars[host]['inventory_hostname_short'] }}",
+    "{{ hostvars[host]['network']['internalIP'] }}",
     "{{ cluster.api }}",
     {% endfor %}
     "127.0.0.1",
